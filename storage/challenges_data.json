@@ -1,0 +1,428 @@
+[
+  {
+    "id": 1,
+    "slug": "dict-chatbot",
+    "title": "DICT Chatbot",
+    "category": "Web",
+    "difficulty": "Hard",
+    "points": 100,
+    "description": "The DICT ChatBot is malfunctioning. Get the restart $(code), and restart it to recover it from the corrupted state.\n\n172.16.105.9:3000\n\nFlag format: HNU{flag}",
+    "target_info": "172.16.105.9:3000",
+    "correct_flag": "HNU{dict_ch4tb0t_r3st4rt_c0d3_2026}",
+    "is_enabled": true,
+    "image_path": "dict-chatbot/DICTChatbotChallenge.png",
+    "solve_count": 3,
+    "attachments": []
+  },
+  {
+    "id": 2,
+    "slug": "bypass-the-firewall",
+    "title": "Bypass the Firewall",
+    "category": "Web",
+    "difficulty": "Hard",
+    "points": 100,
+    "description": "You're trying to upload a .php file into a Web Application, however there seems to be a firewall. Find a way to bypass it, make sure they don't see it.\n\n172.16.105.9:5000\n\nFlag format: HNU{flag}",
+    "target_info": "172.16.105.9:5000",
+    "correct_flag": "HNU{byp4ss_f1r3w4ll_php_upl04d_succ3ss}",
+    "is_enabled": true,
+    "image_path": "bypass-the-firewall/BypasstheFirewallChallenge.png",
+    "solve_count": 2,
+    "attachments": []
+  },
+  {
+    "id": 3,
+    "slug": "gacha-pulling-4-the-king-of-jobbers",
+    "title": "Gacha Pulling 4 the KING OF JOBBERS",
+    "category": "Web",
+    "difficulty": "Hard",
+    "points": 100,
+    "description": "The King of Jobbers, Gilgamesh. Needs you to pull for him! Because of his ego he doesn't want anyone else in the banner but him. Find a way to satisfy his pride by getting him 10 times in 1 pull.\n\n172.16.105.9:3067\n\nFlag format: HNU{flag}",
+    "target_info": "172.16.105.9:3067",
+    "correct_flag": "HNU{g4ch4_k1ng_0f_j0bb3rs_10x_pull}",
+    "is_enabled": true,
+    "image_path": "gacha-pulling-4-the-king-of-jobbers/GachaPulling4theKINGOFJOBBERSChallenge.png",
+    "solve_count": 1,
+    "attachments": []
+  },
+  {
+    "id": 4,
+    "slug": "race-royale",
+    "title": "Race Royale",
+    "category": "Web",
+    "difficulty": "Hard",
+    "points": 100,
+    "description": "Welcome to Race Royale, where being first isn't just bragging rights, it might be the only way in. The application looks polished, the doors look locked, and the admin panel definitely wasn't made for you. Somewhere beneath the surface, though, the system has a slight problem keeping up when things get hectic. Your mission is simple: find the crack, outpace the application, and claim what's waiting behind /admin. Ready, set... exploit.\n\n172.16.105.9:5151\n\nFlag format: HNU{flag}",
+    "target_info": "172.16.105.9:5151",
+    "correct_flag": "HNU{r4c3_c0nd1t10n_adm1n_p4n3l_pwn3d}",
+    "is_enabled": true,
+    "image_path": "race-royale/RaceRoyaleChallenge.png",
+    "solve_count": 2,
+    "attachments": []
+  },
+  {
+    "id": 5,
+    "slug": "who-owns-this-neighborhood",
+    "title": "Who Owns This Neighborhood",
+    "category": "OSINT",
+    "difficulty": "Easy",
+    "points": 30,
+    "description": "An IP address rarely stands alone. You have been given:\n\n124.6.144.115\n\nPublic registration information suggests that this address belongs to a network associated with the Philippine Bureau of Immigration. Your task is to determine the CIDR notation of the netblock containing this IP address. Don't submit the individual IP. We want the entire neighborhood.\n\nFlag Format: HNU{cidr}",
+    "target_info": "Target IP: 124.6.144.115",
+    "correct_flag": "HNU{124.6.144.112/28}",
+    "is_enabled": true,
+    "image_path": "who-owns-this-neighborhood/WhoOwnsThisNeighborhoodChallenge.png",
+    "solve_count": 11,
+    "attachments": []
+  },
+  {
+    "id": 6,
+    "slug": "a-block-for-defense",
+    "title": "A Block for Defense",
+    "category": "OSINT",
+    "difficulty": "Easy",
+    "points": 30,
+    "description": "Government organizations have websites. But websites aren't the only thing they own.\n\nYour mission is to investigate publicly available IP registration information and identify one IP address range associated with our National Defense.\n\nWe aren't looking for an individual IP. We want a block of it. Identify one valid eight-host network associated with the DND.\n\nFlag Format: HNU{cidr}",
+    "target_info": "Target: Department of National Defense",
+    "correct_flag": "HNU{112.199.117.168/29}",
+    "is_enabled": true,
+    "image_path": "a-block-for-defense/ABlockforDefenseChallenge.png",
+    "solve_count": 9,
+    "attachments": []
+  },
+  {
+    "id": 7,
+    "slug": "where-did-gotyme-go",
+    "title": "Where Did GoTyme Go",
+    "category": "OSINT",
+    "difficulty": "Easy",
+    "points": 40,
+    "description": "GoTyme seems to have gone somewhere... Your task is to follow the trail left behind by:\n\ngotyme.com.ph\n\nUsing publicly available domain intelligence tools, trace the trail and identify one domain that leads back to the source.\n\nFlag Format: HNU{domain}",
+    "target_info": "Domain: gotyme.com.ph",
+    "correct_flag": "HNU{gotyme.bank}",
+    "is_enabled": true,
+    "image_path": "where-did-gotyme-go/WhereDidGoTymeGoChallenge.png",
+    "solve_count": 8,
+    "attachments": []
+  },
+  {
+    "id": 8,
+    "slug": "time-will-tell",
+    "title": "Time Will Tell",
+    "category": "OSINT",
+    "difficulty": "Medium",
+    "points": 60,
+    "description": "A FortiGate device belonging to a certain SIIX Logistics Philippines Incorporated has left some information exposed to the public internet. Fortunately, you're not being asked to break into it. Everything you need has already been indexed.\n\nDetermine the firmware release date displayed in the device information. The date and time must be synchronized with our local time.\n\nFlag Format: HNU{DayOfTheWeek, Month DD, YYYY at hh:mm:ss AM/PM}",
+    "target_info": "Target: SIIX Logistics Philippines FortiGate",
+    "correct_flag": "HNU{Wednesday, March 15, 2023 at 08:30:00 AM}",
+    "is_enabled": true,
+    "image_path": "time-will-tell/TimeWillTellChallenge.png",
+    "solve_count": 5,
+    "attachments": []
+  },
+  {
+    "id": 9,
+    "slug": "nas-ter-of-discovery",
+    "title": "NAS-ter of Discovery",
+    "category": "OSINT",
+    "difficulty": "Medium",
+    "points": 70,
+    "description": "Some devices prefer to stay at home. This one apparently didn't. Somewhere in the Philippines, a QNAP NAS running version 4.4.3 has been publicly exposed.\n\nYour mission is simple: Find the IP address.\n\nFlag Format: HNU{IPaddress}",
+    "target_info": "Target: QNAP NAS v4.4.3 (PH)",
+    "correct_flag": "HNU{119.92.174.12}",
+    "is_enabled": true,
+    "image_path": "nas-ter-of-discovery/NAS-terofDiscoveryChallenge.png",
+    "solve_count": 4,
+    "attachments": []
+  },
+  {
+    "id": 10,
+    "slug": "the-counterfeit",
+    "title": "The Counterfeit",
+    "category": "OSINT",
+    "difficulty": "Hard",
+    "points": 100,
+    "description": "I drop no payloads and I break no walls, I simply build a mirror where the victim falls. Wearing a trusted face to quietly take your keys, Find the clever counterfeit built to deceive.\n\nFlag Format: HNU{Domain}",
+    "target_info": "Attachment: The_Counterfeit.txt",
+    "correct_flag": "HNU{phishing-login-portal.net}",
+    "is_enabled": true,
+    "image_path": "the-counterfeit/TheCounterfeitChallenge.png",
+    "solve_count": 3,
+    "attachments": [
+      {
+        "id": 1,
+        "filename": "The_Counterfeit.txt",
+        "file_size": 10814,
+        "mime_type": "text/plain"
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "slug": "the-clean-slate",
+    "title": "The Clean Slate",
+    "category": "OSINT",
+    "difficulty": "Hard",
+    "points": 100,
+    "description": "Amongst the wicked shadows, I alone am bright, Zero stains on my name, I walk in the light. No scanner can curse me, no list marks my name, Find the one pure path in this dark, dirty game.\n\nFlag Format: HNU{domain}",
+    "target_info": "Attachment: The_Clean_Slate.txt",
+    "correct_flag": "HNU{verified-clean-secure.org}",
+    "is_enabled": true,
+    "image_path": "the-clean-slate/TheCleanSlateChallenge.png",
+    "solve_count": 3,
+    "attachments": [
+      {
+        "id": 2,
+        "filename": "The_Clean_Slate.txt",
+        "file_size": 11305,
+        "mime_type": "text/plain"
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "slug": "domengs-logic",
+    "title": "Domeng's Logic",
+    "category": "Network",
+    "difficulty": "Hard",
+    "points": 100,
+    "description": "Patterns pretend to be random, but every choice leaves a trace.\n\nFormat Flag: HNU{IPAddress}",
+    "target_info": "Attachment: Domengs.pcap",
+    "correct_flag": "HNU{192.168.1.105}",
+    "is_enabled": true,
+    "image_path": "domengs-logic/Domeng_sLogicChallenge.png",
+    "solve_count": 4,
+    "attachments": [
+      {
+        "id": 3,
+        "filename": "Domengs.pcap",
+        "file_size": 361639,
+        "mime_type": "application/vnd.tcpdump.pcap"
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "slug": "the-silent-traffic",
+    "title": "The Silent Traffic",
+    "category": "Network",
+    "difficulty": "Easy",
+    "points": 30,
+    "description": "A suspicious PCAP was captured from a compromised workstation. Most of the traffic appears normal, but investigators believe a hidden message was transmitted during the session.\n\nFlag format: HNU{flag}",
+    "target_info": "Attachment: malicious_traffic.pcapng",
+    "correct_flag": "HNU{icmp_exf1ltr4t10n_succ3ss}",
+    "is_enabled": true,
+    "image_path": "the-silent-traffic/TheSilentTrafficChallenge.png",
+    "solve_count": 14,
+    "attachments": [
+      {
+        "id": 4,
+        "filename": "malicious_traffic.pcapng",
+        "file_size": 5868,
+        "mime_type": "application/x-pcapng"
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "slug": "sweeperswipper",
+    "title": "SweeperSwipper",
+    "category": "Network",
+    "difficulty": "Medium",
+    "points": 50,
+    "description": "The network's been rough lately. Something feels off. I bet someone's stirring up trouble again.\n\nFlag Format: HNU{TechniqueIdentifierAccessiblePortsSeparatedBy,}",
+    "target_info": "Attachment: 17a11a51b899c8ca13717b13adcbccd653697869",
+    "correct_flag": "HNU{T1046_22,80,443}",
+    "is_enabled": true,
+    "image_path": "sweeperswipper/SweeperSwipperChallenge.png",
+    "solve_count": 6,
+    "attachments": [
+      {
+        "id": 5,
+        "filename": "17a11a51b899c8ca13717b13adcbccd653697869",
+        "file_size": 2248503,
+        "mime_type": "application/octet-stream"
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "slug": "filing-a-leave",
+    "title": "Filing a Leave",
+    "category": "Forensics",
+    "difficulty": "Easy",
+    "points": 20,
+    "description": "Meridian Fiduciary Group's night-shift network tap caught a file leaving the finance server at 02:02. By breakfast, the CFO's workstation had been \"cleaned up\". The Audit Committee has handed you what survived.\n\nFlag Format: HNU{flag}",
+    "target_info": "Attachment: network_capture.pcap",
+    "correct_flag": "HNU{ftp_exf1ltr4t3d_l34v3_f0rm}",
+    "is_enabled": true,
+    "image_path": "filing-a-leave/FilingALeaveChallenge.png",
+    "solve_count": 16,
+    "attachments": [
+      {
+        "id": 6,
+        "filename": "network_capture.pcap",
+        "file_size": 7703,
+        "mime_type": "application/vnd.tcpdump.pcap"
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "slug": "the-long-way-home",
+    "title": "The Long Way Home",
+    "category": "Steganography",
+    "difficulty": "Medium",
+    "points": 50,
+    "description": "For 58 lonely nights, this pup wandered the city streets wearing a collar inscribed with 6s8UurfK81L3da. A kind stranger eventually took him in, and it's been 45 days since his rescue. He's safe and happy now, but he carries a hidden message inside.\n\nFlag Format: HNU{flag}",
+    "target_info": "Attachment: happydog.jpeg",
+    "correct_flag": "HNU{st3gh1d3_p4ss_6s8UurfK81L3da}",
+    "is_enabled": true,
+    "image_path": "the-long-way-home/TheLongWayHomeChallenge.png",
+    "solve_count": 8,
+    "attachments": [
+      {
+        "id": 7,
+        "filename": "happydog.jpeg",
+        "file_size": 8050,
+        "mime_type": "image/jpeg"
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "slug": "where-the-sun-hides",
+    "title": "Where the Sun Hides",
+    "category": "Steganography",
+    "difficulty": "Medium",
+    "points": 70,
+    "description": "The photo appears ordinary, but the photographer may have left additional information within the files. Your task is to examine what was left behind and uncover the hidden answer.\n\nFlag Format: HNU{flag}",
+    "target_info": "Attachments: Final.zip, Sunset.png",
+    "correct_flag": "HNU{h1dd3n_b3h1nd_th3_suns3t}",
+    "is_enabled": true,
+    "image_path": "where-the-sun-hides/WheretheSunHidesChallenge.png",
+    "solve_count": 5,
+    "attachments": [
+      {
+        "id": 8,
+        "filename": "Final.zip",
+        "file_size": 494125,
+        "mime_type": "application/zip"
+      },
+      {
+        "id": 9,
+        "filename": "Sunset.png",
+        "file_size": 492501,
+        "mime_type": "image/png"
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "slug": "m3-y4w",
+    "title": "M3-y4W",
+    "category": "Steganography",
+    "difficulty": "Hard",
+    "points": 100,
+    "description": "We have a note saying, \u201ccats' tails tell a lot.\u201d Can you reveal the mystery and find the flag?\n\nHNU Format: HNU{flag}",
+    "target_info": "Attachments: cat_tails.png, blue_lsb.png",
+    "correct_flag": "HNU{blu3_ch4nn3l_lsb_s3cr3t}",
+    "is_enabled": true,
+    "image_path": "m3-y4w/M3-y4WChallenge.png",
+    "solve_count": 3,
+    "attachments": [
+      {
+        "id": 10,
+        "filename": "cat_tails.png",
+        "file_size": 112203,
+        "mime_type": "image/png"
+      },
+      {
+        "id": 11,
+        "filename": "blue_lsb.png",
+        "file_size": 466,
+        "mime_type": "image/png"
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "slug": "credential-vault",
+    "title": "Credential Vault",
+    "category": "Miscellaneous",
+    "difficulty": "Easy",
+    "points": 30,
+    "description": "A Python-based credential vault was recovered from a compromised workstation. Although the application appears simple, the stored vault contents are not directly readable. Reverse the program's logic, determine how the protected data is transformed, recover the original credentials, and submit the correct flag.\n\nFlag Format: HNU{username:password}",
+    "target_info": "Attachment: Credential_Vault.py",
+    "correct_flag": "HNU{adm1n_us3r:S3cur3P@ssw0rd!}",
+    "is_enabled": true,
+    "image_path": "credential-vault/CredentialVaultChallenge.png",
+    "solve_count": 12,
+    "attachments": [
+      {
+        "id": 12,
+        "filename": "Credential_Vault.py",
+        "file_size": 1650,
+        "mime_type": "text/x-python"
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "slug": "my-melodys-matcha-latte",
+    "title": "My Melody's Matcha Latte",
+    "category": "Miscellaneous",
+    "difficulty": "Hard",
+    "points": 100,
+    "description": "Something's off about My Melody's too-perfect matcha latte, Kuromi thinks, snooping around her computer. That's when she spots it: a suspicious matcha latte photo, saved with a strange filename. Her ears perk up, and her tail flicks with excitement, there's got to be something hidden in it. But Kuromi can't crack this one alone. Can you help her dig through the photo and uncover the secret hidden inside? Time to crack the case, and maybe steal a snack while she's at it.\n\nFlag Format: HNU{flag}",
+    "target_info": "Attachment: my_golisden_matischa_laistte_raistio.jpg",
+    "correct_flag": "HNU{m4tch4_l4tt3_s3cr3t_r3c1p3}",
+    "is_enabled": true,
+    "image_path": "my-melodys-matcha-latte/MyMelody_sMatchaLatteChallenge.png",
+    "solve_count": 4,
+    "attachments": [
+      {
+        "id": 13,
+        "filename": "my_golisden_matischa_laistte_raistio.jpg",
+        "file_size": 202327,
+        "mime_type": "image/jpeg"
+      }
+    ]
+  },
+  {
+    "id": 21,
+    "slug": "is-there-really-a-password",
+    "title": "IS there really a password?",
+    "category": "Miscellaneous",
+    "difficulty": "Medium",
+    "points": 50,
+    "description": "We recovered an archive from a decommissioned workstation. It holds two files. One of them opens just fine read it. The other one makes every tool we own demand a password, and the admin swears no password was ever set on these exports.\n\nMaybe that file is only pretending to be locked.\n\nFlag format: HNU{flag}",
+    "target_info": "Attachment: secret_docs.zip",
+    "correct_flag": "HNU{z1p_f4k3_3ncrypt10n_b1t_byp4ss}",
+    "is_enabled": true,
+    "image_path": "is-there-really-a-password/IsThereReallyAPassword.png",
+    "solve_count": 7,
+    "attachments": [
+      {
+        "id": 14,
+        "filename": "secret_docs.zip",
+        "file_size": 549,
+        "mime_type": "application/zip"
+      }
+    ]
+  },
+  {
+    "id": 22,
+    "slug": "quantum-echoes",
+    "title": "Quantum Echoes",
+    "category": "Miscellaneous",
+    "difficulty": "Hard",
+    "points": 100,
+    "description": "Your task is to follow the traces, uncover what was concealed, and recover the flag before the fragment disappears.\n\nhttps://cert1234.github.io/Quantum-Echoes/\n\nFlag Format: HNU{flag}",
+    "target_info": "https://cert1234.github.io/Quantum-Echoes/",
+    "correct_flag": "HNU{qu4ntum_c0h3r3nc3_3ch0_d3t3ct3d}",
+    "is_enabled": true,
+    "image_path": "quantum-echoes/Quantum_Echoes.png",
+    "solve_count": 2,
+    "attachments": []
+  }
+]

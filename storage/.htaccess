@@ -1,0 +1,10 @@
+# Prevent direct HTTP access to protected challenge artifacts
+# All downloads must be verified and streamed through backend/api/download.php
+<IfModule mod_authz_core.c>
+    Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
+    Order Allow,Deny
+    Deny from all
+</IfModule>
+
