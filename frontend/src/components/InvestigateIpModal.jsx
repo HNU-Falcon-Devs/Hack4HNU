@@ -73,25 +73,25 @@ export default function InvestigateIpModal({ ip, onClose, onActionSuccess }) {
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
-      <div className="relative bg-[#111827] border border-[#1E293B] rounded-xl max-w-4xl w-full shadow-2xl overflow-hidden my-6 max-h-[90vh] flex flex-col">
+      <div className="relative bg-[#1a2234] border border-[#26334a] rounded-2xl max-w-4xl w-full shadow-2xl overflow-hidden my-6 max-h-[90vh] flex flex-col">
         
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[#1E293B] bg-[#0B1120] shrink-0">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[#26334a] bg-[#161c2d] shrink-0">
           <div className="flex items-center space-x-3">
-            <div className="p-2 bg-red-950/80 border border-red-800/80 rounded-lg text-red-400">
+            <div className="p-2 bg-red-950/80 border border-red-800/80 rounded-xl text-red-400">
               <ShieldAlert className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center space-x-2">
                 <h2 className="text-lg font-bold text-white font-mono">SOC Deep IP Investigation</h2>
-                <span className="px-2 py-0.5 rounded text-xs font-mono font-bold bg-[#1E293B] text-cyan-300">
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-[#121722] border border-[#26334a] text-[#10B981]">
                   {ip}
                 </span>
               </div>
               <p className="text-xs text-gray-400 font-mono">Security Operations Center Forensic Profile</p>
             </div>
           </div>
-          <button onClick={onClose} className="text-gray-400 hover:text-white p-1 rounded-lg hover:bg-gray-800 transition">
+          <button onClick={onClose} className="text-gray-400 hover:text-white p-1 rounded-lg hover:bg-[#202b3d] transition">
             <X className="w-5 h-5" />
           </button>
         </div>

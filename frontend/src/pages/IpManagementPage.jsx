@@ -80,20 +80,20 @@ export default function IpManagementPage() {
 
   const getStatusBadge = (status) => {
     switch (status) {
-      case 'blocked': return 'bg-red-950 text-red-400 border-red-800';
-      case 'rate_limited': return 'bg-amber-950 text-amber-400 border-amber-800';
-      case 'suspicious': return 'bg-orange-950 text-orange-400 border-orange-800';
-      case 'whitelisted': return 'bg-blue-950 text-blue-400 border-blue-800';
-      default: return 'bg-gray-800 text-gray-300 border-gray-700';
+      case 'blocked': return 'bg-red-950 text-red-400 border-red-800 font-bold';
+      case 'rate_limited': return 'bg-amber-950 text-amber-400 border-amber-800 font-bold';
+      case 'suspicious': return 'bg-orange-950 text-orange-400 border-orange-800 font-bold';
+      case 'whitelisted': return 'bg-emerald-950 text-emerald-400 border-emerald-800 font-bold';
+      default: return 'bg-[#121722] text-gray-300 border-[#26334a]';
     }
   };
 
   const getThreatBadge = (level) => {
     switch (level) {
-      case 'Critical': return 'text-red-400 bg-red-950/60 border-red-800';
-      case 'High': return 'text-orange-400 bg-orange-950/60 border-orange-800';
-      case 'Medium': return 'text-amber-400 bg-amber-950/60 border-amber-800';
-      default: return 'text-green-400 bg-green-950/60 border-green-800';
+      case 'Critical': return 'text-red-400 bg-red-950/60 border-red-800 font-bold';
+      case 'High': return 'text-orange-400 bg-orange-950/60 border-orange-800 font-bold';
+      case 'Medium': return 'text-[#F59E0B] bg-amber-950/60 border-amber-800';
+      default: return 'text-[#10B981] bg-emerald-950/60 border-emerald-800';
     }
   };
 
@@ -101,17 +101,17 @@ export default function IpManagementPage() {
     <div className="space-y-6">
       
       {/* Header */}
-      <div className="bg-[#111827] border border-[#1E293B] rounded-2xl p-6 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-6 shadow-lg flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="flex items-center space-x-3">
-          <div className="p-3 bg-orange-950/80 border border-orange-800/80 rounded-xl text-orange-400 shadow-lg shadow-orange-950/50">
+          <div className="p-3 bg-emerald-950/80 border border-emerald-800/80 rounded-xl text-[#10B981] shadow-lg shadow-emerald-950/50">
             <Server className="w-6 h-6" />
           </div>
           <div>
             <div className="flex items-center space-x-2">
-              <h1 className="text-2xl font-extrabold text-white tracking-tight font-mono">
+              <h1 className="text-2xl font-black text-white tracking-tight font-mono">
                 IP Access Control & Security Filter
               </h1>
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-green-950 border border-green-800 text-green-400">
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-950 border border-emerald-800 text-[#10B981]">
                 BACKEND ENFORCED
               </span>
             </div>
@@ -125,7 +125,7 @@ export default function IpManagementPage() {
           <button
             onClick={loadData}
             disabled={loading}
-            className="px-3.5 py-2 bg-[#080D18] hover:bg-gray-800 border border-gray-700 text-gray-300 rounded-lg text-xs font-mono flex items-center space-x-1.5 transition"
+            className="px-3.5 py-2 bg-[#121722] hover:bg-[#202b3d] border border-[#26334a] text-gray-300 rounded-xl text-xs font-mono flex items-center space-x-1.5 transition"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
             <span>Refresh</span>
@@ -133,7 +133,7 @@ export default function IpManagementPage() {
 
           <button
             onClick={() => setShowAddModal(true)}
-            className="px-4 py-2 bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-400 hover:to-red-500 text-white rounded-lg text-xs font-mono font-bold flex items-center space-x-1.5 transition shadow-lg shadow-orange-500/20"
+            className="px-4 py-2 bg-gradient-to-r from-[#059669] to-[#10B981] hover:from-[#047857] hover:to-[#059669] text-white rounded-xl text-xs font-mono font-bold flex items-center space-x-1.5 transition shadow-md shadow-emerald-900/30"
           >
             <Plus className="w-4 h-4" />
             <span>Add / Rule IP</span>
@@ -143,8 +143,8 @@ export default function IpManagementPage() {
 
       {/* Manual Rule Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#111827] border border-[#1E293B] rounded-xl max-w-md w-full p-6 shadow-2xl space-y-4 font-mono text-xs">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 font-mono text-xs">
             <h3 className="text-base font-bold text-white font-mono">Apply Custom IP Policy</h3>
             
             <form onSubmit={handleManualAction} className="space-y-3">
@@ -156,7 +156,7 @@ export default function IpManagementPage() {
                   onChange={(e) => setNewIp(e.target.value)}
                   placeholder="e.g. 192.168.1.100"
                   required
-                  className="w-full bg-[#080D18] border border-gray-700 rounded-lg p-2 text-white focus:border-cyan-400"
+                  className="w-full bg-[#121722] border border-[#26334a] rounded-xl p-2.5 text-white focus:border-[#10B981] focus:outline-none"
                 />
               </div>
 
@@ -165,7 +165,7 @@ export default function IpManagementPage() {
                 <select
                   value={newAction}
                   onChange={(e) => setNewAction(e.target.value)}
-                  className="w-full bg-[#080D18] border border-gray-700 rounded-lg p-2 text-white focus:border-cyan-400"
+                  className="w-full bg-[#121722] border border-[#26334a] rounded-xl p-2.5 text-white focus:border-[#10B981] focus:outline-none"
                 >
                   <option value="block">Block IP (HTTP 403 Forbidden)</option>
                   <option value="whitelist">Whitelist IP (Bypass Heuristics)</option>
@@ -180,7 +180,7 @@ export default function IpManagementPage() {
                   value={newNotes}
                   onChange={(e) => setNewNotes(e.target.value)}
                   placeholder="Reason for blocking or whitelisting..."
-                  className="w-full bg-[#080D18] border border-gray-700 rounded-lg p-2 text-white focus:border-cyan-400"
+                  className="w-full bg-[#121722] border border-[#26334a] rounded-xl p-2.5 text-white focus:border-[#10B981] focus:outline-none"
                 />
               </div>
 
@@ -190,25 +190,25 @@ export default function IpManagementPage() {
                   id="enforceCheck"
                   checked={newEnforced}
                   onChange={(e) => setNewEnforced(e.target.checked)}
-                  className="rounded bg-[#080D18] border-gray-700 text-orange-500 focus:ring-0"
+                  className="rounded bg-[#121722] border-[#26334a] text-emerald-500 focus:ring-0"
                 />
                 <label htmlFor="enforceCheck" className="text-gray-300 cursor-pointer">
                   Enforce immediately in PHP backend middleware
                 </label>
               </div>
 
-              <div className="flex justify-end space-x-2 pt-3 border-t border-gray-800">
+              <div className="flex justify-end space-x-2 pt-3 border-t border-[#26334a]">
                 <button
                   type="button"
                   onClick={() => setShowAddModal(false)}
-                  className="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-lg transition"
+                  className="px-4 py-2 bg-[#121722] hover:bg-[#202b3d] text-gray-300 border border-[#26334a] rounded-xl transition"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={actionLoading}
-                  className="px-5 py-2 bg-red-600 hover:bg-red-500 text-white font-bold rounded-lg transition disabled:opacity-50"
+                  className="px-5 py-2 bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 hover:to-rose-600 text-white font-bold rounded-xl transition disabled:opacity-50"
                 >
                   {actionLoading ? 'Applying...' : 'Apply IP Policy'}
                 </button>
@@ -219,7 +219,7 @@ export default function IpManagementPage() {
       )}
 
       {/* Filter Tabs & Search */}
-      <div className="bg-[#111827] border border-[#1E293B] rounded-2xl p-4 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-4 shadow-lg flex flex-col sm:flex-row items-center justify-between gap-3">
         <div className="flex items-center space-x-1.5 overflow-x-auto w-full sm:w-auto">
           {[
             { id: 'all', label: 'All Monitored' },
@@ -230,10 +230,10 @@ export default function IpManagementPage() {
             <button
               key={t.id}
               onClick={() => setFilter(t.id)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-mono whitespace-nowrap transition border ${
+              className={`px-3 py-1.5 rounded-xl text-xs font-mono whitespace-nowrap transition border ${
                 filter === t.id 
-                  ? 'bg-orange-500/20 text-orange-300 border-orange-500/50 font-bold' 
-                  : 'bg-[#080D18] text-gray-400 border-gray-800 hover:text-white'
+                  ? 'bg-[#10B981] text-slate-950 border-[#10B981] font-bold shadow-md' 
+                  : 'bg-[#121722] text-gray-400 border-[#26334a] hover:text-white'
               }`}
             >
               {t.label}
@@ -242,24 +242,24 @@ export default function IpManagementPage() {
         </div>
 
         <div className="relative w-full sm:w-72">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-500">
-            <Search className="w-3.5 h-3.5 text-cyan-400" />
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+            <Search className="w-3.5 h-3.5 text-[#10B981]" />
           </div>
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search IP or reason..."
-            className="w-full bg-[#080D18] border border-gray-700 rounded-lg pl-8 pr-3 py-1.5 text-xs font-mono text-white placeholder-gray-500 focus:border-cyan-400"
+            className="w-full bg-[#121722] border border-[#26334a] rounded-xl pl-8 pr-3 py-1.5 text-xs font-mono text-white placeholder-gray-500 focus:border-[#10B981] transition"
           />
         </div>
       </div>
 
       {/* Main IP Table */}
-      <div className="bg-[#111827] border border-[#1E293B] rounded-2xl overflow-hidden shadow-sm">
+      <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl overflow-hidden shadow-lg">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs font-mono">
-            <thead className="bg-[#0B1120] text-gray-400 border-b border-gray-800 uppercase tracking-wider text-[11px]">
+            <thead className="bg-[#161c2d] text-gray-400 border-b border-[#26334a] uppercase tracking-wider text-[11px]">
               <tr>
                 <th className="px-5 py-3.5">IP Address</th>
                 <th className="px-5 py-3.5">Status</th>
@@ -270,7 +270,7 @@ export default function IpManagementPage() {
                 <th className="px-5 py-3.5 text-right">Remediation Controls</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-800/80">
+            <tbody className="divide-y divide-[#26334a]/80">
               {loading ? (
                 <tr>
                   <td colSpan="7" className="px-5 py-12 text-center text-gray-400">
@@ -285,7 +285,7 @@ export default function IpManagementPage() {
                 </tr>
               ) : (
                 filteredIps.map((row) => (
-                  <tr key={row.id} className="hover:bg-gray-800/30 transition">
+                  <tr key={row.id} className="hover:bg-[#1f283a] transition">
                     <td className="px-5 py-3.5 font-bold text-white whitespace-nowrap">
                       {row.ip_address}
                     </td>
@@ -304,7 +304,7 @@ export default function IpManagementPage() {
                     </td>
                     <td className="px-5 py-3.5 whitespace-nowrap">
                       {row.is_enforced ? (
-                        <span className="flex items-center space-x-1 text-green-400 text-[11px]">
+                        <span className="flex items-center space-x-1 text-[#10B981] text-[11px] font-bold">
                           <ShieldCheck className="w-3.5 h-3.5" />
                           <span>Enforced</span>
                         </span>
@@ -322,7 +322,7 @@ export default function IpManagementPage() {
                       <div className="flex items-center justify-end space-x-1.5">
                         <button
                           onClick={() => setInvestigatingIp(row.ip_address)}
-                          className="px-2 py-1 rounded bg-[#080D18] hover:bg-gray-800 border border-gray-700 text-cyan-300 text-[11px] font-bold flex items-center space-x-1 transition"
+                          className="px-2.5 py-1 rounded-lg bg-[#121722] hover:bg-[#202b3d] border border-[#26334a] hover:border-[#10B981]/50 text-[#10B981] text-[11px] font-bold flex items-center space-x-1 transition"
                           title="View Forensic Timeline"
                         >
                           <Eye className="w-3 h-3" />
@@ -332,14 +332,14 @@ export default function IpManagementPage() {
                         {row.status !== 'blocked' ? (
                           <button
                             onClick={() => handleQuickAction(row.ip_address, 'block')}
-                            className="px-2 py-1 rounded bg-red-950/80 hover:bg-red-900 border border-red-800 text-red-300 text-[11px] font-bold transition"
+                            className="px-2 py-1 rounded-lg bg-red-950/80 hover:bg-red-900 border border-red-800 text-red-300 text-[11px] font-bold transition"
                           >
                             Block
                           </button>
                         ) : (
                           <button
                             onClick={() => handleQuickAction(row.ip_address, 'unblock')}
-                            className="px-2 py-1 rounded bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 text-[11px] font-bold transition"
+                            className="px-2 py-1 rounded-lg bg-[#121722] hover:bg-[#202b3d] border border-[#26334a] text-gray-300 text-[11px] font-bold transition"
                           >
                             Unblock
                           </button>
@@ -348,7 +348,7 @@ export default function IpManagementPage() {
                         {row.status !== 'whitelisted' && (
                           <button
                             onClick={() => handleQuickAction(row.ip_address, 'whitelist')}
-                            className="px-2 py-1 rounded bg-blue-950/80 hover:bg-blue-900 border border-blue-800 text-blue-300 text-[11px] font-bold transition"
+                            className="px-2 py-1 rounded-lg bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-800 text-emerald-300 text-[11px] font-bold transition"
                           >
                             Whitelist
                           </button>
@@ -375,4 +375,3 @@ export default function IpManagementPage() {
     </div>
   );
 }
-

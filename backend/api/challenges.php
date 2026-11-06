@@ -41,6 +41,23 @@ switch ($action) {
         if ($dbConnected && $pdo) {
             $isAdmin = ($currentUser && $currentUser['role'] === 'admin');
             
+            // Determine solve subqueries based on user & team
+            if ($currentUser && !empty($currentUser['team_id'])) {
+                $teamId = (int)$currentUser['team_id'];
+                $solveSql = "
+                    (SELECT COUNT(*) FROM solves s2 JOIN users u2 ON s2.user_id = u2.id WHERE s2.challenge_id = c.id AND u2.team_id = {$teamId}) as is_solved,
+                    (SELECT u3.username FROM solves s3 JOIN users u3 ON s3.user_id = u3.id WHERE s3.challenge_id = c.id AND u3.team_id = {$teamId} ORDER BY s3.solved_at ASC LIMIT 1) as solved_by_username
+                ";
+            } elseif ($currentUser) {
+                $uid = (int)$currentUser['id'];
+                $solveSql = "
+                    (SELECT COUNT(*) FROM solves s2 WHERE s2.challenge_id = c.id AND s2.user_id = {$uid}) as is_solved,
+                    (SELECT u3.username FROM solves s3 JOIN users u3 ON s3.user_id = u3.id WHERE s3.challenge_id = c.id AND s3.user_id = {$uid} LIMIT 1) as solved_by_username
+                ";
+            } else {
+                $solveSql = "0 as is_solved, NULL as solved_by_username";
+            }
+
             // Build query
             $sql = "
                 SELECT 
@@ -48,7 +65,7 @@ switch ($action) {
                     c.description, c.target_info, c.is_enabled, c.image_path, c.created_at,
                     " . ($isAdmin ? "c.correct_flag," : "") . "
                     (SELECT COUNT(*) FROM solves s WHERE s.challenge_id = c.id) as solve_count,
-                    " . ($currentUser ? "(SELECT COUNT(*) FROM solves s2 WHERE s2.challenge_id = c.id AND s2.user_id = " . (int)$currentUser['id'] . ") as is_solved" : "0 as is_solved") . "
+                    {$solveSql}
                 FROM challenges c
                 WHERE 1=1
             ";
@@ -93,29 +110,39 @@ switch ($action) {
                 ];
             }
 
-            foreach ($challenges as &$ch) {
+            $output = [];
+            foreach ($challenges as $ch) {
                 $ch['id'] = (int)$ch['id'];
                 $ch['points'] = (int)$ch['points'];
                 $ch['is_enabled'] = (bool)$ch['is_enabled'];
-                $ch['is_solved'] = (bool)$ch['is_solved'];
+                $isSolved = ((int)$ch['is_solved']) > 0;
+                $ch['is_solved'] = $isSolved;
+                $ch['solved_by_team'] = $isSolved;
+                $solver = $ch['solved_by_username'] ?? null;
+                $ch['solved_by_username'] = $solver;
+                $ch['solved_by_teammate'] = ($isSolved && $currentUser && $solver && $solver !== $currentUser['username']);
                 $ch['solve_count'] = (int)$ch['solve_count'];
                 $ch['attachments'] = $attachmentsByChallenge[$ch['id']] ?? [];
 
                 // Filter by solved/unsolved if requested
                 if ($statusFilter === 'solved' && !$ch['is_solved']) continue;
                 if ($statusFilter === 'unsolved' && $ch['is_solved']) continue;
+
+                $output[] = $ch;
             }
 
             sendJsonResponse([
                 'status' => 'success',
                 'db_connected' => true,
-                'count' => count($challenges),
-                'challenges' => array_values($challenges)
+                'count' => count($output),
+                'challenges' => $output
             ]);
         } else {
             // Offline / Pre-database setup mode
             $fallback = getFallbackChallenges();
-            $solvedSlugs = $_SESSION['demo_solves'] ?? [];
+            $teamKey = 'team_' . ($currentUser['team_id'] ?? 'solo_' . ($currentUser['id'] ?? 'guest'));
+            $demoTeamSolves = $_SESSION['demo_team_solves'][$teamKey] ?? [];
+            $legacySolves = $_SESSION['demo_solves'] ?? [];
 
             $filtered = [];
             foreach ($fallback as $ch) {
@@ -123,7 +150,14 @@ switch ($action) {
                 if (!empty($difficulty) && $difficulty !== 'All' && strcasecmp($ch['difficulty'], $difficulty) !== 0) continue;
                 if (!empty($search) && stripos($ch['title'], $search) === false && stripos($ch['description'], $search) === false) continue;
 
-                $ch['is_solved'] = in_array($ch['slug'], $solvedSlugs);
+                $isSolved = isset($demoTeamSolves[$ch['slug']]) || in_array($ch['slug'], $legacySolves);
+                $solver = isset($demoTeamSolves[$ch['slug']]) ? $demoTeamSolves[$ch['slug']]['solver'] : ($currentUser['username'] ?? 'cyberspartan');
+
+                $ch['is_solved'] = $isSolved;
+                $ch['solved_by_team'] = $isSolved;
+                $ch['solved_by_username'] = $isSolved ? $solver : null;
+                $ch['solved_by_teammate'] = ($isSolved && $currentUser && $solver !== $currentUser['username']);
+
                 if ($statusFilter === 'solved' && !$ch['is_solved']) continue;
                 if ($statusFilter === 'unsolved' && $ch['is_solved']) continue;
 

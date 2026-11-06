@@ -88,13 +88,13 @@ export default function SecurityLogsPage() {
     <div className="space-y-6">
       
       {/* Header */}
-      <div className="bg-[#111827] border border-[#1E293B] rounded-2xl p-6 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-6 shadow-lg flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="flex items-center space-x-3">
           <div className="p-3 bg-purple-950/80 border border-purple-800/80 rounded-xl text-purple-400 shadow-lg shadow-purple-950/50">
             <FileText className="w-6 h-6" />
           </div>
           <div>
-            <h1 className="text-2xl font-extrabold text-white tracking-tight font-mono">
+            <h1 className="text-2xl font-black text-white tracking-tight font-mono">
               SOC Security Incident & Audit Logs
             </h1>
             <p className="text-xs text-gray-400 font-mono">
@@ -106,7 +106,7 @@ export default function SecurityLogsPage() {
         <button
           onClick={loadLogs}
           disabled={loading}
-          className="px-3.5 py-2 bg-[#080D18] hover:bg-gray-800 border border-gray-700 text-gray-300 rounded-lg text-xs font-mono flex items-center space-x-1.5 transition"
+          className="px-3.5 py-2 bg-[#121722] hover:bg-[#202b3d] border border-[#26334a] text-gray-300 rounded-xl text-xs font-mono flex items-center space-x-1.5 transition"
         >
           <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
           <span>Refresh Logs</span>
@@ -114,19 +114,19 @@ export default function SecurityLogsPage() {
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="bg-[#111827] border border-[#1E293B] rounded-2xl p-5 shadow-sm space-y-3 font-mono text-xs">
+      <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-5 shadow-lg space-y-3 font-mono text-xs">
         
         <form onSubmit={handleSearchSubmit} className="flex flex-col md:flex-row gap-3 items-center justify-between">
           <div className="relative w-full md:w-96">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-500">
-              <Search className="w-3.5 h-3.5 text-cyan-400" />
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+              <Search className="w-3.5 h-3.5 text-[#10B981]" />
             </div>
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search user, IP, challenge, or reason..."
-              className="w-full bg-[#080D18] border border-gray-700 rounded-lg pl-8 pr-3 py-2 text-white placeholder-gray-500 focus:border-cyan-400"
+              className="w-full bg-[#121722] border border-[#26334a] rounded-xl pl-8 pr-3 py-2 text-white placeholder-gray-500 focus:border-[#10B981] transition"
             />
           </div>
 
@@ -135,7 +135,7 @@ export default function SecurityLogsPage() {
             <select
               value={eventType}
               onChange={(e) => { setEventType(e.target.value); setPage(1); }}
-              className="bg-[#080D18] border border-gray-700 rounded-lg px-2.5 py-2 text-gray-300 focus:border-cyan-400 text-xs"
+              className="bg-[#121722] border border-[#26334a] rounded-xl px-2.5 py-2 text-gray-300 focus:border-[#10B981] text-xs"
             >
               {EVENT_TYPES.map(t => (
                 <option key={t} value={t}>Event: {t}</option>
@@ -146,7 +146,7 @@ export default function SecurityLogsPage() {
             <select
               value={threatLevel}
               onChange={(e) => { setThreatLevel(e.target.value); setPage(1); }}
-              className="bg-[#080D18] border border-gray-700 rounded-lg px-2.5 py-2 text-gray-300 focus:border-cyan-400 text-xs"
+              className="bg-[#121722] border border-[#26334a] rounded-xl px-2.5 py-2 text-gray-300 focus:border-[#10B981] text-xs"
             >
               {THREAT_LEVELS.map(l => (
                 <option key={l} value={l}>Threat: {l}</option>

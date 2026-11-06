@@ -20,7 +20,9 @@ function requireAuth() {
     return [
         'id' => $_SESSION['user_id'],
         'username' => $_SESSION['username'],
-        'role' => $_SESSION['role']
+        'role' => $_SESSION['role'],
+        'team_id' => $_SESSION['team_id'] ?? null,
+        'team_name' => $_SESSION['team_name'] ?? null
     ];
 }
 
@@ -30,7 +32,9 @@ function getOptionalAuth() {
         return [
             'id' => $_SESSION['user_id'],
             'username' => $_SESSION['username'],
-            'role' => $_SESSION['role']
+            'role' => $_SESSION['role'],
+            'team_id' => $_SESSION['team_id'] ?? null,
+            'team_name' => $_SESSION['team_name'] ?? null
         ];
     }
     return null;

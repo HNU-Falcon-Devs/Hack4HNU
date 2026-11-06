@@ -8,7 +8,17 @@
 -- =====================================================================
 
 -- ---------------------------------------------------------------------
--- 1. Table: users
+-- 1. Table: teams
+-- Each team consists of strictly 4 participants
+-- ---------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `teams` (
+  `id` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  `name` VARCHAR(100) NOT NULL UNIQUE,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ---------------------------------------------------------------------
+-- 1b. Table: users
 -- No registration system. Accounts are provisioned manually by administrators.
 -- ---------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `users` (
@@ -16,12 +26,17 @@ CREATE TABLE IF NOT EXISTS `users` (
   `username` VARCHAR(50) NOT NULL UNIQUE,
   `password_hash` VARCHAR(255) NOT NULL,
   `role` ENUM('participant', 'admin') NOT NULL DEFAULT 'participant',
+  `team_id` INT UNSIGNED NULL,
+  `team_name` VARCHAR(100) NULL,
   `is_active` TINYINT(1) NOT NULL DEFAULT 1,
   `last_login_at` DATETIME NULL,
   `last_login_ip` VARCHAR(45) NULL,
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   INDEX `idx_users_role` (`role`),
-  INDEX `idx_users_active` (`is_active`)
+  INDEX `idx_users_active` (`is_active`),
+  INDEX `idx_users_team` (`team_id`),
+  CONSTRAINT `fk_users_team` FOREIGN KEY (`team_id`) 
+    REFERENCES `teams` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ---------------------------------------------------------------------
@@ -217,16 +232,41 @@ INSERT INTO `system_settings` (`setting_key`, `setting_value`, `description`) VA
 ('platform_title', 'HNU CTF', 'Name of the CTF competition platform')
 ON DUPLICATE KEY UPDATE `setting_value` = VALUES(`setting_value`);
 
--- 2. Default Provisioned Accounts (Password: Admin@HNU2026! / Participant123!)
--- Administrators can insert new users directly or change passwords using password_hash()
-INSERT INTO `users` (`id`, `username`, `password_hash`, `role`, `is_active`) VALUES
-(1, 'admin', '$2y$12$fLdVU3QXfjEM4Ulqwh7QHuF8I7CKy2cTQBe0Csm0PJKjPedUsq7Je', 'admin', 1),
-(2, 'cyberspartan', '$2y$12$mOHXPmoH49dLFFDFPUUvhe9yykOS9oPZRhYHSa35TNzrAOuBwETFi', 'participant', 1),
-(3, 'bytehunter', '$2y$12$mOHXPmoH49dLFFDFPUUvhe9yykOS9oPZRhYHSa35TNzrAOuBwETFi', 'participant', 1),
-(4, 'netrunner', '$2y$12$mOHXPmoH49dLFFDFPUUvhe9yykOS9oPZRhYHSa35TNzrAOuBwETFi', 'participant', 1)
+-- 2. Teams (4 participants per team)
+INSERT INTO `teams` (`id`, `name`) VALUES
+(1, 'Team Alpha'),
+(2, 'Team Bravo'),
+(3, 'Team Gamma')
+ON DUPLICATE KEY UPDATE `name` = VALUES(`name`);
+
+-- 3. Default Provisioned Accounts (Password: Admin@HNU2026! / Participant123!)
+-- Exactly 4 participants per team, plus Admin
+-- Passwords:
+-- Admin: Admin@HNU2026!
+-- Participants: Participant123!
+INSERT INTO `users` (`id`, `username`, `password_hash`, `role`, `team_id`, `team_name`, `is_active`) VALUES
+(1, 'admin', '$2y$12$fLdVU3QXfjEM4Ulqwh7QHuF8I7CKy2cTQBe0Csm0PJKjPedUsq7Je', 'admin', NULL, NULL, 1),
+
+-- Team Alpha (4 Participants)
+(2, 'cyberspartan', '$2y$12$mOHXPmoH49dLFFDFPUUvhe9yykOS9oPZRhYHSa35TNzrAOuBwETFi', 'participant', 1, 'Team Alpha', 1),
+(3, 'alpha_hunter', '$2y$12$mOHXPmoH49dLFFDFPUUvhe9yykOS9oPZRhYHSa35TNzrAOuBwETFi', 'participant', 1, 'Team Alpha', 1),
+(4, 'alpha_sentry', '$2y$12$mOHXPmoH49dLFFDFPUUvhe9yykOS9oPZRhYHSa35TNzrAOuBwETFi', 'participant', 1, 'Team Alpha', 1),
+(5, 'alpha_vanguard', '$2y$12$mOHXPmoH49dLFFDFPUUvhe9yykOS9oPZRhYHSa35TNzrAOuBwETFi', 'participant', 1, 'Team Alpha', 1),
+
+-- Team Bravo (4 Participants)
+(6, 'bravo_falcon', '$2y$12$mOHXPmoH49dLFFDFPUUvhe9yykOS9oPZRhYHSa35TNzrAOuBwETFi', 'participant', 2, 'Team Bravo', 1),
+(7, 'bravo_shadow', '$2y$12$mOHXPmoH49dLFFDFPUUvhe9yykOS9oPZRhYHSa35TNzrAOuBwETFi', 'participant', 2, 'Team Bravo', 1),
+(8, 'bravo_cipher', '$2y$12$mOHXPmoH49dLFFDFPUUvhe9yykOS9oPZRhYHSa35TNzrAOuBwETFi', 'participant', 2, 'Team Bravo', 1),
+(9, 'bravo_specter', '$2y$12$mOHXPmoH49dLFFDFPUUvhe9yykOS9oPZRhYHSa35TNzrAOuBwETFi', 'participant', 2, 'Team Bravo', 1),
+
+-- Team Gamma (4 Participants)
+(10, 'gamma_recon', '$2y$12$mOHXPmoH49dLFFDFPUUvhe9yykOS9oPZRhYHSa35TNzrAOuBwETFi', 'participant', 3, 'Team Gamma', 1),
+(11, 'gamma_spark', '$2y$12$mOHXPmoH49dLFFDFPUUvhe9yykOS9oPZRhYHSa35TNzrAOuBwETFi', 'participant', 3, 'Team Gamma', 1),
+(12, 'gamma_strike', '$2y$12$mOHXPmoH49dLFFDFPUUvhe9yykOS9oPZRhYHSa35TNzrAOuBwETFi', 'participant', 3, 'Team Gamma', 1),
+(13, 'gamma_phantom', '$2y$12$mOHXPmoH49dLFFDFPUUvhe9yykOS9oPZRhYHSa35TNzrAOuBwETFi', 'participant', 3, 'Team Gamma', 1)
 ON DUPLICATE KEY UPDATE `username` = VALUES(`username`);
 
--- 3. Imported HNU CTF Challenges (All 22 Authentic Challenges)
+-- 4. Imported HNU CTF Challenges (All 22 Authentic Challenges)
 -- Note: Replace placeholder flags with your desired verified flags in the Admin SOC panel.
 INSERT INTO `challenges` (`id`, `slug`, `title`, `category`, `difficulty`, `points`, `description`, `target_info`, `correct_flag`, `is_enabled`, `image_path`) VALUES
 -- WEB

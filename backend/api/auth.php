@@ -39,7 +39,7 @@ switch ($action) {
         $ip = getClientIP();
 
         if ($dbConnected && $pdo) {
-            $stmt = $pdo->prepare("SELECT id, username, password_hash, role, is_active FROM users WHERE username = ? LIMIT 1");
+            $stmt = $pdo->prepare("SELECT id, username, password_hash, role, team_id, team_name, is_active FROM users WHERE username = ? LIMIT 1");
             $stmt->execute([$username]);
             $user = $stmt->fetch();
 
@@ -52,6 +52,8 @@ switch ($action) {
                 $_SESSION['user_id'] = (int)$user['id'];
                 $_SESSION['username'] = $user['username'];
                 $_SESSION['role'] = $user['role'];
+                $_SESSION['team_id'] = !empty($user['team_id']) ? (int)$user['team_id'] : null;
+                $_SESSION['team_name'] = $user['team_name'] ?? null;
 
                 // Update login metadata
                 $update = $pdo->prepare("UPDATE users SET last_login_at = NOW(), last_login_ip = ? WHERE id = ?");
@@ -74,7 +76,9 @@ switch ($action) {
                     'user' => [
                         'id' => (int)$user['id'],
                         'username' => $user['username'],
-                        'role' => $user['role']
+                        'role' => $user['role'],
+                        'team_id' => $_SESSION['team_id'],
+                        'team_name' => $_SESSION['team_name']
                     ]
                 ]);
             } else {
@@ -93,12 +97,19 @@ switch ($action) {
             }
         } else {
             // DATABASE NOT YET CONNECTED: Clear fallback demo mode
-            // Allow admin and test participants so developer/evaluator can inspect system prior to manual MySQL import
+            // 4 participants per team + 1 administrator
             $demoAccounts = [
-                'admin' => ['pass' => 'Admin@HNU2026!', 'role' => 'admin', 'id' => 1],
-                'cyberspartan' => ['pass' => 'Participant123!', 'role' => 'participant', 'id' => 2],
-                'bytehunter' => ['pass' => 'Participant123!', 'role' => 'participant', 'id' => 3],
-                'netrunner' => ['pass' => 'Participant123!', 'role' => 'participant', 'id' => 4],
+                'admin'          => ['pass' => 'Admin@HNU2026!', 'role' => 'admin',       'id' => 1, 'team_id' => null, 'team_name' => null],
+                // Team Alpha (4 Participants)
+                'cyberspartan'   => ['pass' => 'Participant123!', 'role' => 'participant', 'id' => 2, 'team_id' => 1,    'team_name' => 'Team Alpha'],
+                'alpha_hunter'   => ['pass' => 'Participant123!', 'role' => 'participant', 'id' => 3, 'team_id' => 1,    'team_name' => 'Team Alpha'],
+                'alpha_sentry'   => ['pass' => 'Participant123!', 'role' => 'participant', 'id' => 4, 'team_id' => 1,    'team_name' => 'Team Alpha'],
+                'alpha_vanguard' => ['pass' => 'Participant123!', 'role' => 'participant', 'id' => 5, 'team_id' => 1,    'team_name' => 'Team Alpha'],
+                // Team Bravo (4 Participants)
+                'bravo_falcon'   => ['pass' => 'Participant123!', 'role' => 'participant', 'id' => 6, 'team_id' => 2,    'team_name' => 'Team Bravo'],
+                'bravo_shadow'   => ['pass' => 'Participant123!', 'role' => 'participant', 'id' => 7, 'team_id' => 2,    'team_name' => 'Team Bravo'],
+                'bravo_cipher'   => ['pass' => 'Participant123!', 'role' => 'participant', 'id' => 8, 'team_id' => 2,    'team_name' => 'Team Bravo'],
+                'bravo_specter'  => ['pass' => 'Participant123!', 'role' => 'participant', 'id' => 9, 'team_id' => 2,    'team_name' => 'Team Bravo']
             ];
 
             if (isset($demoAccounts[$username]) && $password === $demoAccounts[$username]['pass']) {
@@ -106,6 +117,8 @@ switch ($action) {
                 $_SESSION['user_id'] = $acc['id'];
                 $_SESSION['username'] = $username;
                 $_SESSION['role'] = $acc['role'];
+                $_SESSION['team_id'] = $acc['team_id'];
+                $_SESSION['team_name'] = $acc['team_name'];
 
                 sendJsonResponse([
                     'status' => 'success',
@@ -115,13 +128,15 @@ switch ($action) {
                     'user' => [
                         'id' => $acc['id'],
                         'username' => $username,
-                        'role' => $acc['role']
+                        'role' => $acc['role'],
+                        'team_id' => $acc['team_id'],
+                        'team_name' => $acc['team_name']
                     ]
                 ]);
             } else {
                 sendJsonResponse([
                     'status' => 'error',
-                    'message' => 'Invalid credentials or database not yet configured. Default accounts: admin (Admin@HNU2026!) or cyberspartan (Participant123!).'
+                    'message' => 'Invalid credentials or database not yet configured. Default accounts: admin (Admin@HNU2026!) or cyberspartan / alpha_hunter / bravo_falcon (Participant123!).'
                 ], 401);
             }
         }
@@ -143,7 +158,9 @@ switch ($action) {
             'user' => [
                 'id' => $_SESSION['user_id'],
                 'username' => $_SESSION['username'],
-                'role' => $_SESSION['role']
+                'role' => $_SESSION['role'],
+                'team_id' => $_SESSION['team_id'] ?? null,
+                'team_name' => $_SESSION['team_name'] ?? null
             ]
         ]);
         break;

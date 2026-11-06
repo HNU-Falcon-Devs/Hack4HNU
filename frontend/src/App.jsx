@@ -50,9 +50,9 @@ export default function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#080D18] flex flex-col items-center justify-center space-y-4">
-        <div className="w-10 h-10 border-3 border-cyan-400 border-t-transparent rounded-full animate-spin" />
-        <div className="font-mono text-xs text-cyan-400 tracking-wider uppercase">
+      <div className="min-h-screen bg-[#121722] flex flex-col items-center justify-center space-y-4">
+        <div className="w-10 h-10 border-3 border-emerald-400 border-t-transparent rounded-full animate-spin" />
+        <div className="font-mono text-xs text-emerald-400 tracking-wider uppercase">
           Initializing HNU CTF Security Gateway...
         </div>
       </div>
@@ -66,7 +66,7 @@ export default function App() {
   const isAdmin = user.role === 'admin';
 
   return (
-    <div className="min-h-screen bg-[#080D18] text-[#F8FAFC] flex flex-col font-sans selection:bg-cyan-500/30 selection:text-cyan-300">
+    <div className="min-h-screen bg-[#121722] text-[#F1F5F9] flex flex-col font-sans selection:bg-emerald-500/30 selection:text-emerald-300">
       
       {/* Top Navbar */}
       <Navbar
@@ -150,16 +150,16 @@ export default function App() {
 
       </main>
 
-      {/* Cyber Footer */}
-      <footer className="bg-[#0B1120] border-t border-[#1E293B] py-4 text-center text-xs font-mono text-gray-500">
+      {/* Sleek Footer */}
+      <footer className="bg-[#0e131d] border-t border-[#1e2638] py-4 text-center text-xs font-sans text-gray-400">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <div>
-            <span>HNU CTF – Cybersecurity Challenge Platform</span>
-            <span className="text-gray-600 ml-2">|</span>
-            <span className="text-emerald-500/80 ml-2">Holy Name University</span>
+          <div className="flex items-center space-x-2">
+            <span className="font-semibold text-gray-300">HNU CTF</span>
+            <span className="text-gray-600">•</span>
+            <span className="text-emerald-400 font-medium">Holy Name University</span>
           </div>
-          <div className="text-gray-400 text-[11px]">
-            Powered by PHP 8 & ReactJS • SOC Active Telemetry
+          <div className="text-gray-400 text-[11px] font-mono">
+            PHP 8 & ReactJS • Active Arena
           </div>
         </div>
       </footer>

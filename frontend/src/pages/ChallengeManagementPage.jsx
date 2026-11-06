@@ -77,13 +77,13 @@ export default function ChallengeManagementPage() {
     <div className="space-y-6">
       
       {/* Header Banner */}
-      <div className="bg-[#111827] border border-[#1E293B] rounded-2xl p-6 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-6 shadow-lg flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="flex items-center space-x-3">
-          <div className="p-3 bg-cyan-950/80 border border-cyan-800/80 rounded-xl text-cyan-400 shadow-lg shadow-cyan-950/50">
+          <div className="p-3 bg-emerald-950/80 border border-emerald-800/80 rounded-xl text-[#10B981] shadow-lg shadow-emerald-950/50">
             <Flag className="w-6 h-6" />
           </div>
           <div>
-            <h1 className="text-2xl font-extrabold text-white tracking-tight font-mono">
+            <h1 className="text-2xl font-black text-white tracking-tight font-mono">
               Challenge Administration & Flag Control
             </h1>
             <p className="text-xs text-gray-400 font-mono">
@@ -95,7 +95,7 @@ export default function ChallengeManagementPage() {
         <button
           onClick={loadChallenges}
           disabled={loading}
-          className="px-3.5 py-2 bg-[#080D18] hover:bg-gray-800 border border-gray-700 text-gray-300 rounded-lg text-xs font-mono flex items-center space-x-1.5 transition"
+          className="px-3.5 py-2 bg-[#121722] hover:bg-[#202b3d] border border-[#26334a] text-gray-300 rounded-xl text-xs font-mono flex items-center space-x-1.5 transition"
         >
           <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
           <span>Reload Challenges</span>
@@ -103,17 +103,17 @@ export default function ChallengeManagementPage() {
       </div>
 
       {/* Search Bar */}
-      <div className="bg-[#111827] border border-[#1E293B] rounded-2xl p-4 shadow-sm flex items-center justify-between">
+      <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-4 shadow-lg flex items-center justify-between">
         <div className="relative w-full sm:w-96">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-500">
-            <Search className="w-3.5 h-3.5 text-cyan-400" />
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+            <Search className="w-3.5 h-3.5 text-[#10B981]" />
           </div>
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search challenges by title or category..."
-            className="w-full bg-[#080D18] border border-gray-700 rounded-lg pl-8 pr-3 py-1.5 text-xs font-mono text-white placeholder-gray-500 focus:border-cyan-400"
+            className="w-full bg-[#121722] border border-[#26334a] rounded-xl pl-8 pr-3 py-1.5 text-xs font-mono text-white placeholder-gray-500 focus:border-[#10B981] transition"
           />
         </div>
         <span className="text-xs text-gray-400 font-mono hidden sm:block">
@@ -122,10 +122,10 @@ export default function ChallengeManagementPage() {
       </div>
 
       {/* Challenges Admin Table */}
-      <div className="bg-[#111827] border border-[#1E293B] rounded-2xl overflow-hidden shadow-sm">
+      <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl overflow-hidden shadow-lg">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs font-mono">
-            <thead className="bg-[#0B1120] text-gray-400 border-b border-gray-800 uppercase tracking-wider text-[11px]">
+            <thead className="bg-[#161c2d] text-gray-400 border-b border-[#26334a] uppercase tracking-wider text-[11px]">
               <tr>
                 <th className="px-5 py-3.5">ID</th>
                 <th className="px-5 py-3.5">Title</th>

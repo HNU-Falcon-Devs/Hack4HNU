@@ -24,7 +24,7 @@ function isValidFlagFormat($flag) {
 /**
  * Process a flag submission.
  */
-function verifyAndProcessFlag($userId, $username, $challengeId, $submittedFlag) {
+function verifyAndProcessFlag($userId, $username, $challengeId, $submittedFlag, $teamId = null) {
     $pdo = getDatabaseConnection();
     $ip = getClientIP();
     $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'Unknown';
@@ -61,18 +61,55 @@ function verifyAndProcessFlag($userId, $username, $challengeId, $submittedFlag) 
         ];
     }
 
-    // 3. Check if user has already solved this challenge
-    $solveCheck = $pdo->prepare("SELECT id, solved_at FROM solves WHERE user_id = ? AND challenge_id = ? LIMIT 1");
-    $solveCheck->execute([$userId, $challengeId]);
-    $alreadySolved = $solveCheck->fetch();
+    // Resolve team if not passed
+    if ($teamId === null) {
+        $uStmt = $pdo->prepare("SELECT team_id, team_name FROM users WHERE id = ?");
+        $uStmt->execute([$userId]);
+        $uRow = $uStmt->fetch();
+        if ($uRow && !empty($uRow['team_id'])) {
+            $teamId = (int)$uRow['team_id'];
+        }
+    }
 
-    if ($alreadySolved) {
-        return [
-            'status' => 'info',
-            'code' => 'ALREADY_SOLVED',
-            'message' => 'You have already solved this challenge. Duplicate points are not awarded.',
-            'solved_at' => $alreadySolved['solved_at']
-        ];
+    // 3. Check if team or user has already solved this challenge
+    if ($teamId) {
+        $teamSolveCheck = $pdo->prepare("
+            SELECT s.id, s.solved_at, u.username as solver_name
+            FROM solves s
+            JOIN users u ON s.user_id = u.id
+            WHERE s.challenge_id = ? AND u.team_id = ?
+            ORDER BY s.solved_at ASC
+            LIMIT 1
+        ");
+        $teamSolveCheck->execute([$challengeId, $teamId]);
+        $alreadySolved = $teamSolveCheck->fetch();
+
+        if ($alreadySolved) {
+            $isMe = ($alreadySolved['solver_name'] === $username);
+            return [
+                'status' => 'info',
+                'code' => 'ALREADY_SOLVED_BY_TEAM',
+                'message' => $isMe
+                    ? 'You have already solved this challenge. Duplicate points are not awarded.'
+                    : "This challenge has already been solved by your teammate '{$alreadySolved['solver_name']}'. Your team has already secured these points!",
+                'solved_by' => $alreadySolved['solver_name'],
+                'solved_at' => $alreadySolved['solved_at']
+            ];
+        }
+    } else {
+        $solveCheck = $pdo->prepare("SELECT id, solved_at FROM solves WHERE user_id = ? AND challenge_id = ? LIMIT 1");
+        $solveCheck->execute([$userId, $challengeId]);
+        $alreadySolved = $solveCheck->fetch();
+
+        if ($alreadySolved) {
+            return [
+                'status' => 'info',
+                'code' => 'ALREADY_SOLVED',
+                'message' => 'You have already solved this challenge. Duplicate points are not awarded.',
+                'solved_at' => $alreadySolved['solved_at']
+            ];
+        }
+    }
     }
 
     // 4. Case-sensitive comparison

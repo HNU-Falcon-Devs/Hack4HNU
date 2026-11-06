@@ -57,11 +57,11 @@ export default function AnnouncementsPage({ user, isAdmin }) {
 
   const getCategoryColor = (cat) => {
     switch (cat) {
-      case 'Competition': return 'bg-cyan-950/80 border-cyan-800 text-cyan-300';
-      case 'Challenge Release': return 'bg-purple-950/80 border-purple-800 text-purple-300';
-      case 'Rules & Reminders': return 'bg-amber-950/80 border-amber-800 text-amber-300';
+      case 'Competition': return 'bg-emerald-950/80 border-emerald-800 text-[#10B981]';
+      case 'Challenge Release': return 'bg-amber-950/80 border-amber-800 text-[#F59E0B]';
+      case 'Rules & Reminders': return 'bg-blue-950/80 border-blue-800 text-blue-300';
       case 'Maintenance': return 'bg-red-950/80 border-red-800 text-red-300';
-      default: return 'bg-blue-950/80 border-blue-800 text-blue-300';
+      default: return 'bg-emerald-950/80 border-emerald-800 text-emerald-300';
     }
   };
 
@@ -69,14 +69,14 @@ export default function AnnouncementsPage({ user, isAdmin }) {
     <div className="space-y-6 max-w-4xl mx-auto">
       
       {/* Header */}
-      <div className="bg-[#111827] border border-[#1E293B] rounded-2xl p-6 sm:p-8 shadow-sm flex items-center justify-between">
+      <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-6 sm:p-8 shadow-lg flex items-center justify-between">
         <div className="space-y-1">
-          <div className="flex items-center space-x-2 text-cyan-400 font-mono text-xs">
+          <div className="flex items-center space-x-2 text-[#F59E0B] font-mono text-xs font-bold">
             <Megaphone className="w-4 h-4" />
-            <span className="uppercase tracking-wider font-bold">Official Broadcast Feed</span>
+            <span className="uppercase tracking-wider">Official Broadcast Feed</span>
           </div>
-          <h1 className="text-2xl font-extrabold text-white tracking-tight">
-            Announcements & Bulletins
+          <h1 className="text-2xl font-black text-white tracking-tight">
+            Notices & Bulletins
           </h1>
           <p className="text-xs text-gray-400">
             Important operational updates, challenge drops, and competition notices.
@@ -86,7 +86,7 @@ export default function AnnouncementsPage({ user, isAdmin }) {
         {isAdmin && (
           <button
             onClick={() => setShowAddModal(true)}
-            className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-mono px-4 py-2.5 rounded-lg text-xs font-semibold flex items-center space-x-2 transition shadow-lg shadow-cyan-500/20"
+            className="bg-gradient-to-r from-[#059669] to-[#10B981] hover:from-[#047857] hover:to-[#059669] text-white font-mono px-4 py-2.5 rounded-xl text-xs font-bold flex items-center space-x-2 transition shadow-md shadow-emerald-900/30"
           >
             <Plus className="w-4 h-4" />
             <span>Publish Broadcast</span>
@@ -96,20 +96,20 @@ export default function AnnouncementsPage({ user, isAdmin }) {
 
       {/* Admin Publish Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#111827] border border-[#1E293B] rounded-xl max-w-lg w-full p-6 shadow-2xl space-y-4">
-            <h3 className="text-lg font-bold text-white font-mono">Publish Competition Announcement</h3>
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
+            <h3 className="text-lg font-bold text-white">Publish Competition Notice</h3>
             
-            <form onSubmit={handleCreate} className="space-y-3 font-mono text-xs">
+            <form onSubmit={handleCreate} className="space-y-3 font-sans text-xs">
               <div>
                 <label className="block text-gray-400 mb-1">Headline Title</label>
                 <input
                   type="text"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  placeholder="e.g. Forensics Category Hint Released"
+                  placeholder="e.g. Challenge Hint Released"
                   required
-                  className="w-full bg-[#080D18] border border-gray-700 rounded-lg p-2.5 text-white focus:border-cyan-400"
+                  className="w-full bg-[#121722] border border-[#26334a] rounded-xl p-2.5 text-white focus:border-[#10B981] focus:outline-none"
                 />
               </div>
 
@@ -118,7 +118,7 @@ export default function AnnouncementsPage({ user, isAdmin }) {
                 <select
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
-                  className="w-full bg-[#080D18] border border-gray-700 rounded-lg p-2.5 text-white focus:border-cyan-400"
+                  className="w-full bg-[#121722] border border-[#26334a] rounded-xl p-2.5 text-white focus:border-[#10B981] focus:outline-none"
                 >
                   {CATEGORIES.map(c => (
                     <option key={c} value={c}>{c}</option>
@@ -134,7 +134,7 @@ export default function AnnouncementsPage({ user, isAdmin }) {
                   onChange={(e) => setContent(e.target.value)}
                   placeholder="Detailed announcement content..."
                   required
-                  className="w-full bg-[#080D18] border border-gray-700 rounded-lg p-2.5 text-white focus:border-cyan-400 font-sans text-sm"
+                  className="w-full bg-[#121722] border border-[#26334a] rounded-xl p-2.5 text-white focus:border-[#10B981] focus:outline-none font-sans text-sm"
                 />
               </div>
 
@@ -144,7 +144,7 @@ export default function AnnouncementsPage({ user, isAdmin }) {
                   id="pin"
                   checked={isPinned}
                   onChange={(e) => setIsPinned(e.target.checked)}
-                  className="rounded bg-[#080D18] border-gray-700 text-cyan-500 focus:ring-0"
+                  className="rounded bg-[#121722] border-[#26334a] text-emerald-500 focus:ring-0"
                 />
                 <label htmlFor="pin" className="text-gray-300 cursor-pointer">Pin to top of participant dashboards</label>
               </div>
@@ -153,14 +153,14 @@ export default function AnnouncementsPage({ user, isAdmin }) {
                 <button
                   type="button"
                   onClick={() => setShowAddModal(false)}
-                  className="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-lg transition"
+                  className="px-4 py-2 bg-[#121722] hover:bg-[#202b3d] text-gray-300 border border-[#26334a] rounded-xl transition"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="px-5 py-2 bg-cyan-600 hover:bg-cyan-500 text-white font-bold rounded-lg transition disabled:opacity-50"
+                  className="px-5 py-2 bg-gradient-to-r from-[#059669] to-[#10B981] hover:from-[#047857] hover:to-[#059669] text-white font-bold rounded-xl transition shadow-md shadow-emerald-900/30 disabled:opacity-50"
                 >
                   {submitting ? 'Broadcasting...' : 'Publish'}
                 </button>
@@ -177,25 +177,27 @@ export default function AnnouncementsPage({ user, isAdmin }) {
             Loading announcements...
           </div>
         ) : announcements.length === 0 ? (
-          <div className="text-center py-12 bg-[#111827] border border-[#1E293B] rounded-2xl p-6 text-gray-500 font-mono text-sm">
+          <div className="text-center py-12 bg-[#1a2234] border border-[#26334a] rounded-2xl p-6 text-gray-400 font-mono text-sm">
             No announcements published yet.
           </div>
         ) : (
           announcements.map((ann) => (
             <div 
               key={ann.id}
-              className={`bg-[#111827] border rounded-xl p-5 shadow-sm space-y-3 transition ${
-                ann.is_pinned ? 'border-cyan-500/50 bg-gradient-to-r from-[#111827] to-[#0d1c28]' : 'border-[#1E293B]'
+              className={`bg-[#1a2234] border rounded-2xl p-5 shadow-md space-y-3 transition ${
+                ann.is_pinned 
+                  ? 'border-[#10B981] bg-gradient-to-r from-[#1a2234] to-[#122820] shadow-[0_0_18px_rgba(16,185,129,0.18)]' 
+                  : 'border-[#26334a]'
               }`}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
-                  <span className={`px-2 py-0.5 rounded text-[11px] font-mono border ${getCategoryColor(ann.category)}`}>
+                  <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-mono border font-bold ${getCategoryColor(ann.category)}`}>
                     {ann.category}
                   </span>
                   {ann.is_pinned && (
-                    <span className="flex items-center space-x-1 text-[11px] font-mono text-cyan-400 font-bold">
-                      <Pin className="w-3.5 h-3.5 fill-cyan-400" />
+                    <span className="flex items-center space-x-1 text-[11px] font-mono text-[#F59E0B] font-bold">
+                      <Pin className="w-3.5 h-3.5 fill-[#F59E0B]" />
                       <span>PINNED</span>
                     </span>
                   )}
@@ -206,7 +208,7 @@ export default function AnnouncementsPage({ user, isAdmin }) {
                   {isAdmin && (
                     <button
                       onClick={() => handleDelete(ann.id)}
-                      className="text-red-400 hover:text-red-300 p-1 hover:bg-red-950/40 rounded transition"
+                      className="text-red-400 hover:text-red-300 p-1 hover:bg-red-950/40 rounded-lg transition"
                       title="Delete Announcement"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -220,8 +222,8 @@ export default function AnnouncementsPage({ user, isAdmin }) {
                 {ann.content}
               </div>
 
-              <div className="text-[11px] font-mono text-gray-500 pt-2 border-t border-gray-800/80">
-                Posted by: <span className="text-gray-300">{ann.author || 'Administrator'}</span>
+              <div className="text-[11px] font-mono text-gray-400 pt-2 border-t border-[#26334a]">
+                Posted by: <span className="text-[#10B981] font-bold">{ann.author || 'Administrator'}</span>
               </div>
             </div>
           ))
@@ -231,4 +233,3 @@ export default function AnnouncementsPage({ user, isAdmin }) {
     </div>
   );
 }
-

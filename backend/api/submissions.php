@@ -37,7 +37,7 @@ switch ($action) {
         }
 
         if ($dbConnected && $pdo) {
-            $result = verifyAndProcessFlag($user['id'], $user['username'], $challengeId, $flag);
+            $result = verifyAndProcessFlag($user['id'], $user['username'], $challengeId, $flag, $user['team_id']);
             $statusCode = ($result['status'] === 'success') ? 200 : ($result['code'] === 'INVALID_FORMAT' ? 400 : 200);
             sendJsonResponse($result, $statusCode);
         } else {
@@ -65,24 +65,43 @@ switch ($action) {
                 sendJsonResponse(['status' => 'error', 'message' => 'Challenge not found'], 404);
             }
 
-            if (!isset($_SESSION['demo_solves'])) {
-                $_SESSION['demo_solves'] = [];
+            $teamKey = 'team_' . ($user['team_id'] ?? 'solo_' . $user['id']);
+            if (!isset($_SESSION['demo_team_solves'])) {
+                $_SESSION['demo_team_solves'] = [];
+            }
+            if (!isset($_SESSION['demo_team_solves'][$teamKey])) {
+                $_SESSION['demo_team_solves'][$teamKey] = [];
             }
 
-            if (in_array($target['slug'], $_SESSION['demo_solves'])) {
+            // Check if solved by team
+            if (isset($_SESSION['demo_team_solves'][$teamKey][$target['slug']])) {
+                $solvedBy = $_SESSION['demo_team_solves'][$teamKey][$target['slug']]['solver'] ?? 'teammate';
                 sendJsonResponse([
                     'status' => 'info',
-                    'code' => 'ALREADY_SOLVED',
-                    'message' => 'You have already solved this challenge. Duplicate points are not awarded.'
+                    'code' => 'ALREADY_SOLVED_BY_TEAM',
+                    'message' => ($solvedBy === $user['username'])
+                        ? 'You have already solved this challenge.'
+                        : "This challenge has already been solved by your teammate '{$solvedBy}'. Your team has already secured these points!",
+                    'solved_by' => $solvedBy
                 ]);
             }
 
             if (strcmp($flag, $target['correct_flag']) === 0) {
+                $_SESSION['demo_team_solves'][$teamKey][$target['slug']] = [
+                    'solver' => $user['username'],
+                    'solved_at' => date('Y-m-d H:i:s'),
+                    'points' => (int)$target['points'],
+                    'title' => $target['title']
+                ];
+                if (!isset($_SESSION['demo_solves'])) {
+                    $_SESSION['demo_solves'] = [];
+                }
                 $_SESSION['demo_solves'][] = $target['slug'];
+
                 sendJsonResponse([
                     'status' => 'success',
                     'code' => 'CORRECT_FLAG',
-                    'message' => "Congratulations! That is the correct flag for '{$target['title']}'! (Demo Mode)",
+                    'message' => "Congratulations! That is the correct flag for '{$target['title']}'! Your team earned {$target['points']} points!",
                     'points_awarded' => (int)$target['points']
                 ]);
             } else {

@@ -32,26 +32,26 @@ export default function LoginPage({ onLoginSuccess }) {
   };
 
   return (
-    <div className="min-h-screen bg-[#080D18] flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8 selection:bg-cyan-500/30 selection:text-cyan-300">
+    <div className="min-h-screen bg-[#121722] flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8 selection:bg-emerald-500/30 selection:text-emerald-300">
       
-      {/* Background cyber accent */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(0,212,255,0.15),rgba(255,255,255,0))] pointer-events-none" />
+      {/* Background ambient lighting */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(16,185,129,0.12),rgba(255,255,255,0))] pointer-events-none" />
 
       <div className="max-w-md w-full space-y-6 relative z-10">
         
         {/* Header Branding */}
         <div className="text-center space-y-2">
-          <div className="mx-auto w-24 h-24 flex items-center justify-center p-2 rounded-2xl bg-[#111827]/80 border border-emerald-500/30 shadow-xl shadow-emerald-500/10">
+          <div className="mx-auto w-24 h-24 flex items-center justify-center p-2 rounded-2xl bg-[#1a2234] border border-[#26334a] shadow-xl shadow-black/40">
             <img 
               src={hnuLogo} 
               alt="Holy Name University Logo" 
-              className="w-full h-full object-contain filter drop-shadow-[0_0_12px_rgba(16,185,129,0.3)]" 
+              className="w-full h-full object-contain filter drop-shadow-[0_2px_10px_rgba(16,185,129,0.35)]" 
             />
           </div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-white font-mono">
-            HNU <span className="text-[#00D4FF]">CTF</span>
+          <h1 className="text-3xl font-black tracking-tight text-white italic">
+            HNU <span className="text-[#10B981]">CTF</span>
           </h1>
-          <p className="text-xs uppercase font-mono tracking-widest text-emerald-400 font-semibold">
+          <p className="text-xs uppercase font-mono tracking-widest text-[#F59E0B] font-bold">
             Holy Name University Cyber Arena
           </p>
           <p className="text-xs text-gray-400 max-w-sm mx-auto">
@@ -59,21 +59,21 @@ export default function LoginPage({ onLoginSuccess }) {
           </p>
         </div>
 
-        {/* Login Card */}
-        <div className="bg-[#111827] border border-[#1E293B] rounded-2xl p-6 sm:p-8 shadow-2xl backdrop-blur-sm">
+        {/* Login Card (Reference Dark Matte Card) */}
+        <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-6 sm:p-8 shadow-2xl">
           
-          <div className="mb-6 pb-4 border-b border-gray-800 flex items-center justify-between">
-            <span className="text-xs font-mono font-bold text-gray-300 uppercase tracking-wider flex items-center space-x-1.5">
-              <KeyRound className="w-4 h-4 text-cyan-400" />
+          <div className="mb-6 pb-4 border-b border-[#26334a] flex items-center justify-between">
+            <span className="text-xs font-mono font-bold text-gray-200 uppercase tracking-wider flex items-center space-x-1.5">
+              <KeyRound className="w-4 h-4 text-[#10B981]" />
               <span>Authentication</span>
             </span>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-gray-800 text-gray-400 border border-gray-700">
-              No Public Registration
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#121722] text-[#F59E0B] border border-[#26334a] font-bold">
+              Closed System
             </span>
           </div>
 
           {error && (
-            <div className="mb-5 p-3 rounded-lg bg-red-950/70 border border-red-800 text-red-300 text-xs flex items-start space-x-2 font-mono">
+            <div className="mb-5 p-3 rounded-xl bg-red-950/70 border border-red-800 text-red-300 text-xs flex items-start space-x-2 font-mono">
               <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
               <span>{error}</span>
             </div>
@@ -88,7 +88,7 @@ export default function LoginPage({ onLoginSuccess }) {
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-500">
-                  <User className="w-4 h-4 text-cyan-400" />
+                  <User className="w-4 h-4 text-[#10B981]" />
                 </div>
                 <input
                   type="text"
@@ -97,7 +97,7 @@ export default function LoginPage({ onLoginSuccess }) {
                   placeholder="Enter your registered username"
                   required
                   autoFocus
-                  className="w-full bg-[#080D18] border border-gray-700 focus:border-[#00D4FF] focus:ring-1 focus:ring-[#00D4FF] rounded-lg pl-9 pr-3 py-2.5 text-sm font-mono text-white placeholder-gray-600"
+                  className="w-full bg-[#121722] border border-[#26334a] focus:border-[#10B981] focus:ring-1 focus:ring-[#10B981] rounded-xl pl-9 pr-3 py-2.5 text-sm font-mono text-white placeholder-gray-500 transition"
                 />
               </div>
             </div>
@@ -109,7 +109,7 @@ export default function LoginPage({ onLoginSuccess }) {
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-500">
-                  <Lock className="w-4 h-4 text-cyan-400" />
+                  <Lock className="w-4 h-4 text-[#10B981]" />
                 </div>
                 <input
                   type="password"
@@ -117,16 +117,16 @@ export default function LoginPage({ onLoginSuccess }) {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••••••"
                   required
-                  className="w-full bg-[#080D18] border border-gray-700 focus:border-[#00D4FF] focus:ring-1 focus:ring-[#00D4FF] rounded-lg pl-9 pr-3 py-2.5 text-sm font-mono text-white placeholder-gray-600"
+                  className="w-full bg-[#121722] border border-[#26334a] focus:border-[#10B981] focus:ring-1 focus:ring-[#10B981] rounded-xl pl-9 pr-3 py-2.5 text-sm font-mono text-white placeholder-gray-500 transition"
                 />
               </div>
             </div>
 
-            {/* Submit Button */}
+            {/* Submit Button in HNU Green */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full mt-2 bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 hover:from-cyan-400 hover:to-blue-500 text-white font-mono font-semibold py-2.5 px-4 rounded-lg text-sm tracking-wider uppercase transition shadow-lg shadow-cyan-500/20 disabled:opacity-50 flex items-center justify-center space-x-2"
+              className="w-full mt-2 bg-gradient-to-r from-[#059669] to-[#10B981] hover:from-[#047857] hover:to-[#059669] text-white font-mono font-bold py-2.5 px-4 rounded-xl text-sm tracking-wider uppercase transition shadow-lg shadow-emerald-900/30 disabled:opacity-50 flex items-center justify-center space-x-2"
             >
               {loading ? (
                 <>
@@ -143,29 +143,38 @@ export default function LoginPage({ onLoginSuccess }) {
           </form>
 
           {/* Preset Demo Accounts Helper */}
-          <div className="mt-6 pt-5 border-t border-gray-800/80">
+          <div className="mt-6 pt-5 border-t border-[#26334a]">
             <p className="text-[11px] font-mono text-gray-400 mb-2 flex items-center space-x-1">
-              <Terminal className="w-3.5 h-3.5 text-cyan-400" />
-              <span>Pre-Provisioned Accounts (Click to test):</span>
+              <Terminal className="w-3.5 h-3.5 text-[#10B981]" />
+              <span>Pre-Provisioned Accounts (Click to quick-fill):</span>
             </p>
             
-            <div className="grid grid-cols-2 gap-2 text-xs font-mono">
+            <div className="grid grid-cols-3 gap-2 text-xs font-mono">
               <button
                 type="button"
                 onClick={() => handleQuickFill('cyberspartan', 'Participant123!')}
-                className="p-2 rounded bg-[#080D18] border border-gray-800 hover:border-cyan-500/50 text-left transition"
+                className="p-2 rounded-xl bg-[#121722] border border-[#26334a] hover:border-[#10B981]/60 text-left transition"
               >
-                <div className="text-cyan-300 font-bold">cyberspartan</div>
-                <div className="text-[10px] text-gray-400">Participant Account</div>
+                <div className="text-[#10B981] font-bold truncate">cyberspartan</div>
+                <div className="text-[10px] text-gray-400">Team Alpha</div>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleQuickFill('bravo_falcon', 'Participant123!')}
+                className="p-2 rounded-xl bg-[#121722] border border-[#26334a] hover:border-[#10B981]/60 text-left transition"
+              >
+                <div className="text-[#10B981] font-bold truncate">bravo_falcon</div>
+                <div className="text-[10px] text-gray-400">Team Bravo</div>
               </button>
 
               <button
                 type="button"
                 onClick={() => handleQuickFill('admin', 'Admin@HNU2026!')}
-                className="p-2 rounded bg-[#080D18] border border-gray-800 hover:border-red-500/50 text-left transition"
+                className="p-2 rounded-xl bg-[#121722] border border-[#26334a] hover:border-red-500/60 text-left transition"
               >
-                <div className="text-red-400 font-bold">admin</div>
-                <div className="text-[10px] text-gray-400">SOC Administrator</div>
+                <div className="text-red-400 font-bold truncate">admin</div>
+                <div className="text-[10px] text-gray-400">SOC Admin</div>
               </button>
             </div>
           </div>
@@ -173,10 +182,10 @@ export default function LoginPage({ onLoginSuccess }) {
         </div>
 
         {/* Security Notice */}
-        <div className="bg-[#0B1120] border border-gray-800/80 rounded-xl p-3.5 text-xs text-gray-400 font-mono flex items-start space-x-2">
-          <Info className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
+        <div className="bg-[#1a2234] border border-[#26334a] rounded-xl p-3.5 text-xs text-gray-400 font-sans flex items-start space-x-2.5">
+          <Info className="w-4 h-4 text-[#F59E0B] shrink-0 mt-0.5" />
           <div className="leading-relaxed">
-            <strong className="text-gray-300">Account Policy:</strong> Public registration is disabled. User accounts are manually created directly in the MySQL database. See <code className="text-cyan-300">documentation/database_schema.md</code> for SQL queries.
+            <strong className="text-gray-200">Account Policy:</strong> Public registration is disabled. User accounts are manually created in MySQL by the event organizers.
           </div>
         </div>
 
@@ -185,4 +194,3 @@ export default function LoginPage({ onLoginSuccess }) {
     </div>
   );
 }
-

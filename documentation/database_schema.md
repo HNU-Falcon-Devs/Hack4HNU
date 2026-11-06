@@ -11,23 +11,33 @@ The system runs on **MySQL** (InnoDB engine) with `utf8mb4` character encoding. 
 ### Entity Relationship Summary
 
 ```
-[users] 1 ----- * [solves] * ----- 1 [challenges]
-   |                 |                     |
-   1                 1                     1
-   |                 |                     |
-   *                 *                     *
-[submissions]   [security_logs]   [challenge_attachments]
-   |
-   *
-[ip_security] 1 ----- * [ip_actions_log]
+[teams] 1 ----- * [users] 1 ----- * [solves] * ----- 1 [challenges]
+                    |                 |                     |
+                    1                 1                     1
+                    |                 |                     |
+                    *                 *                     *
+              [submissions]   [security_logs]   [challenge_attachments]
+                    |
+                    *
+              [ip_security] 1 ----- * [ip_actions_log]
 ```
 
 ---
 
 ## Table Definitions
 
-### 1. `users`
-Stores user credentials for participants and administrators. There is **no public registration**. Accounts are added manually by database administrators.
+### 1. `teams`
+Represents the competition teams. In HNU CTF, each team strictly consists of **4 participants**.
+Participants within a team work together, share solve recognition, and see their own team's total points and member breakdowns. Competitor scores are strictly isolated and confidential to participants; administrators can view all teams and individual scores.
+
+| Column | Data Type | Constraints | Description |
+|---|---|---|---|
+| `id` | INT UNSIGNED | PRIMARY KEY, AUTO_INCREMENT | Unique team identifier |
+| `name` | VARCHAR(100) | UNIQUE, NOT NULL | Team name (e.g., "Team Alpha") |
+| `created_at` | DATETIME | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Team creation timestamp |
+
+### 2. `users`
+Stores user credentials for participants and administrators. There is **no public registration**. Accounts are added manually by database administrators. Each participant belongs to a team (4 participants per team).
 
 | Column | Data Type | Constraints | Description |
 |---|---|---|---|
@@ -35,6 +45,8 @@ Stores user credentials for participants and administrators. There is **no publi
 | `username` | VARCHAR(50) | UNIQUE, NOT NULL | Login username |
 | `password_hash` | VARCHAR(255) | NOT NULL | Secure PHP `password_hash()` bcrypt string |
 | `role` | ENUM('participant', 'admin') | NOT NULL, DEFAULT 'participant' | Access control level |
+| `team_id` | INT UNSIGNED | NULL, FK -> `teams(id)` | Associated team ID (NULL for admins) |
+| `team_name` | VARCHAR(100) | NULL | Cached team display name |
 | `is_active` | TINYINT(1) | NOT NULL, DEFAULT 1 | 1 = active, 0 = disabled |
 | `last_login_at` | DATETIME | NULL | Timestamp of last successful authentication |
 | `last_login_ip` | VARCHAR(45) | NULL | IPv4/IPv6 address of last login |
