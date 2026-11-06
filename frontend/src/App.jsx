@@ -156,7 +156,7 @@ export default function App() {
           <div>
             <span>HNU CTF – Cybersecurity Challenge Platform</span>
             <span className="text-gray-600 ml-2">|</span>
-            <span className="text-cyan-500/80 ml-2">Hack4Gov 2026 Region 7</span>
+            <span className="text-emerald-500/80 ml-2">Holy Name University</span>
           </div>
           <div className="text-gray-400 text-[11px]">
             Powered by PHP 8 & ReactJS • SOC Active Telemetry

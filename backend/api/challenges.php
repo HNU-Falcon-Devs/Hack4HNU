@@ -19,7 +19,7 @@ $dbConnected = isDatabaseConnected();
 $pdo = getDatabaseConnection();
 $currentUser = getOptionalAuth();
 
-// Pre-packaged authentic Hack4Gov 2026 Region 7 challenge fallback dataset
+// Pre-packaged authentic HNU CTF challenge fallback dataset
 function getFallbackChallenges() {
     static $cached = null;
     if ($cached !== null) return $cached;

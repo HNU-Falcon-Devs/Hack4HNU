@@ -107,7 +107,7 @@ export default function ChallengeModal({ challenge, onClose, onSolveSuccess, isA
           <div className="flex items-start justify-between">
             <div>
               <h2 className="text-2xl font-bold text-white tracking-wide">{challenge.title}</h2>
-              <p className="text-xs text-gray-400 font-mono mt-1">Hack4Gov 2026 Region 7 Official Challenge</p>
+              <p className="text-xs text-gray-400 font-mono mt-1">HNU CTF Official Challenge</p>
             </div>
             <div className="text-right">
               <span className="text-3xl font-mono font-bold text-[#00D4FF]">{challenge.points}</span>

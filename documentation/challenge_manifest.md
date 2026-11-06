@@ -1,6 +1,6 @@
-# HNU CTF – Hack4Gov 2026 Region 7 Challenge Manifest
+# HNU CTF – Challenge Manifest
 
-This manifest documents all 22 authentic challenges imported from the **Hack4Gov 2026 Region 7** package, organized strictly according to official categories, point values, difficulty levels, descriptions transcribed from the original challenge cards, and preserved downloadable artifacts.
+This manifest documents all 22 authentic challenges organized strictly according to official categories, point values, difficulty levels, descriptions transcribed from the original challenge cards, and preserved downloadable artifacts.
 
 ---
 

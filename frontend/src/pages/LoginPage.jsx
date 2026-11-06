@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Shield, Lock, User, KeyRound, AlertCircle, Terminal, Info, Database } from 'lucide-react';
 import { api } from '../services/api';
+import hnuLogo from '../assets/hnu-logo.png';
 
 export default function LoginPage({ onLoginSuccess }) {
   const [username, setUsername] = useState('');
@@ -40,14 +41,18 @@ export default function LoginPage({ onLoginSuccess }) {
         
         {/* Header Branding */}
         <div className="text-center space-y-2">
-          <div className="mx-auto w-16 h-16 rounded-2xl bg-gradient-to-tr from-cyan-500 via-blue-600 to-indigo-700 flex items-center justify-center shadow-xl shadow-cyan-500/20 border border-cyan-400/30">
-            <Shield className="w-9 h-9 text-white" />
+          <div className="mx-auto w-24 h-24 flex items-center justify-center p-2 rounded-2xl bg-[#111827]/80 border border-emerald-500/30 shadow-xl shadow-emerald-500/10">
+            <img 
+              src={hnuLogo} 
+              alt="Holy Name University Logo" 
+              className="w-full h-full object-contain filter drop-shadow-[0_0_12px_rgba(16,185,129,0.3)]" 
+            />
           </div>
           <h1 className="text-3xl font-extrabold tracking-tight text-white font-mono">
             HNU <span className="text-[#00D4FF]">CTF</span>
           </h1>
-          <p className="text-xs uppercase font-mono tracking-widest text-cyan-400 font-semibold">
-            Hack4Gov 2026 Region 7 Platform
+          <p className="text-xs uppercase font-mono tracking-widest text-emerald-400 font-semibold">
+            Holy Name University Cyber Arena
           </p>
           <p className="text-xs text-gray-400 max-w-sm mx-auto">
             Authorized participant & administrator security challenge gateway.

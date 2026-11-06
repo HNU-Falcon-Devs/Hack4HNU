@@ -33,7 +33,7 @@ This guide walks you through setting up and running the **HNU CTF** platform on 
    ```
 6. Click **Import** (or **Go**).
    - This creates all 10 required tables.
-   - Pre-seeds all 22 Hack4Gov 2026 Region 7 challenges.
+   - Pre-seeds all 22 authentic challenges.
    - Creates the default administrator and participant accounts.
 
 ---

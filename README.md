@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="hnu-logo.png" width="130" alt="Holy Name University Logo" />
+</p>
+
 # 🛡️ HNU CTF – Cybersecurity Challenge & SOC Monitoring Platform
 
 > **Localhost Event Edition**  
@@ -28,7 +32,7 @@ The **HNU CTF** platform allows organizers to host an on-premise, zero-cloud-dep
 ### Core Highlights:
 - **Zero Cloud Reliance**: Operates 100% offline on `localhost` or an isolated competition switch/LAN.
 - **PicoCTF-Inspired Participant Experience**: Interactive challenge explorer with category tabs, difficulty badges, search, and dynamic solving modal.
-- **Authentic Challenge Materials**: Preserves all 22 authentic challenges, PCAP files, ZIP archives, forensic artifacts, and Python scripts from Hack4Gov 2026 Region 7.
+- **Authentic Challenge Materials**: Preserves all 22 authentic challenges, PCAP files, ZIP archives, forensic artifacts, and Python scripts.
 - **Real-Time SOC Telemetry**: Live attack monitoring dashboard displaying brute-force flag submission detection, suspicious source IPs, and visual analytics via Recharts.
 - **Strict Role-Based Access Control**: Participants and administrators only. Public self-registration is strictly blocked—all accounts must be provisioned in MySQL by the organizer.
 - **Protected File Delivery**: Challenge attachments are isolated behind an `.htaccess` firewall and served only via session-authenticated PHP streaming.
@@ -241,7 +245,7 @@ Log in using the `admin` account to access the protected Security Operations Cen
 
 ## 🗃️ Authentic Challenge Manifest
 
-All 22 authentic challenges from **Hack4Gov 2026 Region 7** are imported and stored in [`storage/challenges/`](file:///c:/Users/Sam%20Nahutdo/Documents/HACKSAHNU/storage/challenges/):
+All 22 authentic challenges are imported and stored in [`storage/challenges/`](file:///c:/Users/Sam%20Nahutdo/Documents/HACKSAHNU/storage/challenges/):
 
 | Category | Challenge Name | Points | Original Attachments / Artifacts |
 | :--- | :--- | :---: | :--- |

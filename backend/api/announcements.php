@@ -52,8 +52,8 @@ switch ($action) {
                     ],
                     [
                         'id' => 3,
-                        'title' => 'Hack4Gov 2026 Region 7 Challenges Released',
-                        'content' => 'All 22 authentic Hack4Gov 2026 Region 7 challenges are now available across Web, OSINT, Network, Forensics, Steganography, and Miscellaneous categories. Investigate files and submit your flags!',
+                        'title' => 'HNU CTF Challenges Released',
+                        'content' => 'All 22 authentic challenges are now available across Web, OSINT, Network, Forensics, Steganography, and Miscellaneous categories. Investigate files and submit your flags!',
                         'category' => 'Challenge Release',
                         'is_pinned' => 0,
                         'created_at' => date('Y-m-d H:i:s', time() - 21600),

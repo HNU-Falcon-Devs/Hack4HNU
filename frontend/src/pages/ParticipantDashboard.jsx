@@ -39,9 +39,9 @@ export default function ParticipantDashboard({ user, onNavigateToChallenges, onN
         <div className="absolute right-0 top-0 bottom-0 w-1/3 bg-[radial-gradient(ellipse_at_center,rgba(0,212,255,0.12),transparent_70%)] pointer-events-none" />
         
         <div className="relative z-10 max-w-3xl space-y-3">
-          <div className="inline-flex items-center space-x-2 px-2.5 py-1 rounded-full bg-cyan-950/80 border border-cyan-800 text-cyan-300 text-xs font-mono">
+          <div className="inline-flex items-center space-x-2 px-2.5 py-1 rounded-full bg-emerald-950/80 border border-emerald-800 text-emerald-300 text-xs font-mono">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Hack4Gov 2026 Region 7 Active Arena</span>
+            <span>Holy Name University Active Arena</span>
           </div>
           
           <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">

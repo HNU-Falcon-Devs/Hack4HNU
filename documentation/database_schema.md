@@ -41,7 +41,7 @@ Stores user credentials for participants and administrators. There is **no publi
 | `created_at` | DATETIME | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Account creation date |
 
 ### 2. `challenges`
-Contains all 22 Hack4Gov challenges with point values, categories, and correct flag answers.
+Contains all 22 HNU CTF challenges with point values, categories, and correct flag answers.
 
 | Column | Data Type | Constraints | Description |
 |---|---|---|---|

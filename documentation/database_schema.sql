@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 -- ---------------------------------------------------------------------
 -- 2. Table: challenges
--- Official 22 Hack4Gov 2026 Region 7 Challenges
+-- Official 22 HNU CTF 2026 Challenges
 -- ---------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `challenges` (
   `id` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -226,7 +226,7 @@ INSERT INTO `users` (`id`, `username`, `password_hash`, `role`, `is_active`) VAL
 (4, 'netrunner', '$2y$12$mOHXPmoH49dLFFDFPUUvhe9yykOS9oPZRhYHSa35TNzrAOuBwETFi', 'participant', 1)
 ON DUPLICATE KEY UPDATE `username` = VALUES(`username`);
 
--- 3. Imported Hack4Gov 2026 Region 7 Challenges (All 22 Authentic Challenges)
+-- 3. Imported HNU CTF Challenges (All 22 Authentic Challenges)
 -- Note: Replace placeholder flags with your desired verified flags in the Admin SOC panel.
 INSERT INTO `challenges` (`id`, `slug`, `title`, `category`, `difficulty`, `points`, `description`, `target_info`, `correct_flag`, `is_enabled`, `image_path`) VALUES
 -- WEB
@@ -346,6 +346,6 @@ ON DUPLICATE KEY UPDATE `filename` = VALUES(`filename`);
 INSERT INTO `announcements` (`id`, `title`, `content`, `category`, `author_id`, `is_pinned`, `created_at`) VALUES
 (1, 'Welcome to HNU CTF 2026', 'Welcome participants to Holy Name University Cyber Security Challenge Platform! The competition is now officially live. Please ensure all flag submissions follow the standard format: HNU{flag}. Good luck to all teams!', 'Competition', 1, 1, NOW()),
 (2, 'Brute-Force & Automated Scanning Notice', 'Notice: Automated brute-forcing of flags will trigger automated SOC alerts and IP rate-limiting. Please analyze challenges methodically using legitimate forensic, OSINT, stego, and network tools.', 'Rules & Reminders', 1, 1, NOW()),
-(3, 'Hack4Gov 2026 Region 7 Challenges Released', 'All 22 authentic Hack4Gov 2026 Region 7 challenges are now available across Web, OSINT, Network, Forensics, Steganography, and Miscellaneous categories. Investigate files and submit your flags!', 'Challenge Release', 1, 0, NOW())
+(3, 'HNU CTF Challenges Released', 'All 22 authentic challenges are now available across Web, OSINT, Network, Forensics, Steganography, and Miscellaneous categories. Investigate files and submit your flags!', 'Challenge Release', 1, 0, NOW())
 ON DUPLICATE KEY UPDATE `title` = VALUES(`title`);
 

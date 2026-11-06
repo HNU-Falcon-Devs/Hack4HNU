@@ -3,6 +3,7 @@ import {
   Shield, Flag, Trophy, Bell, Activity, Users, FileText, 
   LogOut, ShieldAlert, Database, Server, ChevronDown, CheckCircle, AlertTriangle
 } from 'lucide-react';
+import hnuLogo from '../assets/hnu-logo.png';
 
 export default function Navbar({ user, onLogout, activeTab, setActiveTab, dbConnected }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -15,14 +16,16 @@ export default function Navbar({ user, onLogout, activeTab, setActiveTab, dbConn
           
           {/* Logo & Platform Name */}
           <div className="flex items-center space-x-3 cursor-pointer" onClick={() => setActiveTab('dashboard')}>
-            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/20">
-              <Shield className="w-6 h-6 text-white" />
-            </div>
+            <img 
+              src={hnuLogo} 
+              alt="Holy Name University Logo" 
+              className="w-10 h-10 object-contain drop-shadow-[0_0_10px_rgba(0,212,255,0.3)]" 
+            />
             <div>
               <div className="flex items-center space-x-2">
                 <span className="font-bold text-lg tracking-wider text-white">HNU <span className="text-[#00D4FF]">CTF</span></span>
-                <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-cyan-950/80 border border-cyan-800 text-cyan-400 font-semibold">
-                  Hack4Gov 2026
+                <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-emerald-950/80 border border-emerald-800 text-emerald-400 font-semibold">
+                  Holy Name University
                 </span>
               </div>
               <p className="text-[11px] text-gray-400 font-mono">Cybersecurity Challenge & SOC</p>
