@@ -18,6 +18,20 @@ $pdo = getDatabaseConnection();
 
 requireAdmin();
 
+// Ensure plain_password column exists if database is connected
+if ($dbConnected && $pdo) {
+    try {
+        $colCheck = $pdo->query("SHOW COLUMNS FROM users LIKE 'plain_password'");
+        if ($colCheck->rowCount() === 0) {
+            $pdo->exec("ALTER TABLE users ADD COLUMN plain_password VARCHAR(255) NULL");
+            $pdo->exec("UPDATE users SET plain_password = 'Participant123!' WHERE role = 'participant' AND (plain_password IS NULL OR plain_password = '')");
+            $pdo->exec("UPDATE users SET plain_password = 'Admin@HNU2026!' WHERE role = 'admin' AND (plain_password IS NULL OR plain_password = '')");
+        }
+    } catch (Exception $e) {
+        // Ignore column check errors
+    }
+}
+
 switch ($action) {
 
     // ── List all teams and their members ────────────────────────────────────
@@ -30,7 +44,7 @@ switch ($action) {
             $result = [];
             foreach ($teams as $team) {
                 $membersStmt = $pdo->prepare("
-                    SELECT id, username, role, created_at
+                    SELECT id, username, role, created_at, COALESCE(plain_password, 'Participant123!') AS plain_password
                     FROM users
                     WHERE team_id = ?
                     ORDER BY id ASC
@@ -45,7 +59,20 @@ switch ($action) {
                 ];
             }
 
-            sendJsonResponse(['status' => 'success', 'teams' => $result]);
+            // Fetch admins
+            $adminsStmt = $pdo->query("
+                SELECT id, username, role, created_at, COALESCE(plain_password, 'Admin@HNU2026!') AS plain_password
+                FROM users
+                WHERE role = 'admin'
+                ORDER BY id ASC
+            ");
+            $admins = $adminsStmt ? $adminsStmt->fetchAll(PDO::FETCH_ASSOC) : [];
+
+            sendJsonResponse([
+                'status' => 'success',
+                'teams'  => $result,
+                'admins' => $admins,
+            ]);
         } else {
             // Demo fallback
             sendJsonResponse([
@@ -55,22 +82,25 @@ switch ($action) {
                         'team_id'   => 1,
                         'team_name' => 'Team Alpha',
                         'members'   => [
-                            ['id' => 2, 'username' => 'cyberspartan',  'role' => 'participant', 'created_at' => '2026-11-01'],
-                            ['id' => 3, 'username' => 'alpha_hunter',  'role' => 'participant', 'created_at' => '2026-11-01'],
-                            ['id' => 4, 'username' => 'alpha_sentry',  'role' => 'participant', 'created_at' => '2026-11-01'],
-                            ['id' => 5, 'username' => 'alpha_vanguard','role' => 'participant', 'created_at' => '2026-11-01'],
+                            ['id' => 2, 'username' => 'cyberspartan',  'role' => 'participant', 'created_at' => '2026-11-01', 'plain_password' => 'Participant123!'],
+                            ['id' => 3, 'username' => 'alpha_hunter',  'role' => 'participant', 'created_at' => '2026-11-01', 'plain_password' => 'Participant123!'],
+                            ['id' => 4, 'username' => 'alpha_sentry',  'role' => 'participant', 'created_at' => '2026-11-01', 'plain_password' => 'Participant123!'],
+                            ['id' => 5, 'username' => 'alpha_vanguard','role' => 'participant', 'created_at' => '2026-11-01', 'plain_password' => 'Participant123!'],
                         ],
                     ],
                     [
                         'team_id'   => 2,
                         'team_name' => 'Team Bravo',
                         'members'   => [
-                            ['id' => 6, 'username' => 'bravo_falcon', 'role' => 'participant', 'created_at' => '2026-11-01'],
-                            ['id' => 7, 'username' => 'bravo_shadow', 'role' => 'participant', 'created_at' => '2026-11-01'],
-                            ['id' => 8, 'username' => 'bravo_cipher', 'role' => 'participant', 'created_at' => '2026-11-01'],
-                            ['id' => 9, 'username' => 'bravo_specter','role' => 'participant', 'created_at' => '2026-11-01'],
+                            ['id' => 6, 'username' => 'bravo_falcon', 'role' => 'participant', 'created_at' => '2026-11-01', 'plain_password' => 'Participant123!'],
+                            ['id' => 7, 'username' => 'bravo_shadow', 'role' => 'participant', 'created_at' => '2026-11-01', 'plain_password' => 'Participant123!'],
+                            ['id' => 8, 'username' => 'bravo_cipher', 'role' => 'participant', 'created_at' => '2026-11-01', 'plain_password' => 'Participant123!'],
+                            ['id' => 9, 'username' => 'bravo_specter','role' => 'participant', 'created_at' => '2026-11-01', 'plain_password' => 'Participant123!'],
                         ],
                     ],
+                ],
+                'admins' => [
+                    ['id' => 1, 'username' => 'admin', 'role' => 'admin', 'created_at' => '2026-11-01', 'plain_password' => 'Admin@HNU2026!'],
                 ],
             ]);
         }
@@ -116,10 +146,17 @@ switch ($action) {
                 }
 
                 $hash = password_hash($password, PASSWORD_BCRYPT);
-                $pdo->prepare("
-                    INSERT INTO users (username, password_hash, role, team_id, team_name, created_at)
-                    VALUES (?, ?, 'participant', ?, ?, NOW())
-                ")->execute([$username, $hash, $teamId, $teamName]);
+                try {
+                    $pdo->prepare("
+                        INSERT INTO users (username, password_hash, plain_password, role, team_id, team_name, created_at)
+                        VALUES (?, ?, ?, 'participant', ?, ?, NOW())
+                    ")->execute([$username, $hash, $password, $teamId, $teamName]);
+                } catch (Exception $insEx) {
+                    $pdo->prepare("
+                        INSERT INTO users (username, password_hash, role, team_id, team_name, created_at)
+                        VALUES (?, ?, 'participant', ?, ?, NOW())
+                    ")->execute([$username, $hash, $teamId, $teamName]);
+                }
                 $created[] = $username;
             }
 
@@ -158,10 +195,17 @@ switch ($action) {
             }
 
             $hash = password_hash($password, PASSWORD_BCRYPT);
-            $pdo->prepare("
-                INSERT INTO users (username, password_hash, role, created_at)
-                VALUES (?, ?, ?, NOW())
-            ")->execute([$username, $hash, $role]);
+            try {
+                $pdo->prepare("
+                    INSERT INTO users (username, password_hash, plain_password, role, created_at)
+                    VALUES (?, ?, ?, ?, NOW())
+                ")->execute([$username, $hash, $password, $role]);
+            } catch (Exception $insEx) {
+                $pdo->prepare("
+                    INSERT INTO users (username, password_hash, role, created_at)
+                    VALUES (?, ?, ?, NOW())
+                ")->execute([$username, $hash, $role]);
+            }
 
             sendJsonResponse(['status' => 'success', 'message' => "Account \"$username\" ($role) created."]);
         } else {
@@ -198,4 +242,3 @@ switch ($action) {
     default:
         sendJsonResponse(['status' => 'error', 'message' => 'Invalid action'], 400);
 }
-
