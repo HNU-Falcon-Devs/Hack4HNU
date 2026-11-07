@@ -223,7 +223,7 @@ export default function AnnouncementsPage({ user, isAdmin }) {
               </div>
 
               <div className="text-[11px] font-mono text-gray-400 pt-2 border-t border-[#26334a]">
-                Posted by: <span className="text-[#10B981] font-bold">{ann.author || 'Administrator'}</span>
+                {ann.created_at}
               </div>
             </div>
           ))

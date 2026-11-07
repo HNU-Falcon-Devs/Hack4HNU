@@ -268,6 +268,51 @@ switch ($action) {
         }
         break;
 
+    case 'create':
+        requireAdmin();
+        $input = json_decode(file_get_contents('php://input'), true) ?? [];
+        if (empty($input['title']) || empty($input['correct_flag'])) {
+            sendJsonResponse(['status' => 'error', 'message' => 'Title and correct flag are required'], 400);
+        }
+        if ($dbConnected && $pdo) {
+            $slug = strtolower(preg_replace('/[^a-z0-9]+/i', '-', $input['title'])) . '-' . time();
+            $stmt = $pdo->prepare("
+                INSERT INTO challenges (title, slug, category, difficulty, points, description, target_info, correct_flag, is_enabled, created_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
+            ");
+            $stmt->execute([
+                $input['title'],
+                $slug,
+                $input['category'] ?? 'Miscellaneous',
+                $input['difficulty'] ?? 'Easy',
+                (int)($input['points'] ?? 100),
+                $input['description'] ?? '',
+                $input['target_info'] ?? '',
+                $input['correct_flag'],
+                isset($input['is_enabled']) ? (int)$input['is_enabled'] : 1,
+            ]);
+            sendJsonResponse(['status' => 'success', 'message' => 'Challenge created', 'id' => $pdo->lastInsertId()]);
+        } else {
+            sendJsonResponse(['status' => 'success', 'message' => 'Challenge created (demo mode)', 'id' => rand(100,999)]);
+        }
+        break;
+
+    case 'delete':
+        requireAdmin();
+        $input = json_decode(file_get_contents('php://input'), true) ?? [];
+        $challengeId = (int)($input['id'] ?? 0);
+        if (!$challengeId) {
+            sendJsonResponse(['status' => 'error', 'message' => 'Challenge ID required'], 400);
+        }
+        if ($dbConnected && $pdo) {
+            $pdo->prepare("DELETE FROM solves WHERE challenge_id = ?")->execute([$challengeId]);
+            $pdo->prepare("DELETE FROM challenges WHERE id = ?")->execute([$challengeId]);
+            sendJsonResponse(['status' => 'success', 'message' => 'Challenge deleted']);
+        } else {
+            sendJsonResponse(['status' => 'success', 'message' => 'Deleted (demo mode)']);
+        }
+        break;
+
     case 'image':
         $slug = $_GET['slug'] ?? '';
         if (!preg_match('/^[a-z0-9\-_]+$/i', $slug)) {

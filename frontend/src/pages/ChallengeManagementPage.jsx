@@ -1,18 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { 
   Flag, Edit3, Eye, EyeOff, CheckCircle, Power, Users, Plus, 
-  Search, Download, ExternalLink, ShieldCheck, RefreshCw, X
+  Search, Download, ExternalLink, ShieldCheck, RefreshCw, X, Trash2
 } from 'lucide-react';
 import { api } from '../services/api';
 
 const CATEGORIES = ['Web', 'OSINT', 'Network', 'Forensics', 'Steganography', 'Miscellaneous'];
 const DIFFICULTIES = ['Easy', 'Medium', 'Hard'];
 
+const BLANK_CHALLENGE = {
+  title: '', category: 'Web', difficulty: 'Easy', points: 100,
+  correct_flag: '', description: '', target_info: '', is_enabled: true
+};
+
 export default function ChallengeManagementPage() {
   const [challenges, setChallenges] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [editChallenge, setEditChallenge] = useState(null);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [newChallenge, setNewChallenge] = useState({ ...BLANK_CHALLENGE });
+  const [creating, setCreating] = useState(false);
   const [showSolversModal, setShowSolversModal] = useState(null);
   const [solversList, setSolversList] = useState([]);
   const [solversLoading, setSolversLoading] = useState(false);
@@ -63,6 +71,30 @@ export default function ChallengeManagementPage() {
     setSolversLoading(false);
   };
 
+  const handleCreateChallenge = async (e) => {
+    e.preventDefault();
+    setCreating(true);
+    const res = await api.createChallenge(newChallenge);
+    setCreating(false);
+    if (res.status === 'success') {
+      setNewChallenge({ ...BLANK_CHALLENGE });
+      setShowCreateModal(false);
+      loadChallenges();
+    } else {
+      alert(res.message || 'Failed to create challenge');
+    }
+  };
+
+  const handleDeleteChallenge = async (id, title) => {
+    if (!confirm(`Delete challenge "${title}"? This cannot be undone.`)) return;
+    const res = await api.deleteChallenge(id);
+    if (res.status === 'success') {
+      loadChallenges();
+    } else {
+      alert(res.message || 'Failed to delete challenge');
+    }
+  };
+
   const toggleFlagReveal = (id) => {
     setRevealFlags(prev => ({ ...prev, [id]: !prev[id] }));
   };
@@ -92,14 +124,23 @@ export default function ChallengeManagementPage() {
           </div>
         </div>
 
-        <button
-          onClick={loadChallenges}
-          disabled={loading}
-          className="px-3.5 py-2 bg-[#121722] hover:bg-[#202b3d] border border-[#26334a] text-gray-300 rounded-xl text-xs font-mono flex items-center space-x-1.5 transition"
-        >
-          <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
-          <span>Reload Challenges</span>
-        </button>
+        <div className="flex items-center space-x-2">
+          <button
+            onClick={loadChallenges}
+            disabled={loading}
+            className="px-3.5 py-2 bg-[#121722] hover:bg-[#202b3d] border border-[#26334a] text-gray-300 rounded-xl text-xs font-mono flex items-center space-x-1.5 transition"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
+            <span>Reload</span>
+          </button>
+          <button
+            onClick={() => { setNewChallenge({ ...BLANK_CHALLENGE }); setShowCreateModal(true); }}
+            className="px-4 py-2 bg-gradient-to-r from-[#059669] to-[#10B981] hover:from-[#047857] hover:to-[#059669] text-white rounded-xl text-xs font-mono font-bold flex items-center space-x-1.5 transition shadow-md shadow-emerald-900/30"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Add Challenge</span>
+          </button>
+        </div>
       </div>
 
       {/* Search Bar */}
@@ -202,13 +243,22 @@ export default function ChallengeManagementPage() {
                         </button>
                       </td>
                       <td className="px-5 py-3.5 text-right whitespace-nowrap">
-                        <button
-                          onClick={() => setEditChallenge({ ...ch })}
-                          className="px-2.5 py-1 bg-[#080D18] hover:bg-cyan-950/60 border border-gray-700 hover:border-cyan-500/50 text-cyan-300 rounded text-[11px] font-bold flex items-center space-x-1 ml-auto transition"
-                        >
-                          <Edit3 className="w-3 h-3" />
-                          <span>Edit</span>
-                        </button>
+                        <div className="flex items-center justify-end space-x-1.5">
+                          <button
+                            onClick={() => setEditChallenge({ ...ch })}
+                            className="px-2.5 py-1 bg-[#121722] hover:bg-[#1a2234] border border-[#26334a] hover:border-emerald-500/50 text-emerald-300 rounded text-[11px] font-bold flex items-center space-x-1 transition"
+                          >
+                            <Edit3 className="w-3 h-3" />
+                            <span>Edit</span>
+                          </button>
+                          <button
+                            onClick={() => handleDeleteChallenge(ch.id, ch.title)}
+                            className="px-2.5 py-1 bg-red-950/60 hover:bg-red-900/80 border border-red-800/60 text-red-300 rounded text-[11px] font-bold flex items-center space-x-1 transition"
+                          >
+                            <Trash2 className="w-3 h-3" />
+                            <span>Delete</span>
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   );
@@ -400,6 +450,118 @@ export default function ChallengeManagementPage() {
                 Close
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* ═══ Create Challenge Modal ══════════════════════════════════════════ */}
+      {showCreateModal && (
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl max-w-2xl w-full p-6 shadow-2xl space-y-4 font-mono text-xs">
+            <div className="flex items-center justify-between pb-3 border-b border-[#26334a]">
+              <h3 className="text-base font-bold text-white font-mono flex items-center space-x-2">
+                <Plus className="w-4 h-4 text-emerald-400" />
+                <span>Add New Challenge</span>
+              </h3>
+              <button onClick={() => setShowCreateModal(false)} className="text-gray-400 hover:text-white">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleCreateChallenge} className="space-y-3">
+              {/* Category first */}
+              <div className="bg-emerald-950/30 border border-emerald-700/40 rounded-xl p-3 space-y-1">
+                <label className="block text-emerald-400 font-bold uppercase tracking-wider text-[10px]">Category (select first)</label>
+                <div className="flex flex-wrap gap-2 pt-1">
+                  {CATEGORIES.map(c => (
+                    <button
+                      key={c}
+                      type="button"
+                      onClick={() => setNewChallenge({ ...newChallenge, category: c })}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition ${
+                        newChallenge.category === c
+                          ? 'bg-emerald-500 border-emerald-400 text-white'
+                          : 'bg-[#121722] border-[#26334a] text-gray-400 hover:text-white hover:border-emerald-500/50'
+                      }`}
+                    >
+                      {c}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-gray-400 mb-1">Challenge Title</label>
+                  <input type="text" value={newChallenge.title}
+                    onChange={(e) => setNewChallenge({ ...newChallenge, title: e.target.value })}
+                    required placeholder="e.g. SQL Injection 101"
+                    className="w-full bg-[#121722] border border-[#26334a] rounded-xl p-2 text-white focus:border-emerald-400 focus:outline-none" />
+                </div>
+                <div>
+                  <label className="block text-gray-400 mb-1">Difficulty</label>
+                  <select value={newChallenge.difficulty}
+                    onChange={(e) => setNewChallenge({ ...newChallenge, difficulty: e.target.value })}
+                    className="w-full bg-[#121722] border border-[#26334a] rounded-xl p-2 text-white focus:border-emerald-400 focus:outline-none">
+                    {DIFFICULTIES.map(d => <option key={d} value={d}>{d}</option>)}
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-gray-400 mb-1">Point Value</label>
+                <input type="number" min="1" max="5000" value={newChallenge.points}
+                  onChange={(e) => setNewChallenge({ ...newChallenge, points: parseInt(e.target.value) || 100 })}
+                  required
+                  className="w-full bg-[#121722] border border-[#26334a] rounded-xl p-2 text-white focus:border-emerald-400 focus:outline-none" />
+              </div>
+
+              {/* Flag */}
+              <div className="bg-[#121722] p-3 rounded-xl border border-red-900/60 space-y-1">
+                <label className="block text-red-400 font-bold uppercase tracking-wider text-[10px]">
+                  Correct Flag (Format: HNU&#123;...&#125;)
+                </label>
+                <input type="text" value={newChallenge.correct_flag}
+                  onChange={(e) => setNewChallenge({ ...newChallenge, correct_flag: e.target.value })}
+                  required placeholder="HNU{your_secret_flag}"
+                  className="w-full bg-[#1a2234] border border-red-800 rounded-lg p-2 text-white font-bold focus:border-red-500 focus:outline-none" />
+              </div>
+
+              <div>
+                <label className="block text-gray-400 mb-1">Target Host / URL / Connection Info</label>
+                <input type="text" value={newChallenge.target_info}
+                  onChange={(e) => setNewChallenge({ ...newChallenge, target_info: e.target.value })}
+                  placeholder="e.g. 172.16.105.9:3000"
+                  className="w-full bg-[#121722] border border-[#26334a] rounded-xl p-2 text-white focus:border-emerald-400 focus:outline-none" />
+              </div>
+
+              <div>
+                <label className="block text-gray-400 mb-1">Description &amp; Prompt</label>
+                <textarea rows={3} value={newChallenge.description}
+                  onChange={(e) => setNewChallenge({ ...newChallenge, description: e.target.value })}
+                  required placeholder="Challenge description and instructions..."
+                  className="w-full bg-[#121722] border border-[#26334a] rounded-xl p-2 text-white focus:border-emerald-400 focus:outline-none font-sans text-xs leading-relaxed" />
+              </div>
+
+              <div className="flex items-center space-x-2">
+                <input type="checkbox" id="newEnabled" checked={newChallenge.is_enabled}
+                  onChange={(e) => setNewChallenge({ ...newChallenge, is_enabled: e.target.checked })}
+                  className="rounded bg-[#121722] border-[#26334a] text-emerald-500 focus:ring-0" />
+                <label htmlFor="newEnabled" className="text-gray-300 cursor-pointer">Challenge is active and visible to participants immediately</label>
+              </div>
+
+              <div className="flex justify-end space-x-2 pt-3 border-t border-[#26334a]">
+                <button type="button" onClick={() => setShowCreateModal(false)}
+                  className="px-4 py-2 bg-[#121722] hover:bg-[#202b3d] text-gray-300 border border-[#26334a] rounded-xl transition">
+                  Cancel
+                </button>
+                <button type="submit" disabled={creating}
+                  className="px-5 py-2 bg-gradient-to-r from-[#059669] to-[#10B981] hover:from-[#047857] hover:to-[#059669] text-white font-bold rounded-xl transition disabled:opacity-50 flex items-center space-x-1.5">
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>{creating ? 'Creating...' : 'Create Challenge'}</span>
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

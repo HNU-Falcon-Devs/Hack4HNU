@@ -139,6 +139,40 @@ export const api = {
     request('/announcements.php?action=delete', {
       method: 'POST',
       body: JSON.stringify({ id })
-    })
+    }),
+
+  // Challenges - Create & Delete
+  createChallenge: (payload) =>
+    request('/challenges.php?action=create', {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    }),
+
+  deleteChallenge: (id) =>
+    request('/challenges.php?action=delete', {
+      method: 'POST',
+      body: JSON.stringify({ id })
+    }),
+
+  // Account Management
+  getAccounts: () => request('/accounts.php?action=list'),
+
+  createTeam: (payload) =>
+    request('/accounts.php?action=create_team', {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    }),
+
+  createAccount: (payload) =>
+    request('/accounts.php?action=create_account', {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    }),
+
+  deleteAccount: (id) =>
+    request('/accounts.php?action=delete_account', {
+      method: 'POST',
+      body: JSON.stringify({ id })
+    }),
 };
 
