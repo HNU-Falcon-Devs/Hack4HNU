@@ -67,19 +67,13 @@ export default function AnnouncementsPage({ user, isAdmin }) {
 
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
-      
+
       {/* Header */}
       <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-6 sm:p-8 shadow-lg flex items-center justify-between">
         <div className="space-y-1">
-          <div className="flex items-center space-x-2 text-[#F59E0B] font-mono text-xs font-bold">
-            <span className="uppercase tracking-wider">Official Broadcast Feed</span>
-          </div>
           <h1 className="text-2xl font-black text-white tracking-tight">
             Notices & Bulletins
           </h1>
-          <p className="text-xs text-gray-400">
-            Important operational updates, challenge drops, and competition notices.
-          </p>
         </div>
 
         {isAdmin && (
@@ -97,7 +91,7 @@ export default function AnnouncementsPage({ user, isAdmin }) {
         <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
           <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
             <h3 className="text-lg font-bold text-white">Publish Competition Notice</h3>
-            
+
             <form onSubmit={handleCreate} className="space-y-3 font-sans text-xs">
               <div>
                 <label className="block text-gray-400 mb-1">Headline Title</label>
@@ -180,13 +174,12 @@ export default function AnnouncementsPage({ user, isAdmin }) {
           </div>
         ) : (
           announcements.map((ann) => (
-            <div 
+            <div
               key={ann.id}
-              className={`bg-[#1a2234] border rounded-2xl p-5 shadow-md space-y-3 transition ${
-                ann.is_pinned 
-                  ? 'border-[#10B981] bg-gradient-to-r from-[#1a2234] to-[#122820] shadow-[0_0_18px_rgba(16,185,129,0.18)]' 
-                  : 'border-[#26334a]'
-              }`}
+              className={`bg-[#1a2234] border rounded-2xl p-5 shadow-md space-y-3 transition ${ann.is_pinned
+                ? 'border-[#10B981] bg-gradient-to-r from-[#1a2234] to-[#122820] shadow-[0_0_18px_rgba(16,185,129,0.18)]'
+                : 'border-[#26334a]'
+                }`}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">

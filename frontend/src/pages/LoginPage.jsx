@@ -33,41 +33,32 @@ export default function LoginPage({ onLoginSuccess }) {
 
   return (
     <div className="min-h-screen bg-[#121722] flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8 selection:bg-emerald-500/30 selection:text-emerald-300">
-      
+
       {/* Background ambient lighting */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(16,185,129,0.12),rgba(255,255,255,0))] pointer-events-none" />
 
       <div className="max-w-md w-full space-y-6 relative z-10">
-        
+
         {/* Header Branding */}
         <div className="text-center space-y-2">
           <div className="mx-auto w-24 h-24 flex items-center justify-center p-2 rounded-2xl bg-[#1a2234] border border-[#26334a] shadow-xl shadow-black/40">
-            <img 
-              src={hnuLogo} 
-              alt="Holy Name University Logo" 
-              className="w-full h-full object-contain filter drop-shadow-[0_2px_10px_rgba(16,185,129,0.35)]" 
+            <img
+              src={hnuLogo}
+              alt="Holy Name University Logo"
+              className="w-full h-full object-contain filter drop-shadow-[0_2px_10px_rgba(16,185,129,0.35)]"
             />
           </div>
           <h1 className="text-3xl font-black tracking-tight text-white italic">
             HNU <span className="text-[#10B981]">CTF</span>
           </h1>
-          <p className="text-xs uppercase font-mono tracking-widest text-[#F59E0B] font-bold">
-            Holy Name University Cyber Arena
-          </p>
-          <p className="text-xs text-gray-400 max-w-sm mx-auto">
-            Authorized participant & administrator security challenge gateway.
-          </p>
         </div>
 
         {/* Login Card (Reference Dark Matte Card) */}
         <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-6 sm:p-8 shadow-2xl">
-          
+
           <div className="mb-6 pb-4 border-b border-[#26334a] flex items-center justify-between">
             <span className="text-xs font-mono font-bold text-gray-200 uppercase tracking-wider flex items-center space-x-1.5">
               <span>Authentication</span>
-            </span>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#121722] text-[#F59E0B] border border-[#26334a] font-bold">
-              Closed System
             </span>
           </div>
 
@@ -78,7 +69,7 @@ export default function LoginPage({ onLoginSuccess }) {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            
+
             {/* Username Field */}
             <div>
               <label className="block text-xs font-mono uppercase tracking-wider text-gray-300 mb-1.5">
@@ -127,7 +118,7 @@ export default function LoginPage({ onLoginSuccess }) {
                 </>
               ) : (
                 <>
-                  <span>Sign In to Platform</span>
+                  <span>Sign In</span>
                 </>
               )}
             </button>
@@ -136,10 +127,8 @@ export default function LoginPage({ onLoginSuccess }) {
 
           {/* Preset Demo Accounts Helper */}
           <div className="mt-6 pt-5 border-t border-[#26334a]">
-            <p className="text-[11px] font-mono text-gray-400 mb-2 flex items-center space-x-1">
-              <span>Pre-Provisioned Accounts (Click to quick-fill):</span>
-            </p>
-            
+
+
             <div className="grid grid-cols-3 gap-2 text-xs font-mono">
               <button
                 type="button"
@@ -172,12 +161,7 @@ export default function LoginPage({ onLoginSuccess }) {
 
         </div>
 
-        {/* Security Notice */}
-        <div className="bg-[#1a2234] border border-[#26334a] rounded-xl p-3.5 text-xs text-gray-400 font-sans flex items-start space-x-2.5">
-          <div className="leading-relaxed">
-            <strong className="text-gray-200">Account Policy:</strong> Public registration is disabled. User accounts are manually created in MySQL by the event organizers.
-          </div>
-        </div>
+
 
       </div>
 

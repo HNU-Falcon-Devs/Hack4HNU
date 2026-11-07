@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { 
-  Flag, Edit3, Eye, EyeOff, CheckCircle, Power, Users, Plus, 
+import {
+  Flag, Edit3, Eye, EyeOff, CheckCircle, Power, Users, Plus,
   Search, Download, ExternalLink, ShieldCheck, RefreshCw, X, Trash2
 } from 'lucide-react';
 import { api } from '../services/api';
@@ -99,7 +99,7 @@ export default function ChallengeManagementPage() {
     setRevealFlags(prev => ({ ...prev, [id]: !prev[id] }));
   };
 
-  const filtered = challenges.filter(c => 
+  const filtered = challenges.filter(c =>
     c.title.toLowerCase().includes(search.toLowerCase()) ||
     c.category.toLowerCase().includes(search.toLowerCase()) ||
     c.slug.toLowerCase().includes(search.toLowerCase())
@@ -107,19 +107,14 @@ export default function ChallengeManagementPage() {
 
   return (
     <div className="space-y-6">
-      
+
       {/* Header Banner */}
       <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-6 shadow-lg flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="flex items-center space-x-3">
-          <div className="p-3 bg-emerald-950/80 border border-emerald-800/80 rounded-xl text-[#10B981] shadow-lg shadow-emerald-950/50">
-          </div>
           <div>
             <h1 className="text-2xl font-black text-white tracking-tight font-mono">
-              Challenge Administration & Flag Control
+              Challenges Dashboard
             </h1>
-            <p className="text-xs text-gray-400 font-mono">
-              Configure correct flags, edit descriptions, toggle visibility, and inspect solve telemetry.
-            </p>
           </div>
         </div>
 
@@ -219,11 +214,10 @@ export default function ChallengeManagementPage() {
                       <td className="px-5 py-3.5 whitespace-nowrap">
                         <button
                           onClick={() => handleToggle(ch.id)}
-                          className={`px-2 py-0.5 rounded text-[10px] font-bold border flex items-center space-x-1 ${
-                            ch.is_enabled 
-                              ? 'bg-green-950/80 border-green-800 text-green-400' 
-                              : 'bg-red-950/80 border-red-800 text-red-400'
-                          }`}
+                          className={`px-2 py-0.5 rounded text-[10px] font-bold border flex items-center space-x-1 ${ch.is_enabled
+                            ? 'bg-green-950/80 border-green-800 text-green-400'
+                            : 'bg-red-950/80 border-red-800 text-red-400'
+                            }`}
                         >
                           <span>{ch.is_enabled ? 'Active' : 'Disabled'}</span>
                         </button>
@@ -461,11 +455,10 @@ export default function ChallengeManagementPage() {
                       key={c}
                       type="button"
                       onClick={() => setNewChallenge({ ...newChallenge, category: c })}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition ${
-                        newChallenge.category === c
-                          ? 'bg-emerald-500 border-emerald-400 text-white'
-                          : 'bg-[#121722] border-[#26334a] text-gray-400 hover:text-white hover:border-emerald-500/50'
-                      }`}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition ${newChallenge.category === c
+                        ? 'bg-emerald-500 border-emerald-400 text-white'
+                        : 'bg-[#121722] border-[#26334a] text-gray-400 hover:text-white hover:border-emerald-500/50'
+                        }`}
                     >
                       {c}
                     </button>

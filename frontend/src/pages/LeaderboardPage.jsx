@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { 
-  Trophy, Medal, Award, Search, Users, Clock, CheckCircle, 
+import {
+  Trophy, Medal, Award, Search, Users, Clock, CheckCircle,
   Lock, Shield, ShieldAlert, AlertCircle, Sparkles, Filter
 } from 'lucide-react';
 import { api } from '../services/api';
@@ -69,7 +69,7 @@ export default function LeaderboardPage({ currentUser }) {
 
     return (
       <div className="space-y-6">
-        
+
         {/* Header Banner */}
         <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-6 sm:p-7 shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
@@ -79,9 +79,6 @@ export default function LeaderboardPage({ currentUser }) {
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
               {team.team_name} Scoreboard
             </h1>
-            <p className="text-xs text-gray-400 mt-1">
-              Real-time score overview and verified challenge solves for your 4-member squad.
-            </p>
           </div>
 
           <div className="bg-[#121722] border border-[#26334a] px-5 py-3 rounded-xl flex items-center space-x-6">
@@ -124,13 +121,12 @@ export default function LeaderboardPage({ currentUser }) {
             {team.members.map((member, idx) => {
               const isMe = member.username === currentUser?.username;
               return (
-                <div 
+                <div
                   key={idx}
-                  className={`bg-[#1a2234] border rounded-2xl p-5 shadow-md flex flex-col justify-between transition ${
-                    isMe 
-                      ? 'border-[#10B981] bg-gradient-to-b from-[#1a2234] to-[#12241d] shadow-[0_0_15px_rgba(16,185,129,0.18)]' 
+                  className={`bg-[#1a2234] border rounded-2xl p-5 shadow-md flex flex-col justify-between transition ${isMe
+                      ? 'border-[#10B981] bg-gradient-to-b from-[#1a2234] to-[#12241d] shadow-[0_0_15px_rgba(16,185,129,0.18)]'
                       : 'border-[#26334a] hover:border-[#384968]'
-                  }`}
+                    }`}
                 >
                   <div className="flex items-center justify-between">
                     <span className="font-mono text-xs font-bold text-[#F59E0B]">
@@ -238,30 +234,40 @@ export default function LeaderboardPage({ currentUser }) {
   const teamsList = data?.teams || [];
   const individualsList = data?.individuals || [];
 
-  const filteredTeams = teamsList.filter(t => 
+  const filteredTeams = teamsList.filter(t =>
     t.team_name.toLowerCase().includes(search.toLowerCase())
   );
 
-  const filteredIndividuals = individualsList.filter(i => 
-    i.username.toLowerCase().includes(search.toLowerCase()) || 
+  const filteredIndividuals = individualsList.filter(i =>
+    i.username.toLowerCase().includes(search.toLowerCase()) ||
     (i.team_name && i.team_name.toLowerCase().includes(search.toLowerCase()))
   );
 
   return (
     <div className="space-y-6">
-      
-      {/* Admin Header Banner */}
-      <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-6 sm:p-8 shadow-lg flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center space-x-2 text-[#F59E0B] font-mono text-xs mb-1 font-bold">
-            <span className="uppercase tracking-wider">Tournament Master Scoreboard</span>
-          </div>
-          <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-            Administrator Live Leaderboard
-          </h1>
-          <p className="text-xs text-gray-400 mt-1">
-            Complete visibility across all competition teams (4 participants each) and individual scoring.
-          </p>
+
+      {/* Admin Tab Switcher & Search */}
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 border-b border-[#26334a] pb-3">
+        <div className="flex items-center space-x-2">
+          <button
+            onClick={() => setAdminTab('teams')}
+            className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-bold transition ${adminTab === 'teams'
+                ? 'bg-[#10B981] text-slate-950 shadow-md'
+                : 'text-gray-400 hover:text-white hover:bg-[#1a2234]'
+              }`}
+          >
+            <span>Team Rankings (All Teams)</span>
+          </button>
+
+          <button
+            onClick={() => setAdminTab('individuals')}
+            className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-bold transition ${adminTab === 'individuals'
+                ? 'bg-[#10B981] text-slate-950 shadow-md'
+                : 'text-gray-400 hover:text-white hover:bg-[#1a2234]'
+              }`}
+          >
+            <span>Individual Scoring (All Participants)</span>
+          </button>
         </div>
 
         {/* Search */}
@@ -271,34 +277,9 @@ export default function LeaderboardPage({ currentUser }) {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search teams or users..."
-            className="w-full bg-[#121722] border border-[#26334a] focus:border-[#10B981] rounded-xl px-4 py-2 text-xs font-mono text-white placeholder-gray-500 transition"
+            className="w-full bg-[#1a2234] border border-[#26334a] focus:border-[#10B981] rounded-xl px-4 py-2 text-xs font-mono text-white placeholder-gray-500 transition"
           />
         </div>
-      </div>
-
-      {/* Admin Tab Switcher */}
-      <div className="flex items-center space-x-2 border-b border-[#26334a] pb-3">
-        <button
-          onClick={() => setAdminTab('teams')}
-          className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-bold transition ${
-            adminTab === 'teams'
-              ? 'bg-[#10B981] text-slate-950 shadow-md'
-              : 'text-gray-400 hover:text-white hover:bg-[#1a2234]'
-          }`}
-        >
-          <span>Team Rankings (All Teams)</span>
-        </button>
-
-        <button
-          onClick={() => setAdminTab('individuals')}
-          className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-bold transition ${
-            adminTab === 'individuals'
-              ? 'bg-[#10B981] text-slate-950 shadow-md'
-              : 'text-gray-400 hover:text-white hover:bg-[#1a2234]'
-          }`}
-        >
-          <span>Individual Scoring (All Participants)</span>
-        </button>
       </div>
 
       {/* TEAMS RANKING TABLE */}
@@ -310,22 +291,20 @@ export default function LeaderboardPage({ currentUser }) {
                 <tr>
                   <th className="px-6 py-4">Rank</th>
                   <th className="px-6 py-4">Team Name</th>
-                  <th className="px-6 py-4">Participants</th>
                   <th className="px-6 py-4">Solved Flags</th>
                   <th className="px-6 py-4">Total Score</th>
-                  <th className="px-6 py-4">Last Activity</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#26334a]/80">
                 {loading ? (
                   <tr>
-                    <td colSpan="6" className="px-6 py-12 text-center text-gray-400">
+                    <td colSpan="4" className="px-6 py-12 text-center text-gray-400">
                       Computing team rankings...
                     </td>
                   </tr>
                 ) : filteredTeams.length === 0 ? (
                   <tr>
-                    <td colSpan="6" className="px-6 py-12 text-center text-gray-500">
+                    <td colSpan="4" className="px-6 py-12 text-center text-gray-500">
                       No teams match your search.
                     </td>
                   </tr>
@@ -341,18 +320,12 @@ export default function LeaderboardPage({ currentUser }) {
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-gray-300">
-                        <span>{t.member_count} Members</span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-gray-300">
                         <span>{t.challenges_solved}</span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className="text-sm font-bold text-[#F59E0B]">
                           {t.total_points} <span className="text-[10px] font-normal text-gray-400">PTS</span>
                         </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-gray-400 text-[11px]">
-                        {t.last_activity}
                       </td>
                     </tr>
                   ))
@@ -375,19 +348,18 @@ export default function LeaderboardPage({ currentUser }) {
                   <th className="px-6 py-4">Team</th>
                   <th className="px-6 py-4">Solved Flags</th>
                   <th className="px-6 py-4">Individual Score</th>
-                  <th className="px-6 py-4">Last Activity</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#26334a]/80">
                 {loading ? (
                   <tr>
-                    <td colSpan="6" className="px-6 py-12 text-center text-gray-400">
+                    <td colSpan="5" className="px-6 py-12 text-center text-gray-400">
                       Computing participant scores...
                     </td>
                   </tr>
                 ) : filteredIndividuals.length === 0 ? (
                   <tr>
-                    <td colSpan="6" className="px-6 py-12 text-center text-gray-500">
+                    <td colSpan="5" className="px-6 py-12 text-center text-gray-500">
                       No participants match your search.
                     </td>
                   </tr>
@@ -414,9 +386,6 @@ export default function LeaderboardPage({ currentUser }) {
                         <span className="text-sm font-bold text-[#F59E0B]">
                           {ind.total_points} <span className="text-[10px] font-normal text-gray-400">PTS</span>
                         </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-gray-400 text-[11px]">
-                        {ind.last_activity}
                       </td>
                     </tr>
                   ))

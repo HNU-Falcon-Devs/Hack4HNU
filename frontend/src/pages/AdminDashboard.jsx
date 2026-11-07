@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 
 import { api } from '../services/api';
+import LoadingScreen from '../components/LoadingScreen';
 
 // ─── Competition Timer State (persisted in localStorage) ─────────────────────
 const TIMER_KEY = 'hnu_admin_timer';
@@ -9,7 +10,7 @@ function loadTimerState() {
   try {
     const raw = localStorage.getItem(TIMER_KEY);
     if (raw) return JSON.parse(raw);
-  } catch {}
+  } catch { }
   return { running: false, remainingMs: 7 * 3600 * 1000, startedAt: null, totalMs: 7 * 3600 * 1000 };
 }
 
@@ -80,6 +81,14 @@ export default function AdminDashboard() {
   const [leaderboard, setLeaderboard] = useState([]);
   const [solves, setSolves] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [screenLoading, setScreenLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setScreenLoading(false);
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, []);
 
   // ── Timer state ──────────────────────────────────────────────────────────
   const [timerState, setTimerState] = useState(loadTimerState);
@@ -202,29 +211,25 @@ export default function AdminDashboard() {
     }
   };
 
+  if (screenLoading) {
+    return (
+      <LoadingScreen
+        message="Entering Administrator Dashboard..."
+        subtitle="Loading competition management & telemetry..."
+      />
+    );
+  }
+
   return (
     <div className="space-y-6">
 
-      {/* ── Page Header ──────────────────────────────────────────────────── */}
-      <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-6 shadow-lg flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-black text-white tracking-tight font-mono">Admin Dashboard</h1>
-          <p className="text-xs text-gray-400 font-mono mt-1">
-            Competition overview — teams, participants, and solve events.
-          </p>
-        </div>
-        <button
-          onClick={loadData}
-          disabled={loading}
-          className="px-3.5 py-2 bg-[#121722] hover:bg-[#202b3d] border border-[#26334a] text-gray-300 rounded-xl text-xs font-mono transition"
-        >
-          <span>Refresh</span>
-        </button>
-      </div>
+
 
       {/* ── Competition Timer ─────────────────────────────────────────────── */}
       <div className={`bg-[#1a2234] border rounded-2xl p-6 shadow-lg ${isExpired ? 'border-red-700/60' : isRunning ? 'border-emerald-600/60' : 'border-[#26334a]'}`}>
         <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
+
+
 
           {/* Timer Display */}
           <div className="text-center sm:text-left">
@@ -241,6 +246,14 @@ export default function AdminDashboard() {
               {formatTime(displayMs)}
             </div>
           </div>
+
+          <button
+            onClick={loadData}
+            disabled={loading}
+            className="px-3.5 py-2 bg-[#121722] hover:bg-[#202b3d] border border-[#26334a] text-gray-300 rounded-xl text-xs font-mono transition"
+          >
+            <span>Refresh</span>
+          </button>
 
           {/* Timer Controls */}
           <div className="flex flex-col gap-3 w-full sm:w-auto">
@@ -289,11 +302,10 @@ export default function AdminDashboard() {
                 <button
                   key={label}
                   onClick={() => handleAddTime(ms)}
-                  className={`px-3 py-1 rounded-lg text-xs font-mono font-bold border transition ${
-                    ms > 0
-                      ? 'bg-emerald-950/40 border-emerald-700/50 text-emerald-300 hover:bg-emerald-950/80'
-                      : 'bg-red-950/40 border-red-700/50 text-red-300 hover:bg-red-950/80'
-                  }`}
+                  className={`px-3 py-1 rounded-lg text-xs font-mono font-bold border transition ${ms > 0
+                    ? 'bg-emerald-950/40 border-emerald-700/50 text-emerald-300 hover:bg-emerald-950/80'
+                    : 'bg-red-950/40 border-red-700/50 text-red-300 hover:bg-red-950/80'
+                    }`}
                 >
                   {label}
                 </button>
@@ -364,12 +376,11 @@ export default function AdminDashboard() {
               {/* Team header */}
               <div className="flex items-center justify-between px-5 py-3.5 bg-[#161c2d] border-b border-[#26334a]">
                 <div className="flex items-center space-x-3">
-                  <div className={`w-7 h-7 rounded-full flex items-center justify-center font-black text-xs text-white shadow ${
-                    ti === 0 ? 'bg-gradient-to-tr from-amber-500 to-yellow-400' :
+                  <div className={`w-7 h-7 rounded-full flex items-center justify-center font-black text-xs text-white shadow ${ti === 0 ? 'bg-gradient-to-tr from-amber-500 to-yellow-400' :
                     ti === 1 ? 'bg-gradient-to-tr from-gray-400 to-gray-300' :
-                    ti === 2 ? 'bg-gradient-to-tr from-orange-700 to-orange-500' :
-                    'bg-gradient-to-tr from-[#059669] to-[#10B981]'
-                  }`}>
+                      ti === 2 ? 'bg-gradient-to-tr from-orange-700 to-orange-500' :
+                        'bg-gradient-to-tr from-[#059669] to-[#10B981]'
+                    }`}>
                     {ti + 1}
                   </div>
                   <span className="font-bold text-white text-sm">{team.team_name}</span>

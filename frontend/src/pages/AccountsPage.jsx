@@ -181,9 +181,6 @@ export default function AccountsPage() {
       <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-6 shadow-lg flex flex-col sm:flex-row items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-black text-white tracking-tight font-mono">Account Management</h1>
-          <p className="text-xs text-gray-400 font-mono mt-1">
-            Manage teams, participants, credentials, and administrator accounts.
-          </p>
         </div>
         <div className="flex items-center space-x-2">
           <button
@@ -210,11 +207,10 @@ export default function AccountsPage() {
 
       {/* Message Banner */}
       {message && (
-        <div className={`p-4 rounded-xl border text-sm font-mono ${
-          message.type === 'success'
-            ? 'bg-emerald-950/60 border-emerald-700/60 text-emerald-300'
-            : 'bg-red-950/60 border-red-700/60 text-red-300'
-        }`}>
+        <div className={`p-4 rounded-xl border text-sm font-mono ${message.type === 'success'
+          ? 'bg-emerald-950/60 border-emerald-700/60 text-emerald-300'
+          : 'bg-red-950/60 border-red-700/60 text-red-300'
+          }`}>
           <span>{message.text}</span>
         </div>
       )}
@@ -234,9 +230,6 @@ export default function AccountsPage() {
             <h2 className="text-sm font-bold text-white font-mono uppercase tracking-wider">
               Participant Teams ({teams.length})
             </h2>
-            <span className="text-[11px] font-mono text-gray-400">
-              Passwords hidden by default — click the eye to view
-            </span>
           </div>
 
           {teams.map((team) => (
@@ -441,16 +434,14 @@ export default function AccountsPage() {
                     return (
                       <div
                         key={i}
-                        className={`border rounded-xl p-3 space-y-2 ${
-                          isOptional
-                            ? 'bg-[#121722]/80 border-dashed border-amber-800/60'
-                            : 'bg-[#121722] border-[#26334a]'
-                        }`}
+                        className={`border rounded-xl p-3 space-y-2 ${isOptional
+                          ? 'bg-[#121722]/80 border-dashed border-amber-800/60'
+                          : 'bg-[#121722] border-[#26334a]'
+                          }`}
                       >
                         <div className="flex items-center justify-between">
-                          <span className={`text-[10px] uppercase font-bold ${
-                            isOptional ? 'text-amber-400' : 'text-emerald-400'
-                          }`}>
+                          <span className={`text-[10px] uppercase font-bold ${isOptional ? 'text-amber-400' : 'text-emerald-400'
+                            }`}>
                             Member {i + 1} {isOptional ? '(Optional)' : '(Required)'}
                           </span>
                           {isOptional && (

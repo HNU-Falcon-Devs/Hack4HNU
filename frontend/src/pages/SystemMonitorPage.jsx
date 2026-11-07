@@ -205,9 +205,7 @@ export default function SystemMonitorPage() {
       <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-6 shadow-lg flex flex-col sm:flex-row items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-black text-white tracking-tight font-mono">System Monitor</h1>
-          <p className="text-xs text-gray-400 font-mono mt-1">
-            Security telemetry, attack detection, IP control, and audit logs.
-          </p>
+
         </div>
         <button
           onClick={() => { if (activeTab === 'overview') loadOverview(); else if (activeTab === 'attacks') loadAttacks(); else if (activeTab === 'ip') loadIps(); else loadLogs(); }}
@@ -223,11 +221,10 @@ export default function SystemMonitorPage() {
           <button
             key={id}
             onClick={() => setActiveTab(id)}
-            className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-xs font-semibold transition flex-1 justify-center ${
-              activeTab === id
+            className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-xs font-semibold transition flex-1 justify-center ${activeTab === id
                 ? 'bg-[#1a2234] border border-[#26334a] text-white shadow-sm'
                 : 'text-gray-400 hover:text-white'
-            }`}
+              }`}
           >
             <span>{label}</span>
           </button>
