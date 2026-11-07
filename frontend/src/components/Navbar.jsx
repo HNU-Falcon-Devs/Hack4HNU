@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
 import {
   LayoutDashboard, Flag, Trophy, Bell, Shield, Users, FileText,
-  LogOut, Database, ChevronDown, Clock, Monitor
+  LogOut, ChevronDown, Monitor
 } from 'lucide-react';
 import hnuLogo from '../assets/hnu-logo.png';
-import { useCompetitionTimer } from '../hooks/useCompetitionTimer';
 
 export default function Navbar({ user, onLogout, activeTab, setActiveTab, dbConnected }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const isAdmin = user?.role === 'admin';
-  const { formatted, isExpired } = useCompetitionTimer(25200);
 
   const teamDisplay = user?.team_name || (isAdmin ? 'Administrator' : 'Team Alpha');
 
@@ -88,32 +86,6 @@ export default function Navbar({ user, onLogout, activeTab, setActiveTab, dbConn
 
           {/* Right: timer + db + profile */}
           <div className="flex items-center space-x-3 shrink-0">
-
-            {/* Competition timer */}
-            <div
-              className={`flex items-center space-x-2 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold shadow-inner border transition ${
-                isExpired
-                  ? 'bg-red-950/60 border-red-700/80 text-red-400'
-                  : 'bg-[#101522] border-[#242f44] text-[#10B981]'
-              }`}
-              title="Competition countdown"
-            >
-              <Clock className="w-3.5 h-3.5 animate-pulse" />
-              <span>{isExpired ? '00:00:00' : formatted}</span>
-            </div>
-
-            {/* DB indicator */}
-            <div
-              className={`hidden sm:flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-mono border ${
-                dbConnected
-                  ? 'bg-emerald-950/40 border-emerald-700/60 text-emerald-400'
-                  : 'bg-amber-950/40 border-amber-700/60 text-amber-300'
-              }`}
-              title={dbConnected ? 'Live MySQL' : 'Demo mode'}
-            >
-              <Database className="w-3 h-3" />
-              <span>{dbConnected ? 'Live' : 'Demo'}</span>
-            </div>
 
             {/* User profile */}
             <div className="relative">
