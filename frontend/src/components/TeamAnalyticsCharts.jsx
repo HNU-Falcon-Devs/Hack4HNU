@@ -37,7 +37,6 @@ export default function TeamAnalyticsCharts({ charts }) {
       <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-5 shadow-lg space-y-3">
         <div className="flex items-center justify-between pb-2 border-b border-[#26334a]">
           <h2 className="text-xs font-bold font-mono text-white uppercase tracking-wider flex items-center space-x-2">
-            <PieIcon className="w-4 h-4 text-[#10B981]" />
             <span>FLAG ACCURACY (SUCCESSFUL VS FAILED)</span>
           </h2>
           <span className="text-[11px] text-gray-500 font-mono">Cumulative</span>
@@ -86,7 +85,6 @@ export default function TeamAnalyticsCharts({ charts }) {
       <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-5 shadow-lg space-y-3">
         <div className="flex items-center justify-between pb-2 border-b border-[#26334a]">
           <h2 className="text-xs font-bold font-mono text-white uppercase tracking-wider flex items-center space-x-2">
-            <Activity className="w-4 h-4 text-[#10B981]" />
             <span>SUBMISSION VOLUME TIMELINE</span>
           </h2>
           <span className="text-[11px] text-gray-500 font-mono">Hourly</span>

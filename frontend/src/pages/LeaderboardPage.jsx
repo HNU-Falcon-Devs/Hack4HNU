@@ -29,7 +29,6 @@ export default function LeaderboardPage({ currentUser }) {
     if (rank === 1) {
       return (
         <div className="flex items-center space-x-1 text-[#F59E0B] font-bold font-mono">
-          <Trophy className="w-4 h-4 text-[#F59E0B]" />
           <span>#1</span>
         </div>
       );
@@ -37,7 +36,6 @@ export default function LeaderboardPage({ currentUser }) {
     if (rank === 2) {
       return (
         <div className="flex items-center space-x-1 text-slate-300 font-bold font-mono">
-          <Medal className="w-4 h-4 text-slate-300" />
           <span>#2</span>
         </div>
       );
@@ -45,7 +43,6 @@ export default function LeaderboardPage({ currentUser }) {
     if (rank === 3) {
       return (
         <div className="flex items-center space-x-1 text-amber-600 font-bold font-mono">
-          <Award className="w-4 h-4 text-amber-600" />
           <span>#3</span>
         </div>
       );
@@ -77,7 +74,6 @@ export default function LeaderboardPage({ currentUser }) {
         <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-6 sm:p-7 shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center space-x-2 text-[#10B981] font-mono text-xs mb-1 font-bold">
-              <Users className="w-4 h-4" />
               <span className="uppercase tracking-wider">HNU CTF • Team Standings</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
@@ -106,7 +102,6 @@ export default function LeaderboardPage({ currentUser }) {
 
         {/* Confidentiality Privacy Notice Alert */}
         <div className="bg-[#161f30] border border-[#263b52] rounded-xl p-4 flex items-start space-x-3 text-xs text-gray-300">
-          <Lock className="w-4 h-4 text-[#10B981] shrink-0 mt-0.5" />
           <div className="space-y-1">
             <span className="font-bold text-white uppercase font-mono text-[11px] tracking-wide">
               Confidential Competition Mode Active
@@ -120,7 +115,6 @@ export default function LeaderboardPage({ currentUser }) {
         {/* 4 Team Participants Breakdown */}
         <div className="space-y-3">
           <div className="flex items-center space-x-2">
-            <Users className="w-4 h-4 text-[#F59E0B]" />
             <h2 className="text-sm font-bold uppercase tracking-wider text-white">
               Team Participants (4 Members)
             </h2>
@@ -177,7 +171,6 @@ export default function LeaderboardPage({ currentUser }) {
         <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl overflow-hidden shadow-lg space-y-0">
           <div className="px-6 py-4 bg-[#161c2d] border-b border-[#26334a] flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <CheckCircle className="w-4 h-4 text-[#10B981]" />
               <h3 className="text-xs font-bold uppercase tracking-wider text-white">
                 Challenges Solved by {team.team_name}
               </h3>
@@ -261,7 +254,6 @@ export default function LeaderboardPage({ currentUser }) {
       <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-6 sm:p-8 shadow-lg flex flex-col sm:flex-row items-center justify-between gap-4">
         <div>
           <div className="flex items-center space-x-2 text-[#F59E0B] font-mono text-xs mb-1 font-bold">
-            <Trophy className="w-4 h-4" />
             <span className="uppercase tracking-wider">Tournament Master Scoreboard</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
@@ -274,15 +266,12 @@ export default function LeaderboardPage({ currentUser }) {
 
         {/* Search */}
         <div className="relative w-full sm:w-72">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-            <Search className="w-4 h-4 text-[#10B981]" />
-          </div>
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search teams or users..."
-            className="w-full bg-[#121722] border border-[#26334a] focus:border-[#10B981] rounded-xl pl-9 pr-3 py-2 text-xs font-mono text-white placeholder-gray-500 transition"
+            className="w-full bg-[#121722] border border-[#26334a] focus:border-[#10B981] rounded-xl px-4 py-2 text-xs font-mono text-white placeholder-gray-500 transition"
           />
         </div>
       </div>
@@ -297,7 +286,6 @@ export default function LeaderboardPage({ currentUser }) {
               : 'text-gray-400 hover:text-white hover:bg-[#1a2234]'
           }`}
         >
-          <Users className="w-4 h-4" />
           <span>Team Rankings (All Teams)</span>
         </button>
 
@@ -309,7 +297,6 @@ export default function LeaderboardPage({ currentUser }) {
               : 'text-gray-400 hover:text-white hover:bg-[#1a2234]'
           }`}
         >
-          <Trophy className="w-4 h-4" />
           <span>Individual Scoring (All Participants)</span>
         </button>
       </div>
@@ -354,16 +341,10 @@ export default function LeaderboardPage({ currentUser }) {
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-gray-300">
-                        <span className="inline-flex items-center space-x-1">
-                          <Users className="w-3.5 h-3.5 text-gray-400" />
-                          <span>{t.member_count} Members</span>
-                        </span>
+                        <span>{t.member_count} Members</span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-gray-300">
-                        <span className="inline-flex items-center space-x-1">
-                          <CheckCircle className="w-3.5 h-3.5 text-[#10B981]" />
-                          <span>{t.challenges_solved}</span>
-                        </span>
+                        <span>{t.challenges_solved}</span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className="text-sm font-bold text-[#F59E0B]">
@@ -427,10 +408,7 @@ export default function LeaderboardPage({ currentUser }) {
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-gray-300">
-                        <span className="inline-flex items-center space-x-1">
-                          <CheckCircle className="w-3.5 h-3.5 text-[#10B981]" />
-                          <span>{ind.challenges_solved}</span>
-                        </span>
+                        <span>{ind.challenges_solved}</span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className="text-sm font-bold text-[#F59E0B]">

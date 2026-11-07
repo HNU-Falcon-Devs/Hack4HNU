@@ -112,7 +112,6 @@ export default function ChallengeManagementPage() {
       <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-6 shadow-lg flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="flex items-center space-x-3">
           <div className="p-3 bg-emerald-950/80 border border-emerald-800/80 rounded-xl text-[#10B981] shadow-lg shadow-emerald-950/50">
-            <Flag className="w-6 h-6" />
           </div>
           <div>
             <h1 className="text-2xl font-black text-white tracking-tight font-mono">
@@ -130,14 +129,12 @@ export default function ChallengeManagementPage() {
             disabled={loading}
             className="px-3.5 py-2 bg-[#121722] hover:bg-[#202b3d] border border-[#26334a] text-gray-300 rounded-xl text-xs font-mono flex items-center space-x-1.5 transition"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
             <span>Reload</span>
           </button>
           <button
             onClick={() => { setNewChallenge({ ...BLANK_CHALLENGE }); setShowCreateModal(true); }}
             className="px-4 py-2 bg-gradient-to-r from-[#059669] to-[#10B981] hover:from-[#047857] hover:to-[#059669] text-white rounded-xl text-xs font-mono font-bold flex items-center space-x-1.5 transition shadow-md shadow-emerald-900/30"
           >
-            <Plus className="w-4 h-4" />
             <span>Add Challenge</span>
           </button>
         </div>
@@ -147,7 +144,6 @@ export default function ChallengeManagementPage() {
       <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-4 shadow-lg flex items-center justify-between">
         <div className="relative w-full sm:w-96">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-            <Search className="w-3.5 h-3.5 text-[#10B981]" />
           </div>
           <input
             type="text"
@@ -216,7 +212,7 @@ export default function ChallengeManagementPage() {
                             className="text-gray-500 hover:text-cyan-400 p-0.5"
                             title={isRevealed ? 'Mask Flag' : 'Reveal Flag'}
                           >
-                            {isRevealed ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                            {isRevealed ? 'Hide' : 'Show'}
                           </button>
                         </div>
                       </td>
@@ -229,7 +225,6 @@ export default function ChallengeManagementPage() {
                               : 'bg-red-950/80 border-red-800 text-red-400'
                           }`}
                         >
-                          <Power className="w-3 h-3" />
                           <span>{ch.is_enabled ? 'Active' : 'Disabled'}</span>
                         </button>
                       </td>
@@ -238,7 +233,6 @@ export default function ChallengeManagementPage() {
                           onClick={() => openSolversModal(ch)}
                           className="text-cyan-400 hover:underline flex items-center space-x-1"
                         >
-                          <Users className="w-3 h-3" />
                           <span>{ch.solve_count || 0} solvers</span>
                         </button>
                       </td>
@@ -248,14 +242,12 @@ export default function ChallengeManagementPage() {
                             onClick={() => setEditChallenge({ ...ch })}
                             className="px-2.5 py-1 bg-[#121722] hover:bg-[#1a2234] border border-[#26334a] hover:border-emerald-500/50 text-emerald-300 rounded text-[11px] font-bold flex items-center space-x-1 transition"
                           >
-                            <Edit3 className="w-3 h-3" />
                             <span>Edit</span>
                           </button>
                           <button
                             onClick={() => handleDeleteChallenge(ch.id, ch.title)}
                             className="px-2.5 py-1 bg-red-950/60 hover:bg-red-900/80 border border-red-800/60 text-red-300 rounded text-[11px] font-bold flex items-center space-x-1 transition"
                           >
-                            <Trash2 className="w-3 h-3" />
                             <span>Delete</span>
                           </button>
                         </div>
@@ -274,13 +266,10 @@ export default function ChallengeManagementPage() {
         <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
           <div className="bg-[#111827] border border-[#1E293B] rounded-xl max-w-2xl w-full p-6 shadow-2xl space-y-4 font-mono text-xs">
             <div className="flex items-center justify-between pb-3 border-b border-gray-800">
-              <h3 className="text-base font-bold text-white font-mono flex items-center space-x-2">
-                <Edit3 className="w-4 h-4 text-cyan-400" />
+              <h3 className="text-base font-bold text-white font-mono">
                 <span>Configure Challenge: {editChallenge.title}</span>
               </h3>
-              <button onClick={() => setEditChallenge(null)} className="text-gray-400 hover:text-white">
-                <X className="w-5 h-5" />
-              </button>
+              <button onClick={() => setEditChallenge(null)} className="text-gray-400 hover:text-white">✕</button>
             </div>
 
             <form onSubmit={handleSaveEdit} className="space-y-3">
@@ -415,13 +404,10 @@ export default function ChallengeManagementPage() {
         <div className="fixed inset-0 z-50 overflow-y-auto bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-[#111827] border border-[#1E293B] rounded-xl max-w-md w-full p-6 shadow-2xl space-y-4 font-mono text-xs">
             <div className="flex items-center justify-between pb-2 border-b border-gray-800">
-              <h3 className="text-sm font-bold text-white font-mono flex items-center space-x-2">
-                <Users className="w-4 h-4 text-cyan-400" />
+              <h3 className="text-sm font-bold text-white font-mono">
                 <span>Solvers for: {showSolversModal.title}</span>
               </h3>
-              <button onClick={() => setShowSolversModal(null)} className="text-gray-400 hover:text-white">
-                <X className="w-5 h-5" />
-              </button>
+              <button onClick={() => setShowSolversModal(null)} className="text-gray-400 hover:text-white">✕</button>
             </div>
 
             <div className="max-h-64 overflow-y-auto space-y-2">
@@ -459,13 +445,10 @@ export default function ChallengeManagementPage() {
         <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
           <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl max-w-2xl w-full p-6 shadow-2xl space-y-4 font-mono text-xs">
             <div className="flex items-center justify-between pb-3 border-b border-[#26334a]">
-              <h3 className="text-base font-bold text-white font-mono flex items-center space-x-2">
-                <Plus className="w-4 h-4 text-emerald-400" />
+              <h3 className="text-base font-bold text-white font-mono">
                 <span>Add New Challenge</span>
               </h3>
-              <button onClick={() => setShowCreateModal(false)} className="text-gray-400 hover:text-white">
-                <X className="w-5 h-5" />
-              </button>
+              <button onClick={() => setShowCreateModal(false)} className="text-gray-400 hover:text-white">✕</button>
             </div>
 
             <form onSubmit={handleCreateChallenge} className="space-y-3">
@@ -557,7 +540,6 @@ export default function ChallengeManagementPage() {
                 </button>
                 <button type="submit" disabled={creating}
                   className="px-5 py-2 bg-gradient-to-r from-[#059669] to-[#10B981] hover:from-[#047857] hover:to-[#059669] text-white font-bold rounded-xl transition disabled:opacity-50 flex items-center space-x-1.5">
-                  <Plus className="w-3.5 h-3.5" />
                   <span>{creating ? 'Creating...' : 'Create Challenge'}</span>
                 </button>
               </div>

@@ -65,8 +65,8 @@ export default function ParticipantDashboard({ user, onNavigateToChallenges, onN
         
         {/* Left: Team Greeting & 4-Member Badge */}
         <div className="flex items-center space-x-4">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-[#059669] to-[#10B981] flex items-center justify-center font-bold text-white shadow-lg shadow-emerald-950/50 shrink-0">
-            <Users className="w-7 h-7 text-white" />
+          <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-[#059669] to-[#10B981] flex items-center justify-center font-black text-xl text-white shadow-lg shadow-emerald-950/50 shrink-0">
+            {team.name ? team.name.charAt(0).toUpperCase() : 'T'}
           </div>
           <div>
             <div className="flex flex-wrap items-center gap-2">
@@ -90,17 +90,12 @@ export default function ParticipantDashboard({ user, onNavigateToChallenges, onN
         <div className="flex flex-wrap items-center gap-3">
           
           {/* Prominent 7-Hour Timer Card */}
-          <div className="bg-[#101522] border border-[#26334a] px-4 py-2.5 rounded-xl shadow-inner flex items-center space-x-3">
-            <div className="w-9 h-9 rounded-lg bg-emerald-950/80 border border-emerald-800/80 flex items-center justify-center">
-              <Clock className="w-5 h-5 text-[#10B981] animate-pulse" />
+          <div className="bg-[#101522] border border-[#26334a] px-5 py-2.5 rounded-xl shadow-inner flex flex-col justify-center">
+            <div className="text-[9px] uppercase font-mono tracking-widest text-gray-400 font-bold">
+              <span>7-Hour Contest Time</span>
             </div>
-            <div>
-              <div className="text-[9px] uppercase font-mono tracking-widest text-gray-400 font-bold flex items-center space-x-1">
-                <span>7-Hour Contest Time</span>
-              </div>
-              <div className="text-xl sm:text-2xl font-extrabold font-mono text-[#10B981] tracking-wider">
-                {isExpired ? '00:00:00' : formatted}
-              </div>
+            <div className="text-xl sm:text-2xl font-extrabold font-mono text-[#10B981] tracking-wider">
+              {isExpired ? '00:00:00' : formatted}
             </div>
           </div>
 
@@ -117,7 +112,6 @@ export default function ParticipantDashboard({ user, onNavigateToChallenges, onN
             className="bg-gradient-to-r from-[#059669] to-[#10B981] hover:from-[#047857] hover:to-[#059669] text-white font-bold px-4 py-3 rounded-xl text-xs transition shadow-md shadow-emerald-900/30 flex items-center space-x-2"
           >
             <span>Browse Challenges</span>
-            <ArrowRight className="w-4 h-4" />
           </button>
         </div>
 
@@ -130,7 +124,6 @@ export default function ParticipantDashboard({ user, onNavigateToChallenges, onN
         <div className="lg:col-span-4 bg-[#1a2234] border border-[#26334a] rounded-2xl p-4 shadow-lg space-y-4">
           <div className="flex items-center justify-between pb-3 border-b border-[#26334a]">
             <div className="flex items-center space-x-2">
-              <Activity className="w-4 h-4 text-[#F59E0B]" />
               <h2 className="text-xs font-black uppercase tracking-wider text-white">
                 Dynamics of Problem Solving
               </h2>
@@ -143,7 +136,6 @@ export default function ParticipantDashboard({ user, onNavigateToChallenges, onN
           <div className="space-y-2 max-h-[560px] overflow-y-auto pr-1">
             {recentActivity.length === 0 ? (
               <div className="text-center py-16 text-gray-400 font-mono text-xs">
-                <Crosshair className="w-8 h-8 text-gray-600 mx-auto mb-2" />
                 <p>No problem solved by your team yet.</p>
                 <p className="text-[11px] text-gray-500 mt-1">Submit flags to populate this feed!</p>
               </div>
@@ -233,7 +225,6 @@ export default function ParticipantDashboard({ user, onNavigateToChallenges, onN
             <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl shadow-md overflow-hidden flex flex-col">
               <div className="bg-[#F59E0B] text-slate-950 px-4 py-2.5 flex items-center justify-between font-black text-xs">
                 <div className="flex items-center space-x-2">
-                  <Bell className="w-4 h-4 text-slate-950" />
                   <span>Notice</span>
                 </div>
                 <span className="bg-slate-950 text-[#F59E0B] px-2 py-0.5 rounded-full text-[10px] font-mono font-bold">
@@ -265,7 +256,6 @@ export default function ParticipantDashboard({ user, onNavigateToChallenges, onN
             <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl shadow-md overflow-hidden flex flex-col">
               <div className="bg-[#059669] text-white px-4 py-2.5 flex items-center justify-between font-black text-xs">
                 <div className="flex items-center space-x-2">
-                  <Users className="w-4 h-4 text-white" />
                   <span>Team Members (4)</span>
                 </div>
                 <span className="bg-[#047857] text-emerald-200 px-2 py-0.5 rounded-full text-[10px] font-mono">
@@ -314,7 +304,6 @@ export default function ParticipantDashboard({ user, onNavigateToChallenges, onN
             <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl shadow-md overflow-hidden flex flex-col">
               <div className="bg-[#232d42] text-[#F59E0B] px-4 py-2.5 flex items-center justify-between font-black text-xs border-b border-[#26334a]">
                 <div className="flex items-center space-x-2">
-                  <Trophy className="w-4 h-4 text-[#F59E0B]" />
                   <span>Team Progress</span>
                 </div>
                 <span className="text-white text-[11px] font-mono font-bold">
@@ -350,10 +339,8 @@ export default function ParticipantDashboard({ user, onNavigateToChallenges, onN
                     className="w-full bg-[#121722] hover:bg-[#1f283a] text-gray-200 border border-[#26334a] py-2 rounded-xl text-xs font-semibold transition flex items-center justify-center space-x-1.5"
                   >
                     <span>View Team Standings</span>
-                    <ChevronRight className="w-3.5 h-3.5 text-gray-400" />
                   </button>
                   <p className="text-[10px] text-gray-500 text-center font-mono mt-1.5 flex items-center justify-center space-x-1">
-                    <Lock className="w-2.5 h-2.5 text-gray-500" />
                     <span>Competitor scores confidential</span>
                   </p>
                 </div>

@@ -10,7 +10,7 @@ import AnnouncementsPage from './pages/AnnouncementsPage';
 import ChallengeManagementPage from './pages/ChallengeManagementPage';
 import SystemMonitorPage from './pages/SystemMonitorPage';
 import AccountsPage from './pages/AccountsPage';
-import { AlertTriangle } from 'lucide-react';
+// import { AlertTriangle } from 'lucide-react';
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -81,7 +81,6 @@ export default function App() {
         <div className="bg-amber-950/60 border-b border-amber-800/80 px-4 py-2 text-xs font-mono text-amber-200">
           <div className="max-w-7xl mx-auto flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
               <span>
                 <strong>DEMO DATA MODE:</strong> MySQL database not yet imported. Run the queries in{' '}
                 <code className="text-cyan-300 font-bold">documentation/database_schema.sql</code> to connect live data.

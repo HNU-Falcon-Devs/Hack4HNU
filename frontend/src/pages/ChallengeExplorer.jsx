@@ -118,12 +118,6 @@ export default function ChallengeExplorer({ user, isAdmin }) {
               {/* Category Section Header (e.g. WEB, OSINT, NETWORK...) */}
               <div className="flex items-center justify-between pb-3 border-b border-[#26334a]">
                 <div className="flex items-center space-x-3">
-                  <div 
-                    className="w-8 h-8 rounded-xl bg-[#121722] border border-[#26334a] flex items-center justify-center font-bold"
-                    style={{ color: group.color }}
-                  >
-                    <Icon className="w-4 h-4" />
-                  </div>
                   <h2 
                     className="text-lg sm:text-xl font-black font-mono tracking-wider uppercase"
                     style={{ color: group.color }}
@@ -183,7 +177,6 @@ export default function ChallengeExplorer({ user, isAdmin }) {
                         {/* Solved by teammate info if applicable */}
                         {isSolved && ch.solved_by_username && (
                           <p className="text-[10px] font-mono text-[#10B981] mt-1 flex items-center space-x-1">
-                            <CheckCircle className="w-3 h-3 text-[#10B981]" />
                             <span>Solved by {ch.solved_by_username} {ch.solved_by_username === user?.username ? '(You)' : ''}</span>
                           </p>
                         )}
@@ -206,7 +199,6 @@ export default function ChallengeExplorer({ user, isAdmin }) {
                         <div className="flex items-center space-x-2 text-xs font-mono text-gray-400">
                           {ch.attachments && ch.attachments.length > 0 && (
                             <span className="flex items-center space-x-1 text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded-full text-[10px] border border-emerald-800">
-                              <Download className="w-3 h-3" />
                               <span>{ch.attachments.length} file</span>
                             </span>
                           )}

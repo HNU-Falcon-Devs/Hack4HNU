@@ -72,7 +72,6 @@ export default function AnnouncementsPage({ user, isAdmin }) {
       <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-6 sm:p-8 shadow-lg flex items-center justify-between">
         <div className="space-y-1">
           <div className="flex items-center space-x-2 text-[#F59E0B] font-mono text-xs font-bold">
-            <Megaphone className="w-4 h-4" />
             <span className="uppercase tracking-wider">Official Broadcast Feed</span>
           </div>
           <h1 className="text-2xl font-black text-white tracking-tight">
@@ -88,7 +87,6 @@ export default function AnnouncementsPage({ user, isAdmin }) {
             onClick={() => setShowAddModal(true)}
             className="bg-gradient-to-r from-[#059669] to-[#10B981] hover:from-[#047857] hover:to-[#059669] text-white font-mono px-4 py-2.5 rounded-xl text-xs font-bold flex items-center space-x-2 transition shadow-md shadow-emerald-900/30"
           >
-            <Plus className="w-4 h-4" />
             <span>Publish Broadcast</span>
           </button>
         )}
@@ -197,7 +195,6 @@ export default function AnnouncementsPage({ user, isAdmin }) {
                   </span>
                   {ann.is_pinned && (
                     <span className="flex items-center space-x-1 text-[11px] font-mono text-[#F59E0B] font-bold">
-                      <Pin className="w-3.5 h-3.5 fill-[#F59E0B]" />
                       <span>PINNED</span>
                     </span>
                   )}
@@ -208,10 +205,10 @@ export default function AnnouncementsPage({ user, isAdmin }) {
                   {isAdmin && (
                     <button
                       onClick={() => handleDelete(ann.id)}
-                      className="text-red-400 hover:text-red-300 p-1 hover:bg-red-950/40 rounded-lg transition"
+                      className="text-red-400 hover:text-red-300 px-2 py-0.5 hover:bg-red-950/40 rounded-lg transition text-xs font-bold"
                       title="Delete Announcement"
                     >
-                      <Trash2 className="w-4 h-4" />
+                      Delete
                     </button>
                   )}
                 </div>

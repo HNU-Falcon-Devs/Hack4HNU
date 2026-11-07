@@ -64,7 +64,6 @@ export default function LoginPage({ onLoginSuccess }) {
           
           <div className="mb-6 pb-4 border-b border-[#26334a] flex items-center justify-between">
             <span className="text-xs font-mono font-bold text-gray-200 uppercase tracking-wider flex items-center space-x-1.5">
-              <KeyRound className="w-4 h-4 text-[#10B981]" />
               <span>Authentication</span>
             </span>
             <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#121722] text-[#F59E0B] border border-[#26334a] font-bold">
@@ -74,7 +73,6 @@ export default function LoginPage({ onLoginSuccess }) {
 
           {error && (
             <div className="mb-5 p-3 rounded-xl bg-red-950/70 border border-red-800 text-red-300 text-xs flex items-start space-x-2 font-mono">
-              <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
               <span>{error}</span>
             </div>
           )}
@@ -87,9 +85,6 @@ export default function LoginPage({ onLoginSuccess }) {
                 Username
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-500">
-                  <User className="w-4 h-4 text-[#10B981]" />
-                </div>
                 <input
                   type="text"
                   value={username}
@@ -97,7 +92,7 @@ export default function LoginPage({ onLoginSuccess }) {
                   placeholder="Enter your registered username"
                   required
                   autoFocus
-                  className="w-full bg-[#121722] border border-[#26334a] focus:border-[#10B981] focus:ring-1 focus:ring-[#10B981] rounded-xl pl-9 pr-3 py-2.5 text-sm font-mono text-white placeholder-gray-500 transition"
+                  className="w-full bg-[#121722] border border-[#26334a] focus:border-[#10B981] focus:ring-1 focus:ring-[#10B981] rounded-xl px-4 py-2.5 text-sm font-mono text-white placeholder-gray-500 transition"
                 />
               </div>
             </div>
@@ -108,16 +103,13 @@ export default function LoginPage({ onLoginSuccess }) {
                 Password
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-500">
-                  <Lock className="w-4 h-4 text-[#10B981]" />
-                </div>
                 <input
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••••••"
                   required
-                  className="w-full bg-[#121722] border border-[#26334a] focus:border-[#10B981] focus:ring-1 focus:ring-[#10B981] rounded-xl pl-9 pr-3 py-2.5 text-sm font-mono text-white placeholder-gray-500 transition"
+                  className="w-full bg-[#121722] border border-[#26334a] focus:border-[#10B981] focus:ring-1 focus:ring-[#10B981] rounded-xl px-4 py-2.5 text-sm font-mono text-white placeholder-gray-500 transition"
                 />
               </div>
             </div>
@@ -145,7 +137,6 @@ export default function LoginPage({ onLoginSuccess }) {
           {/* Preset Demo Accounts Helper */}
           <div className="mt-6 pt-5 border-t border-[#26334a]">
             <p className="text-[11px] font-mono text-gray-400 mb-2 flex items-center space-x-1">
-              <Terminal className="w-3.5 h-3.5 text-[#10B981]" />
               <span>Pre-Provisioned Accounts (Click to quick-fill):</span>
             </p>
             
@@ -183,7 +174,6 @@ export default function LoginPage({ onLoginSuccess }) {
 
         {/* Security Notice */}
         <div className="bg-[#1a2234] border border-[#26334a] rounded-xl p-3.5 text-xs text-gray-400 font-sans flex items-start space-x-2.5">
-          <Info className="w-4 h-4 text-[#F59E0B] shrink-0 mt-0.5" />
           <div className="leading-relaxed">
             <strong className="text-gray-200">Account Policy:</strong> Public registration is disabled. User accounts are manually created in MySQL by the event organizers.
           </div>

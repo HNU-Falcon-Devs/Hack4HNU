@@ -13,10 +13,10 @@ import { api } from '../services/api';
 import InvestigateIpModal from '../components/InvestigateIpModal';
 
 const TABS = [
-  { id: 'overview', label: 'Overview', icon: BarChart3 },
-  { id: 'attacks', label: 'Attacks', icon: Flame },
-  { id: 'ip', label: 'IP Filter', icon: Server },
-  { id: 'logs', label: 'Security Logs', icon: FileText },
+  { id: 'overview', label: 'Overview' },
+  { id: 'attacks', label: 'Attacks' },
+  { id: 'ip', label: 'IP Filter' },
+  { id: 'logs', label: 'Security Logs' },
 ];
 
 const EVENT_TYPES = [
@@ -213,14 +213,13 @@ export default function SystemMonitorPage() {
           onClick={() => { if (activeTab === 'overview') loadOverview(); else if (activeTab === 'attacks') loadAttacks(); else if (activeTab === 'ip') loadIps(); else loadLogs(); }}
           className="px-3.5 py-2 bg-[#121722] hover:bg-[#202b3d] border border-[#26334a] text-gray-300 rounded-xl text-xs font-mono flex items-center space-x-1.5 transition"
         >
-          <RefreshCw className="w-3.5 h-3.5" />
           <span>Refresh</span>
         </button>
       </div>
 
       {/* Tabs */}
       <div className="flex items-center space-x-1 bg-[#161c2d] border border-[#26334a] rounded-xl p-1">
-        {TABS.map(({ id, label, icon: Icon }) => (
+        {TABS.map(({ id, label }) => (
           <button
             key={id}
             onClick={() => setActiveTab(id)}
@@ -230,7 +229,6 @@ export default function SystemMonitorPage() {
                 : 'text-gray-400 hover:text-white'
             }`}
           >
-            <Icon className="w-3.5 h-3.5" />
             <span>{label}</span>
           </button>
         ))}
@@ -264,7 +262,7 @@ export default function SystemMonitorPage() {
             <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-5 shadow-lg space-y-3">
               <div className="flex items-center justify-between pb-2 border-b border-[#26334a]">
                 <h2 className="text-xs font-bold font-mono text-white uppercase tracking-wider flex items-center space-x-2">
-                  <PieIcon className="w-4 h-4 text-emerald-400" /><span>Flag Accuracy</span>
+                  <span>Flag Accuracy</span>
                 </h2>
                 <span className="text-[11px] text-gray-500 font-mono">Cumulative</span>
               </div>
@@ -287,7 +285,7 @@ export default function SystemMonitorPage() {
             <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-5 shadow-lg space-y-3">
               <div className="flex items-center justify-between pb-2 border-b border-[#26334a]">
                 <h2 className="text-xs font-bold font-mono text-white uppercase tracking-wider flex items-center space-x-2">
-                  <Activity className="w-4 h-4 text-emerald-400" /><span>Submission Volume</span>
+                  <span>Submission Volume</span>
                 </h2>
                 <span className="text-[11px] text-gray-500 font-mono">Hourly</span>
               </div>
@@ -320,7 +318,7 @@ export default function SystemMonitorPage() {
             <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-5 shadow-lg space-y-3">
               <div className="flex items-center justify-between pb-2 border-b border-[#26334a]">
                 <h2 className="text-xs font-bold font-mono text-white uppercase tracking-wider flex items-center space-x-2">
-                  <Server className="w-4 h-4 text-red-400" /><span>Top Suspicious IPs</span>
+                  <span>Top Suspicious IPs</span>
                 </h2>
                 <span className="text-[11px] text-red-400 font-mono">High Risk</span>
               </div>
@@ -342,7 +340,7 @@ export default function SystemMonitorPage() {
             <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-5 shadow-lg space-y-3">
               <div className="flex items-center justify-between pb-2 border-b border-[#26334a]">
                 <h2 className="text-xs font-bold font-mono text-white uppercase tracking-wider flex items-center space-x-2">
-                  <Users className="w-4 h-4 text-amber-400" /><span>Most Active Participants</span>
+                  <span>Most Active Participants</span>
                 </h2>
                 <span className="text-[11px] text-gray-500 font-mono">By Submissions</span>
               </div>
@@ -370,7 +368,6 @@ export default function SystemMonitorPage() {
           <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-5 shadow-lg space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-[#26334a]">
               <div className="flex items-center space-x-2">
-                <Sliders className="w-4 h-4 text-emerald-400" />
                 <h2 className="text-xs font-bold font-mono text-white uppercase tracking-wider">Brute-Force Detection Thresholds</h2>
               </div>
             </div>
@@ -422,12 +419,10 @@ export default function SystemMonitorPage() {
           <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-5 shadow-lg space-y-3">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
               <div className="flex items-center space-x-2">
-                <Activity className="w-4 h-4 text-red-400" />
                 <h2 className="text-sm font-bold font-mono text-white uppercase tracking-wider">Flag Brute-Force Monitor</h2>
                 <span className="text-xs text-gray-400 font-mono">({filteredAttacks.length})</span>
               </div>
               <div className="relative w-full sm:w-72">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-emerald-400" />
                 <input type="text" value={attackSearch} onChange={(e) => setAttackSearch(e.target.value)}
                   placeholder="Search participant or IP..."
                   className="w-full bg-[#121722] border border-[#26334a] rounded-xl pl-8 pr-3 py-1.5 text-xs font-mono text-white placeholder-gray-500 focus:border-emerald-400 focus:outline-none transition" />
@@ -463,7 +458,7 @@ export default function SystemMonitorPage() {
                       <td className="px-4 py-3 text-right">
                         <button onClick={() => setInvestigatingIp(row.ip_address)}
                           className="px-2.5 py-1 rounded-lg bg-[#121722] hover:bg-[#202b3d] border border-[#26334a] hover:border-emerald-400/50 text-emerald-400 text-[11px] font-bold flex items-center space-x-1 ml-auto transition">
-                          <Eye className="w-3.5 h-3.5" /><span>Investigate</span>
+                          <span>Investigate</span>
                         </button>
                       </td>
                     </tr>
@@ -489,14 +484,13 @@ export default function SystemMonitorPage() {
             </div>
             <div className="flex items-center space-x-2 w-full sm:w-auto">
               <div className="relative flex-1 sm:w-60">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-emerald-400" />
                 <input type="text" value={ipSearch} onChange={(e) => setIpSearch(e.target.value)}
                   placeholder="Search IP..."
                   className="w-full bg-[#121722] border border-[#26334a] rounded-xl pl-8 pr-3 py-1.5 text-xs font-mono text-white placeholder-gray-500 focus:border-emerald-400 focus:outline-none transition" />
               </div>
               <button onClick={() => setShowAddIpModal(true)}
                 className="px-4 py-2 bg-gradient-to-r from-[#059669] to-[#10B981] hover:from-[#047857] hover:to-[#059669] text-white rounded-xl text-xs font-mono font-bold flex items-center space-x-1.5 transition shadow-md shadow-emerald-900/30">
-                <Plus className="w-4 h-4" /><span>Add IP Rule</span>
+                <span>Add IP Rule</span>
               </button>
             </div>
           </div>
@@ -529,15 +523,15 @@ export default function SystemMonitorPage() {
                       <td className="px-5 py-3.5 font-bold text-red-400">{row.failed_attempts_count}</td>
                       <td className="px-5 py-3.5">
                         {row.is_enforced
-                          ? <span className="flex items-center space-x-1 text-emerald-400 text-[11px] font-bold"><ShieldCheck className="w-3.5 h-3.5" /><span>Enforced</span></span>
-                          : <span className="flex items-center space-x-1 text-amber-400 text-[11px]"><AlertCircle className="w-3.5 h-3.5" /><span>Marked</span></span>}
+                          ? <span className="flex items-center space-x-1 text-emerald-400 text-[11px] font-bold"><span>Enforced</span></span>
+                          : <span className="flex items-center space-x-1 text-amber-400 text-[11px]"><span>Marked</span></span>}
                       </td>
                       <td className="px-5 py-3.5 text-gray-300 max-w-xs truncate" title={row.reason}>{row.reason || '—'}</td>
                       <td className="px-5 py-3.5 text-right whitespace-nowrap">
                         <div className="flex items-center justify-end space-x-1.5">
                           <button onClick={() => setInvestigatingIp(row.ip_address)}
                             className="px-2.5 py-1 rounded-lg bg-[#121722] hover:bg-[#202b3d] border border-[#26334a] hover:border-emerald-400/50 text-emerald-400 text-[11px] font-bold flex items-center space-x-1 transition">
-                            <Eye className="w-3 h-3" /><span>Profile</span>
+                            <span>Profile</span>
                           </button>
                           {row.status !== 'blocked'
                             ? <button onClick={() => handleQuickIpAction(row.ip_address, 'block')} className="px-2 py-1 rounded-lg bg-red-950/80 hover:bg-red-900 border border-red-800 text-red-300 text-[11px] font-bold transition">Block</button>
@@ -559,7 +553,7 @@ export default function SystemMonitorPage() {
               <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 font-mono text-xs">
                 <div className="flex items-center justify-between">
                   <h3 className="text-base font-bold text-white">Apply IP Policy</h3>
-                  <button onClick={() => setShowAddIpModal(false)} className="text-gray-400 hover:text-white"><AlertCircle className="w-5 h-5" /></button>
+                  <button onClick={() => setShowAddIpModal(false)} className="text-gray-400 hover:text-white">✕</button>
                 </div>
                 <form onSubmit={handleManualIpAction} className="space-y-3">
                   <div>
@@ -604,7 +598,6 @@ export default function SystemMonitorPage() {
           {/* Filters */}
           <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-4 shadow-lg flex flex-wrap items-center gap-3">
             <div className="relative flex-1 min-w-48">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-emerald-400" />
               <input type="text" value={logsSearch} onChange={(e) => setLogsSearch(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && loadLogs()}
                 placeholder="Search logs... (press Enter)"
                 className="w-full bg-[#121722] border border-[#26334a] rounded-xl pl-8 pr-3 py-1.5 text-xs font-mono text-white placeholder-gray-500 focus:border-emerald-400 focus:outline-none transition" />
@@ -657,12 +650,12 @@ export default function SystemMonitorPage() {
             <div className="flex items-center justify-between">
               <button onClick={() => setLogsPage(p => Math.max(1, p - 1))} disabled={logsPage === 1}
                 className="flex items-center space-x-1 px-3 py-2 bg-[#121722] hover:bg-[#202b3d] border border-[#26334a] text-gray-300 rounded-xl text-xs font-mono transition disabled:opacity-40">
-                <ChevronLeft className="w-4 h-4" /><span>Prev</span>
+                <span>Prev</span>
               </button>
               <span className="text-xs text-gray-400 font-mono">Page {logsPage} / {logsTotalPages}</span>
               <button onClick={() => setLogsPage(p => Math.min(logsTotalPages, p + 1))} disabled={logsPage === logsTotalPages}
                 className="flex items-center space-x-1 px-3 py-2 bg-[#121722] hover:bg-[#202b3d] border border-[#26334a] text-gray-300 rounded-xl text-xs font-mono transition disabled:opacity-40">
-                <span>Next</span><ChevronRight className="w-4 h-4" />
+                <span>Next</span>
               </button>
             </div>
           )}

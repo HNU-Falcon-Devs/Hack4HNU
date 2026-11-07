@@ -90,7 +90,6 @@ export default function ChallengeModal({ challenge, onClose, onSolveSuccess, isA
             </span>
             {challenge.is_solved && (
               <span className="flex items-center space-x-1 text-xs text-[#10B981] bg-emerald-950/80 border border-emerald-800 px-2.5 py-0.5 rounded-full font-mono font-bold">
-                <CheckCircle className="w-3.5 h-3.5" />
                 <span>{challenge.solved_by_teammate ? 'SOLVED BY TEAM' : 'SOLVED'}</span>
               </span>
             )}
@@ -99,7 +98,7 @@ export default function ChallengeModal({ challenge, onClose, onSolveSuccess, isA
             onClick={onClose} 
             className="text-gray-400 hover:text-white p-1 rounded-lg hover:bg-[#232d42] transition"
           >
-            <X className="w-5 h-5" />
+            ✕
           </button>
         </div>
 
@@ -109,7 +108,6 @@ export default function ChallengeModal({ challenge, onClose, onSolveSuccess, isA
           {/* Team Solve Info Banner if solved */}
           {challenge.is_solved && (
             <div className="bg-emerald-950/40 border border-emerald-800/80 rounded-xl p-3.5 flex items-start space-x-3 text-xs text-emerald-300">
-              <CheckCircle className="w-4 h-4 text-[#10B981] shrink-0 mt-0.5" />
               <div>
                 <p className="font-bold text-white">
                   {challenge.solved_by_teammate 
@@ -139,7 +137,6 @@ export default function ChallengeModal({ challenge, onClose, onSolveSuccess, isA
           {challenge.target_info && (
             <div className="bg-[#121722] border border-[#26334a] rounded-xl p-3 flex items-center justify-between">
               <div className="flex items-center space-x-2 text-sm text-[#10B981] font-mono">
-                <Terminal className="w-4 h-4 text-[#10B981] shrink-0" />
                 <span className="select-all">{challenge.target_info}</span>
               </div>
               {challenge.target_info.startsWith('http') && (
@@ -150,7 +147,6 @@ export default function ChallengeModal({ challenge, onClose, onSolveSuccess, isA
                   className="text-xs flex items-center space-x-1 text-[#10B981] hover:text-emerald-300 bg-emerald-950/60 border border-emerald-800 px-2.5 py-1 rounded-lg transition"
                 >
                   <span>Open Target</span>
-                  <ExternalLink className="w-3.5 h-3.5" />
                 </a>
               )}
             </div>
@@ -168,7 +164,6 @@ export default function ChallengeModal({ challenge, onClose, onSolveSuccess, isA
           {challenge.attachments && challenge.attachments.length > 0 && (
             <div className="space-y-2">
               <h3 className="text-xs uppercase font-mono tracking-wider text-gray-400 flex items-center space-x-1.5">
-                <Download className="w-3.5 h-3.5 text-[#10B981]" />
                 <span>Downloadable Challenge Files ({challenge.attachments.length})</span>
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -180,9 +175,6 @@ export default function ChallengeModal({ challenge, onClose, onSolveSuccess, isA
                     className="flex items-center justify-between p-3 rounded-xl bg-[#121722] border border-[#26334a] hover:border-[#10B981]/60 hover:bg-[#1a2438] transition group"
                   >
                     <div className="flex items-center space-x-2.5 truncate">
-                      <div className="p-2 rounded-lg bg-emerald-950/80 text-[#10B981] group-hover:bg-emerald-500/20 transition">
-                        <Download className="w-4 h-4" />
-                      </div>
                       <div className="truncate">
                         <p className="text-xs font-mono font-medium text-white truncate">{file.filename}</p>
                         <p className="text-[10px] text-gray-400 font-mono">{formatFileSize(file.file_size)}</p>
@@ -203,7 +195,6 @@ export default function ChallengeModal({ challenge, onClose, onSolveSuccess, isA
               onClick={() => setShowScreenshot(!showScreenshot)}
               className="flex items-center space-x-2 text-xs text-gray-400 hover:text-[#10B981] font-mono transition"
             >
-              <ImageIcon className="w-4 h-4" />
               <span>{showScreenshot ? 'Hide Original Challenge Screenshot' : 'View Original CTFd Screenshot'}</span>
             </button>
 
@@ -236,9 +227,6 @@ export default function ChallengeModal({ challenge, onClose, onSolveSuccess, isA
               feedback.type === 'info' ? 'bg-blue-950/60 border-blue-800 text-blue-300' :
               'bg-red-950/60 border-red-800 text-red-300'
             }`}>
-              {feedback.type === 'success' && <CheckCircle className="w-5 h-5 text-[#10B981] shrink-0 mt-0.5" />}
-              {feedback.type === 'info' && <Info className="w-5 h-5 text-blue-400 shrink-0 mt-0.5" />}
-              {feedback.type === 'error' && <AlertCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />}
               <div className="leading-snug">{feedback.message}</div>
             </div>
           )}
@@ -250,16 +238,13 @@ export default function ChallengeModal({ challenge, onClose, onSolveSuccess, isA
             </label>
             <div className="flex items-center space-x-2">
               <div className="relative flex-1">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                  <Flag className="w-4 h-4 text-[#10B981]" />
-                </div>
                 <input
                   type="text"
                   value={flag}
                   onChange={(e) => setFlag(e.target.value)}
                   placeholder="HNU{flag_is_Hidden}"
                   disabled={challenge.is_solved}
-                  className="w-full bg-[#121722] border border-[#26334a] focus:border-[#10B981] focus:ring-1 focus:ring-[#10B981] rounded-xl pl-9 pr-3 py-2.5 text-sm font-mono text-white placeholder-gray-500 disabled:opacity-50 transition"
+                  className="w-full bg-[#121722] border border-[#26334a] focus:border-[#10B981] focus:ring-1 focus:ring-[#10B981] rounded-xl px-4 py-2.5 text-sm font-mono text-white placeholder-gray-500 disabled:opacity-50 transition"
                   required
                 />
               </div>
