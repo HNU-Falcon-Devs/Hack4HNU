@@ -10,11 +10,13 @@ import AnnouncementsPage from './pages/AnnouncementsPage';
 import ChallengeManagementPage from './pages/ChallengeManagementPage';
 import SystemMonitorPage from './pages/SystemMonitorPage';
 import AccountsPage from './pages/AccountsPage';
+import LoadingScreen from './components/LoadingScreen';
 // import { AlertTriangle } from 'lucide-react';
 
 export default function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [activeTab, setActiveTab] = useState('dashboard');
   const [dbConnected, setDbConnected] = useState(false);
 
@@ -36,9 +38,12 @@ export default function App() {
   };
 
   const handleLoginSuccess = (userData) => {
+    setIsLoggingIn(true);
     setUser(userData);
     setActiveTab(userData.role === 'admin' ? 'admin_dashboard' : 'dashboard');
-    checkSession();
+    setTimeout(() => {
+      setIsLoggingIn(false);
+    }, 2000);
   };
 
   const handleLogout = async () => {
@@ -60,6 +65,15 @@ export default function App() {
 
   if (!user) {
     return <LoginPage onLoginSuccess={handleLoginSuccess} />;
+  }
+
+  if (isLoggingIn) {
+    return (
+      <LoadingScreen
+        message={user.role === 'admin' ? 'Entering Administrator Dashboard...' : 'Entering Participant Dashboard...'}
+        subtitle="Initializing tournament environment..."
+      />
+    );
   }
 
   const isAdmin = user.role === 'admin';

@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 
 import { api } from '../services/api';
-import LoadingScreen from '../components/LoadingScreen';
 
 // ─── Competition Timer State (persisted in localStorage) ─────────────────────
 const TIMER_KEY = 'hnu_admin_timer';
@@ -81,14 +80,6 @@ export default function AdminDashboard() {
   const [leaderboard, setLeaderboard] = useState([]);
   const [solves, setSolves] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [screenLoading, setScreenLoading] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setScreenLoading(false);
-    }, 2000);
-    return () => clearTimeout(timer);
-  }, []);
 
   // ── Timer state ──────────────────────────────────────────────────────────
   const [timerState, setTimerState] = useState(loadTimerState);
@@ -210,15 +201,6 @@ export default function AdminDashboard() {
       default: return 'bg-emerald-950/80 border-emerald-700/60 text-emerald-300';
     }
   };
-
-  if (screenLoading) {
-    return (
-      <LoadingScreen
-        message="Entering Administrator Dashboard..."
-        subtitle="Loading competition management & telemetry..."
-      />
-    );
-  }
 
   return (
     <div className="space-y-6">

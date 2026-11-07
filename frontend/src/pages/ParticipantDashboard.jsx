@@ -2,34 +2,19 @@ import React, { useEffect, useState } from 'react';
 import { api } from '../services/api';
 import { useCompetitionTimer } from '../hooks/useCompetitionTimer';
 import TeamAnalyticsCharts from '../components/TeamAnalyticsCharts';
-import LoadingScreen from '../components/LoadingScreen';
 
 export default function ParticipantDashboard({ user }) {
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
   const { formatted, isExpired, isRunning, hours, minutes, seconds } = useCompetitionTimer(25200);
 
   useEffect(() => {
     loadDashboard();
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 2000);
-    return () => clearTimeout(timer);
   }, []);
 
   const loadDashboard = async () => {
     const res = await api.getDashboard();
     setData(res);
   };
-
-  if (loading) {
-    return (
-      <LoadingScreen
-        message="Entering Participant Dashboard..."
-        subtitle="Loading competition clock & team statistics..."
-      />
-    );
-  }
 
   const teamName = data?.team?.name || user?.team_name || 'Team Alpha';
 

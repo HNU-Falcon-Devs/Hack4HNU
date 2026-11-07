@@ -97,17 +97,7 @@ export default function LeaderboardPage({ currentUser }) {
           </div>
         </div>
 
-        {/* Confidentiality Privacy Notice Alert */}
-        <div className="bg-[#161f30] border border-[#263b52] rounded-xl p-4 flex items-start space-x-3 text-xs text-gray-300">
-          <div className="space-y-1">
-            <span className="font-bold text-white uppercase font-mono text-[11px] tracking-wide">
-              Confidential Competition Mode Active
-            </span>
-            <p className="text-gray-300 leading-relaxed font-sans">
-              To preserve tournament strategy and fairness, competitor teams' scores are confidential. Only your team's total points, your 4 team participants, and your verified team solves are displayed.
-            </p>
-          </div>
-        </div>
+
 
         {/* 4 Team Participants Breakdown */}
         <div className="space-y-3">
@@ -124,8 +114,8 @@ export default function LeaderboardPage({ currentUser }) {
                 <div
                   key={idx}
                   className={`bg-[#1a2234] border rounded-2xl p-5 shadow-md flex flex-col justify-between transition ${isMe
-                      ? 'border-[#10B981] bg-gradient-to-b from-[#1a2234] to-[#12241d] shadow-[0_0_15px_rgba(16,185,129,0.18)]'
-                      : 'border-[#26334a] hover:border-[#384968]'
+                    ? 'border-[#10B981] bg-gradient-to-b from-[#1a2234] to-[#12241d] shadow-[0_0_15px_rgba(16,185,129,0.18)]'
+                    : 'border-[#26334a] hover:border-[#384968]'
                     }`}
                 >
                   <div className="flex items-center justify-between">
@@ -252,8 +242,8 @@ export default function LeaderboardPage({ currentUser }) {
           <button
             onClick={() => setAdminTab('teams')}
             className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-bold transition ${adminTab === 'teams'
-                ? 'bg-[#10B981] text-slate-950 shadow-md'
-                : 'text-gray-400 hover:text-white hover:bg-[#1a2234]'
+              ? 'bg-[#10B981] text-slate-950 shadow-md'
+              : 'text-gray-400 hover:text-white hover:bg-[#1a2234]'
               }`}
           >
             <span>Team Rankings (All Teams)</span>
@@ -262,8 +252,8 @@ export default function LeaderboardPage({ currentUser }) {
           <button
             onClick={() => setAdminTab('individuals')}
             className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-bold transition ${adminTab === 'individuals'
-                ? 'bg-[#10B981] text-slate-950 shadow-md'
-                : 'text-gray-400 hover:text-white hover:bg-[#1a2234]'
+              ? 'bg-[#10B981] text-slate-950 shadow-md'
+              : 'text-gray-400 hover:text-white hover:bg-[#1a2234]'
               }`}
           >
             <span>Individual Scoring (All Participants)</span>
