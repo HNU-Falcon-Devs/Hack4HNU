@@ -175,7 +175,41 @@ if ($dbConnected && $pdo) {
         }
     } else {
         // Admin View: Can view ALL team scores and ALL individual scoring
-        // 1. All Teams Ranking
+        // 1. Fetch team members with individual points
+        $memberSql = "
+            SELECT 
+                u.id as user_id,
+                u.username,
+                COALESCE(u.team_id, 0) as team_id,
+                COALESCE(u.team_name, '') as team_name,
+                COALESCE(SUM(s.points), 0) as points,
+                COUNT(s.id) as solves
+            FROM users u
+            LEFT JOIN solves s ON u.id = s.user_id
+            WHERE u.role = 'participant' AND u.is_active = 1
+            GROUP BY u.id, u.username, u.team_id, u.team_name
+            ORDER BY points DESC, u.id ASC
+        ";
+        $memberStmt = $pdo->query($memberSql);
+        $allMembers = $memberStmt->fetchAll();
+
+        $membersByTeam = [];
+        foreach ($allMembers as $m) {
+            $tid = (int)$m['team_id'];
+            $tname = $m['team_name'];
+            $memData = [
+                'user_id' => (int)$m['user_id'],
+                'username' => $m['username'],
+                'points' => (int)$m['points'],
+                'solves' => (int)$m['solves']
+            ];
+            $membersByTeam['id_' . $tid][] = $memData;
+            if ($tname) {
+                $membersByTeam['name_' . $tname][] = $memData;
+            }
+        }
+
+        // 2. All Teams Ranking
         $teamSql = "
             SELECT 
                 COALESCE(u.team_id, 0) as team_id,
@@ -196,18 +230,23 @@ if ($dbConnected && $pdo) {
         $rank = 1;
         $teams = [];
         foreach ($teamsRaw as $t) {
+            $tid = (int)$t['team_id'];
+            $tname = $t['team_name'];
+            $teamMembers = $membersByTeam['id_' . $tid] ?? ($membersByTeam['name_' . $tname] ?? []);
+
             $teams[] = [
                 'rank' => $rank++,
-                'team_id' => (int)$t['team_id'],
-                'team_name' => $t['team_name'],
+                'team_id' => $tid,
+                'team_name' => $tname,
                 'total_points' => (int)$t['total_points'],
                 'challenges_solved' => (int)$t['challenges_solved'],
-                'member_count' => (int)$t['member_count'],
+                'member_count' => count($teamMembers) > 0 ? count($teamMembers) : (int)$t['member_count'],
+                'members' => $teamMembers,
                 'last_activity' => $t['last_activity'] ?? 'No activity yet'
             ];
         }
 
-        // 2. All Individuals Ranking
+        // 3. All Individuals Ranking
         $indSql = "
             SELECT 
                 u.id as user_id,
@@ -239,13 +278,42 @@ if ($dbConnected && $pdo) {
             ];
         }
 
+        // 4. Recent Solve Events Feed
+        $recentSolvesStmt = $pdo->query("
+            SELECT 
+                s.id as solve_id,
+                u.username,
+                COALESCE(u.team_name, 'No Team') as team_name,
+                c.title as challenge_title,
+                c.category,
+                s.points,
+                DATE_FORMAT(s.solved_at, '%H:%i:%s') as solved_at
+            FROM solves s
+            JOIN users u ON s.user_id = u.id
+            JOIN challenges c ON s.challenge_id = c.id
+            ORDER BY s.solved_at DESC
+            LIMIT 50
+        ");
+        $recentSolves = $recentSolvesStmt->fetchAll(PDO::FETCH_ASSOC);
+
         sendJsonResponse([
             'status' => 'success',
             'db_connected' => true,
             'view' => 'admin_full',
             'is_admin' => true,
             'teams' => $teams,
-            'individuals' => $individuals
+            'individuals' => $individuals,
+            'recent_solves' => array_map(function($rs) {
+                return [
+                    'solve_id' => (int)$rs['solve_id'],
+                    'username' => $rs['username'],
+                    'team_name' => $rs['team_name'],
+                    'challenge_title' => $rs['challenge_title'],
+                    'category' => $rs['category'],
+                    'points' => (int)$rs['points'],
+                    'solved_at' => $rs['solved_at']
+                ];
+            }, $recentSolves)
         ]);
     }
 } else {
@@ -346,9 +414,51 @@ if ($dbConnected && $pdo) {
     } else {
         // Admin full demo view
         $demoTeams = [
-            ['rank' => 1, 'team_id' => 1, 'team_name' => 'Team Alpha', 'total_points' => 450, 'challenges_solved' => 5, 'member_count' => 4, 'last_activity' => date('Y-m-d H:i:s', time() - 300)],
-            ['rank' => 2, 'team_id' => 2, 'team_name' => 'Team Bravo', 'total_points' => 380, 'challenges_solved' => 4, 'member_count' => 4, 'last_activity' => date('Y-m-d H:i:s', time() - 900)],
-            ['rank' => 3, 'team_id' => 3, 'team_name' => 'Team Gamma', 'total_points' => 210, 'challenges_solved' => 2, 'member_count' => 4, 'last_activity' => date('Y-m-d H:i:s', time() - 2400)]
+            [
+                'rank' => 1,
+                'team_id' => 1,
+                'team_name' => 'Team Alpha',
+                'total_points' => 450,
+                'challenges_solved' => 5,
+                'member_count' => 4,
+                'members' => [
+                    ['username' => 'cyberspartan', 'points' => 250, 'solves' => 3],
+                    ['username' => 'alpha_hunter', 'points' => 150, 'solves' => 1],
+                    ['username' => 'alpha_sentry', 'points' => 50, 'solves' => 1],
+                    ['username' => 'alpha_vanguard', 'points' => 0, 'solves' => 0]
+                ],
+                'last_activity' => date('Y-m-d H:i:s', time() - 300)
+            ],
+            [
+                'rank' => 2,
+                'team_id' => 2,
+                'team_name' => 'Team Bravo',
+                'total_points' => 380,
+                'challenges_solved' => 4,
+                'member_count' => 4,
+                'members' => [
+                    ['username' => 'bravo_falcon', 'points' => 200, 'solves' => 2],
+                    ['username' => 'bravo_shadow', 'points' => 180, 'solves' => 2],
+                    ['username' => 'bravo_cipher', 'points' => 0, 'solves' => 0],
+                    ['username' => 'bravo_specter', 'points' => 0, 'solves' => 0]
+                ],
+                'last_activity' => date('Y-m-d H:i:s', time() - 900)
+            ],
+            [
+                'rank' => 3,
+                'team_id' => 3,
+                'team_name' => 'Team Gamma',
+                'total_points' => 210,
+                'challenges_solved' => 2,
+                'member_count' => 4,
+                'members' => [
+                    ['username' => 'gamma_recon', 'points' => 120, 'solves' => 1],
+                    ['username' => 'gamma_spark', 'points' => 90, 'solves' => 1],
+                    ['username' => 'gamma_cipher', 'points' => 0, 'solves' => 0],
+                    ['username' => 'gamma_root', 'points' => 0, 'solves' => 0]
+                ],
+                'last_activity' => date('Y-m-d H:i:s', time() - 2400)
+            ]
         ];
 
         $demoIndividuals = [
@@ -362,6 +472,14 @@ if ($dbConnected && $pdo) {
             ['rank' => 8, 'user_id' => 5, 'username' => 'alpha_vanguard', 'team_name' => 'Team Alpha', 'total_points' => 0, 'challenges_solved' => 0, 'last_activity' => 'No activity yet']
         ];
 
+        $demoSolves = [
+            ['solve_id' => 1, 'username' => 'cyberspartan', 'team_name' => 'Team Alpha', 'challenge_title' => 'DICT Chatbot', 'category' => 'Web', 'points' => 100, 'solved_at' => date('H:i:s', time() - 300)],
+            ['solve_id' => 2, 'username' => 'bravo_falcon', 'team_name' => 'Team Bravo', 'challenge_title' => 'Credential Vault', 'category' => 'Miscellaneous', 'points' => 30, 'solved_at' => date('H:i:s', time() - 900)],
+            ['solve_id' => 3, 'username' => 'bravo_shadow', 'team_name' => 'Team Bravo', 'challenge_title' => 'Security Headers', 'category' => 'Web', 'points' => 50, 'solved_at' => date('H:i:s', time() - 1200)],
+            ['solve_id' => 4, 'username' => 'alpha_hunter', 'team_name' => 'Team Alpha', 'challenge_title' => 'Encrypted Payload', 'category' => 'Cryptography', 'points' => 150, 'solved_at' => date('H:i:s', time() - 1500)],
+            ['solve_id' => 5, 'username' => 'gamma_recon', 'team_name' => 'Team Gamma', 'challenge_title' => 'Network Sniff', 'category' => 'Network', 'points' => 120, 'solved_at' => date('H:i:s', time() - 2400)]
+        ];
+
         sendJsonResponse([
             'status' => 'success',
             'db_connected' => false,
@@ -369,7 +487,8 @@ if ($dbConnected && $pdo) {
             'view' => 'admin_full',
             'is_admin' => true,
             'teams' => $demoTeams,
-            'individuals' => $demoIndividuals
+            'individuals' => $demoIndividuals,
+            'recent_solves' => $demoSolves
         ]);
     }
 }

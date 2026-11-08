@@ -108,10 +108,22 @@ export default function AdminDashboard() {
     return () => clearInterval(tickRef.current);
   }, []);
 
-  // ── Load leaderboard data ─────────────────────────────────────────────────
+  // ── Load leaderboard & timer data ─────────────────────────────────────────
   useEffect(() => {
     loadData();
+    syncTimerFromServer();
   }, []);
+
+  const syncTimerFromServer = async () => {
+    try {
+      const res = await api.getTimer();
+      if (res?.status === 'success' && res.timer) {
+        setTimerState(res.timer);
+        saveTimerState(res.timer);
+        setDisplayMs(computeRemaining(res.timer));
+      }
+    } catch { }
+  };
 
   const loadData = async () => {
     setLoading(true);
@@ -131,27 +143,33 @@ export default function AdminDashboard() {
     setLoading(false);
   };
 
-  // ── Timer controls ────────────────────────────────────────────────────────
+  // ── Timer controls with live backend sync ──────────────────────────────────
+  const broadcastTimer = (next) => {
+    setTimerState(next);
+    saveTimerState(next);
+    try {
+      window.dispatchEvent(new CustomEvent('hnu_timer_sync', { detail: next }));
+    } catch { }
+    api.updateTimer(next).catch(() => {});
+  };
+
   const handleStart = () => {
     const rem = computeRemaining(timerState);
     if (rem <= 0) return;
     const next = { ...timerState, running: true, startedAt: Date.now(), remainingMs: rem };
-    setTimerState(next);
-    saveTimerState(next);
+    broadcastTimer(next);
   };
 
   const handlePause = () => {
     const rem = computeRemaining(timerState);
     const next = { ...timerState, running: false, remainingMs: rem, startedAt: null };
-    setTimerState(next);
-    saveTimerState(next);
+    broadcastTimer(next);
     setDisplayMs(rem);
   };
 
   const handleReset = () => {
     const next = { running: false, remainingMs: timerState.totalMs, startedAt: null, totalMs: timerState.totalMs };
-    setTimerState(next);
-    saveTimerState(next);
+    broadcastTimer(next);
     setDisplayMs(timerState.totalMs);
   };
 
@@ -161,8 +179,7 @@ export default function AdminDashboard() {
     const next = timerState.running
       ? { ...timerState, remainingMs: newRem, startedAt: Date.now() }
       : { ...timerState, remainingMs: newRem };
-    setTimerState(next);
-    saveTimerState(next);
+    broadcastTimer(next);
     setDisplayMs(newRem);
   };
 
@@ -181,8 +198,7 @@ export default function AdminDashboard() {
     const next = timerState.running
       ? { ...timerState, remainingMs: ms, startedAt: Date.now() }
       : { ...timerState, remainingMs: ms };
-    setTimerState(next);
-    saveTimerState(next);
+    broadcastTimer(next);
     setDisplayMs(ms);
     setEditingTime(false);
   };
@@ -358,13 +374,7 @@ export default function AdminDashboard() {
               {/* Team header */}
               <div className="flex items-center justify-between px-5 py-3.5 bg-[#161c2d] border-b border-[#26334a]">
                 <div className="flex items-center space-x-3">
-                  <div className={`w-7 h-7 rounded-full flex items-center justify-center font-black text-xs text-white shadow ${ti === 0 ? 'bg-gradient-to-tr from-amber-500 to-yellow-400' :
-                    ti === 1 ? 'bg-gradient-to-tr from-gray-400 to-gray-300' :
-                      ti === 2 ? 'bg-gradient-to-tr from-orange-700 to-orange-500' :
-                        'bg-gradient-to-tr from-[#059669] to-[#10B981]'
-                    }`}>
-                    {ti + 1}
-                  </div>
+                  <span className="font-mono text-xs font-bold text-[#F59E0B]">#{ti + 1}</span>
                   <span className="font-bold text-white text-sm">{team.team_name}</span>
                 </div>
                 <div className="flex items-center space-x-3">
@@ -382,13 +392,8 @@ export default function AdminDashboard() {
               <div className="grid grid-cols-2 sm:grid-cols-4 divide-x divide-y divide-[#26334a]">
                 {(team.members || []).slice(0, 4).map((m, mi) => (
                   <div key={m.username || mi} className="px-4 py-3 space-y-1">
-                    <div className="flex items-center space-x-2">
-                      <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-[#059669] to-[#10B981] flex items-center justify-center text-[9px] font-bold text-white">
-                        {(m.username || '?').charAt(0).toUpperCase()}
-                      </div>
-                      <span className="text-xs font-bold text-white truncate">{m.username}</span>
-                    </div>
-                    <div className="text-[11px] font-mono text-emerald-400 pl-7">{m.points ?? 0} pts</div>
+                    <span className="text-xs font-bold text-white truncate block">{m.username}</span>
+                    <div className="text-[11px] font-mono text-emerald-400">{m.points ?? 0} pts</div>
                   </div>
                 ))}
                 {/* Pad empty slots */}

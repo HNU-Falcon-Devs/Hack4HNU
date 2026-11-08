@@ -295,9 +295,6 @@ export default function AccountsPage() {
               {/* Team header */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between px-5 py-3.5 bg-[#161c2d] border-b border-[#26334a] gap-3">
                 <div className="flex flex-wrap items-center gap-3">
-                  <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-[#059669] to-[#10B981] flex items-center justify-center font-black text-xs text-white">
-                    {(team.team_name || 'T').charAt(0)}
-                  </div>
                   <span className="font-bold text-white text-sm">{team.team_name}</span>
                   <span className="text-xs font-mono text-gray-400">
                     {(team.members || []).length} / 4 members

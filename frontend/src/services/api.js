@@ -92,6 +92,15 @@ export const api = {
   
   getDashboard: () => request('/dashboard.php'),
 
+  // Competition Timer Sync
+  getTimer: () => request('/timer.php?action=get'),
+
+  updateTimer: (timerState) =>
+    request('/timer.php?action=update', {
+      method: 'POST',
+      body: JSON.stringify(timerState)
+    }),
+
   // SOC Monitoring & Brute Force Detection
   getSocStats: () => request('/monitoring.php?action=stats'),
   

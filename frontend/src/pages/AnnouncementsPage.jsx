@@ -23,6 +23,10 @@ export default function AnnouncementsPage({ user, isAdmin }) {
     const res = await api.getAnnouncements();
     if (res.status === 'success' && res.announcements) {
       setAnnouncements(res.announcements);
+      try {
+        const allIds = res.announcements.map(a => a.id);
+        localStorage.setItem('hnu_read_announcements', JSON.stringify(allIds));
+      } catch {}
     }
     setLoading(false);
   };

@@ -7,6 +7,8 @@
 
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../middleware/admin.php';
+require_once __DIR__ . '/../includes/audit_logger.php';
+require_once __DIR__ . '/../includes/brute_force_detection.php';
 
 setupCorsHeaders();
 ensureSessionStarted();

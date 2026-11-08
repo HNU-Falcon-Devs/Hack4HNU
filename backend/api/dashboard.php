@@ -22,13 +22,35 @@ $pdo = getDatabaseConnection();
 $teamId = $user['team_id'] ?? null;
 $teamName = $user['team_name'] ?? ($teamId ? "Team {$teamId}" : 'Team Alpha');
 
-// 7-hour competition timer definition (25,200 seconds)
-$eventTimer = [
-    'duration_hours' => 7,
-    'total_seconds' => 25200,
-    'status' => 'RUNNING',
-    'label' => '7 Hours Competition Duration'
+// Competition timer state (fetched from system_settings or storage fallback)
+$defaultTimer = [
+    'running' => false,
+    'remainingMs' => 7 * 3600 * 1000,
+    'startedAt' => null,
+    'totalMs' => 7 * 3600 * 1000
 ];
+$eventTimer = $defaultTimer;
+
+if ($dbConnected && $pdo) {
+    try {
+        $tStmt = $pdo->query("SELECT setting_value FROM system_settings WHERE setting_key = 'competition_timer'");
+        $tVal = $tStmt->fetchColumn();
+        if ($tVal) {
+            $tDec = json_decode($tVal, true);
+            if (is_array($tDec) && isset($tDec['remainingMs'])) {
+                $eventTimer = $tDec;
+            }
+        }
+    } catch (Exception $e) { }
+}
+
+$timerStorageFile = __DIR__ . '/../../storage/timer_state.json';
+if ($eventTimer === $defaultTimer && file_exists($timerStorageFile)) {
+    $tDec = json_decode(file_get_contents($timerStorageFile), true);
+    if (is_array($tDec) && isset($tDec['remainingMs'])) {
+        $eventTimer = $tDec;
+    }
+}
 
 if ($dbConnected && $pdo) {
     // 1. Total available challenges

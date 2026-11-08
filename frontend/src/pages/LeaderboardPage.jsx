@@ -365,7 +365,7 @@ export default function LeaderboardPage({ currentUser }) {
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="text-[11px] px-2 py-0.5 rounded-full bg-[#121722] border border-[#26334a] text-gray-300 font-semibold">
+                        <span className="text-gray-300 font-medium">
                           {ind.team_name}
                         </span>
                       </td>

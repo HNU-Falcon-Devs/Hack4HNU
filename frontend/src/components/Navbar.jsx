@@ -1,24 +1,59 @@
-import React, { useState } from 'react';
-import { ChevronDown, LogOut } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { api } from '../services/api';
 import hnuLogo from '../assets/hnu-logo.png';
 
 export default function Navbar({ user, onLogout, activeTab, setActiveTab, dbConnected }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [unreadAnnouncements, setUnreadAnnouncements] = useState(0);
   const isAdmin = user?.role === 'admin';
 
   const teamDisplay = user?.team_name || (isAdmin ? 'Administrator' : 'Team Alpha');
 
+  // Check unread announcements periodically
+  useEffect(() => {
+    checkUnread();
+    const interval = setInterval(checkUnread, 8000);
+    return () => clearInterval(interval);
+  }, [activeTab]);
+
+  const checkUnread = async () => {
+    try {
+      const res = await api.getAnnouncements();
+      if (res.status === 'success' && Array.isArray(res.announcements)) {
+        const readIds = JSON.parse(localStorage.getItem('hnu_read_announcements') || '[]');
+        if (activeTab === 'announcements') {
+          const allIds = res.announcements.map(a => a.id);
+          localStorage.setItem('hnu_read_announcements', JSON.stringify(allIds));
+          setUnreadAnnouncements(0);
+        } else {
+          const unread = res.announcements.filter(a => !readIds.includes(a.id)).length;
+          setUnreadAnnouncements(unread);
+        }
+      }
+    } catch {}
+  };
+
   const navBtn = (tab, label) => (
     <button
       key={tab}
-      onClick={() => setActiveTab(tab)}
-      className={`px-4 h-16 text-sm font-semibold transition-all border-b-2 whitespace-nowrap ${
+      onClick={() => {
+        if (tab === 'announcements') {
+          setUnreadAnnouncements(0);
+        }
+        setActiveTab(tab);
+      }}
+      className={`px-4 h-16 text-sm font-semibold transition-all border-b-2 whitespace-nowrap flex items-center space-x-1.5 ${
         activeTab === tab
           ? 'border-[#10B981] text-[#10B981]'
           : 'border-transparent text-gray-400 hover:text-white hover:border-gray-600'
       }`}
     >
-      {label}
+      <span>{label}</span>
+      {tab === 'announcements' && unreadAnnouncements > 0 && (
+        <span className="px-1.5 py-0.2 rounded-full text-[10px] font-mono font-bold bg-[#10B981] text-slate-950 animate-pulse">
+          {unreadAnnouncements > 9 ? '9+' : unreadAnnouncements}
+        </span>
+      )}
     </button>
   );
 
@@ -65,21 +100,9 @@ export default function Navbar({ user, onLogout, activeTab, setActiveTab, dbConn
           <div className="relative shrink-0">
             <button
               onClick={() => setDropdownOpen(!dropdownOpen)}
-              className="flex items-center space-x-2.5 bg-[#101522] hover:bg-[#1a2234] px-3 py-1.5 rounded-full border border-[#242f44] transition shadow-md"
+              className="flex items-center space-x-2 bg-[#101522] hover:bg-[#1a2234] px-3.5 py-1.5 rounded-full border border-[#242f44] transition shadow-md"
             >
-              <div className={`w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs ${
-                isAdmin
-                  ? 'bg-gradient-to-tr from-amber-600 to-amber-400 text-white'
-                  : 'bg-gradient-to-tr from-[#059669] to-[#10B981] text-white'
-              }`}>
-                {user?.username?.charAt(0).toUpperCase() || 'U'}
-              </div>
-              <div className="text-left hidden sm:block">
-                <div className="text-xs font-bold text-white">{user?.username}</div>
-                <div className="text-[10px] font-mono text-[#F59E0B] leading-none">
-                  {isAdmin ? 'Administrator' : `Team: ${teamDisplay}`}
-                </div>
-              </div>
+              <span className="text-xs font-bold text-white">{user?.username}</span>
               <span className="text-gray-400 text-xs">▾</span>
             </button>
 
