@@ -14,6 +14,8 @@
 CREATE TABLE IF NOT EXISTS `teams` (
   `id` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   `name` VARCHAR(100) NOT NULL UNIQUE,
+  `suspended_until` DATETIME NULL,
+  `suspension_reason` VARCHAR(255) NULL,
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -30,6 +32,8 @@ CREATE TABLE IF NOT EXISTS `users` (
   `team_id` INT UNSIGNED NULL,
   `team_name` VARCHAR(100) NULL,
   `is_active` TINYINT(1) NOT NULL DEFAULT 1,
+  `suspended_until` DATETIME NULL,
+  `suspension_reason` VARCHAR(255) NULL,
   `last_login_at` DATETIME NULL,
   `last_login_ip` VARCHAR(45) NULL,
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,

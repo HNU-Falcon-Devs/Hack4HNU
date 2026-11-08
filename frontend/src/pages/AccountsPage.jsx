@@ -147,13 +147,71 @@ export default function AccountsPage() {
   };
 
   const handleDeleteUser = async (userId, username) => {
-    if (!confirm(`Delete account "${username}"? This cannot be undone.`)) return;
+    if (!confirm(`Remove member "${username}"? This cannot be undone.`)) return;
     const res = await api.deleteAccount(userId);
     if (res.status === 'success') {
-      setMessage({ type: 'success', text: `Account "${username}" deleted.` });
+      setMessage({ type: 'success', text: `Member "${username}" removed.` });
       loadAccounts();
     } else {
-      setMessage({ type: 'error', text: res.message || 'Failed to delete account.' });
+      setMessage({ type: 'error', text: res.message || 'Failed to remove member.' });
+    }
+    setTimeout(() => setMessage(null), 4000);
+  };
+
+  const handleDeleteTeam = async (teamId, teamName) => {
+    if (!confirm(`Are you sure you want to remove team "${teamName}" and all its members? This cannot be undone.`)) return;
+    const res = await api.deleteTeam(teamId);
+    if (res.status === 'success') {
+      setMessage({ type: 'success', text: `Team "${teamName}" removed successfully.` });
+      loadAccounts();
+    } else {
+      setMessage({ type: 'error', text: res.message || 'Failed to remove team.' });
+    }
+    setTimeout(() => setMessage(null), 4000);
+  };
+
+  const handleSuspendTeam = async (teamId, teamName) => {
+    if (!confirm(`Suspend team "${teamName}" for 30 minutes? Their screens will immediately blur with the rule violation notice.`)) return;
+    const res = await api.suspendTeam(teamId, 30, "You're suspended for 30mins.... your doing something not in the rules");
+    if (res.status === 'success') {
+      setMessage({ type: 'success', text: `Team "${teamName}" has been suspended for 30 minutes.` });
+      loadAccounts();
+    } else {
+      setMessage({ type: 'error', text: res.message || 'Failed to suspend team.' });
+    }
+    setTimeout(() => setMessage(null), 4000);
+  };
+
+  const handleUnsuspendTeam = async (teamId, teamName) => {
+    const res = await api.unsuspendTeam(teamId);
+    if (res.status === 'success') {
+      setMessage({ type: 'success', text: `Suspension lifted for team "${teamName}".` });
+      loadAccounts();
+    } else {
+      setMessage({ type: 'error', text: res.message || 'Failed to lift suspension.' });
+    }
+    setTimeout(() => setMessage(null), 4000);
+  };
+
+  const handleSuspendUser = async (userId, username) => {
+    if (!confirm(`Suspend "${username}" for 30 minutes? Their screen will immediately blur with the rule violation notice.`)) return;
+    const res = await api.suspendUser(userId, 30, "You're suspended for 30mins.... your doing something not in the rules");
+    if (res.status === 'success') {
+      setMessage({ type: 'success', text: `Participant "${username}" suspended for 30 minutes.` });
+      loadAccounts();
+    } else {
+      setMessage({ type: 'error', text: res.message || 'Failed to suspend participant.' });
+    }
+    setTimeout(() => setMessage(null), 4000);
+  };
+
+  const handleUnsuspendUser = async (userId, username) => {
+    const res = await api.unsuspendUser(userId);
+    if (res.status === 'success') {
+      setMessage({ type: 'success', text: `Suspension lifted for "${username}".` });
+      loadAccounts();
+    } else {
+      setMessage({ type: 'error', text: res.message || 'Failed to lift suspension.' });
     }
     setTimeout(() => setMessage(null), 4000);
   };
@@ -235,8 +293,8 @@ export default function AccountsPage() {
           {teams.map((team) => (
             <div key={team.team_id || team.team_name} className="bg-[#1a2234] border border-[#26334a] rounded-2xl overflow-hidden shadow-md">
               {/* Team header */}
-              <div className="flex items-center justify-between px-5 py-3.5 bg-[#161c2d] border-b border-[#26334a]">
-                <div className="flex items-center space-x-3">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between px-5 py-3.5 bg-[#161c2d] border-b border-[#26334a] gap-3">
+                <div className="flex flex-wrap items-center gap-3">
                   <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-[#059669] to-[#10B981] flex items-center justify-center font-black text-xs text-white">
                     {(team.team_name || 'T').charAt(0)}
                   </div>
@@ -244,12 +302,45 @@ export default function AccountsPage() {
                   <span className="text-xs font-mono text-gray-400">
                     {(team.members || []).length} / 4 members
                   </span>
+                  {team.is_suspended && (
+                    <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-rose-950/90 border border-rose-600 text-rose-300 font-bold uppercase tracking-wider animate-pulse">
+                      Suspended ({Math.ceil((team.suspension_remaining || 1800) / 60)}m remaining)
+                    </span>
+                  )}
+                  {(team.members || []).length === 3 && (
+                    <span className="text-[11px] font-mono px-2 py-0.5 rounded-full bg-amber-950/60 border border-amber-700/50 text-amber-300">
+                      3 of 4 slots filled
+                    </span>
+                  )}
                 </div>
-                {(team.members || []).length === 3 && (
-                  <span className="text-[11px] font-mono px-2 py-0.5 rounded-full bg-amber-950/60 border border-amber-700/50 text-amber-300">
-                    3 of 4 slots filled (4th member optional)
-                  </span>
-                )}
+
+                {/* Team Actions: Suspend / Unsuspend & Remove Team */}
+                <div className="flex items-center space-x-2 shrink-0">
+                  {team.is_suspended ? (
+                    <button
+                      onClick={() => handleUnsuspendTeam(team.team_id, team.team_name)}
+                      className="px-2.5 py-1 rounded-lg bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-600 text-emerald-300 text-xs font-mono font-bold transition shadow-sm"
+                    >
+                      Unsuspend Team
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => handleSuspendTeam(team.team_id, team.team_name)}
+                      className="px-2.5 py-1 rounded-lg bg-amber-950/70 hover:bg-amber-900 border border-amber-700/80 text-amber-300 text-xs font-mono font-bold transition shadow-sm"
+                      title="Suspend entire team for 30 minutes"
+                    >
+                      Suspend Team (30m)
+                    </button>
+                  )}
+
+                  <button
+                    onClick={() => handleDeleteTeam(team.team_id, team.team_name)}
+                    className="px-2.5 py-1 rounded-lg bg-red-950/70 hover:bg-red-900 border border-red-700 text-red-300 text-xs font-mono font-bold transition shadow-sm"
+                    title="Remove team and all its participants"
+                  >
+                    Remove Team
+                  </button>
+                </div>
               </div>
 
               {/* Members table */}
@@ -260,7 +351,7 @@ export default function AccountsPage() {
                       <th className="px-5 py-2.5">#</th>
                       <th className="px-5 py-2.5">Username</th>
                       <th className="px-5 py-2.5">Password</th>
-                      <th className="px-5 py-2.5">Role</th>
+                      <th className="px-5 py-2.5">Role / Status</th>
                       <th className="px-5 py-2.5">Created</th>
                       <th className="px-5 py-2.5 text-right">Actions</th>
                     </tr>
@@ -287,19 +378,47 @@ export default function AccountsPage() {
                               </button>
                             </div>
                           </td>
-                          <td className="px-5 py-3">
-                            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-950/60 border border-emerald-700/50 text-emerald-300">
+                          <td className="px-5 py-3 whitespace-nowrap">
+                            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-950/60 border border-emerald-700/50 text-emerald-300 mr-1.5">
                               {m.role || 'participant'}
                             </span>
+                            {m.is_suspended && (
+                              <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-rose-950 border border-rose-700 text-rose-300 uppercase tracking-wider animate-pulse">
+                                Suspended ({Math.ceil((m.suspension_remaining || 1800) / 60)}m)
+                              </span>
+                            )}
                           </td>
                           <td className="px-5 py-3 text-gray-400">{m.created_at || '—'}</td>
                           <td className="px-5 py-3 text-right">
-                            <button
-                              onClick={() => handleDeleteUser(m.id, m.username)}
-                              className="px-2.5 py-1 rounded-lg bg-red-950/60 hover:bg-red-900/80 border border-red-800/60 text-red-300 text-[11px] font-bold transition"
-                            >
-                              <span>Delete</span>
-                            </button>
+                            <div className="flex items-center justify-end space-x-1.5">
+                              {/* Suspend / Unsuspend Participant */}
+                              {m.is_suspended ? (
+                                <button
+                                  onClick={() => handleUnsuspendUser(m.id, m.username)}
+                                  className="px-2 py-1 rounded-lg bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-600 text-emerald-300 text-[10px] font-mono font-bold transition"
+                                  title="Lift 30m suspension"
+                                >
+                                  Unsuspend
+                                </button>
+                              ) : (
+                                <button
+                                  onClick={() => handleSuspendUser(m.id, m.username)}
+                                  className="px-2 py-1 rounded-lg bg-amber-950/60 hover:bg-amber-900 border border-amber-700 text-amber-300 text-[10px] font-mono font-bold transition"
+                                  title="Suspend for 30 minutes"
+                                >
+                                  Suspend (30m)
+                                </button>
+                              )}
+
+                              {/* Remove Member */}
+                              <button
+                                onClick={() => handleDeleteUser(m.id, m.username)}
+                                className="px-2 py-1 rounded-lg bg-red-950/60 hover:bg-red-900/80 border border-red-800/60 text-red-300 text-[10px] font-mono font-bold transition"
+                                title="Remove member"
+                              >
+                                Remove
+                              </button>
+                            </div>
                           </td>
                         </tr>
                       );

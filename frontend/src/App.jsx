@@ -11,6 +11,7 @@ import ChallengeManagementPage from './pages/ChallengeManagementPage';
 import SystemMonitorPage from './pages/SystemMonitorPage';
 import AccountsPage from './pages/AccountsPage';
 import LoadingScreen from './components/LoadingScreen';
+import SuspendedScreen from './components/SuspendedScreen';
 // import { AlertTriangle } from 'lucide-react';
 
 export default function App() {
@@ -23,6 +24,18 @@ export default function App() {
   useEffect(() => {
     checkSession();
   }, []);
+
+  // Poll participant session to reflect live admin suspensions / unsuspensions
+  useEffect(() => {
+    if (!user || user.role === 'admin') return;
+    const poll = setInterval(async () => {
+      const res = await api.me();
+      if (res.status === 'authenticated' && res.user) {
+        setUser(res.user);
+      }
+    }, 3000);
+    return () => clearInterval(poll);
+  }, [user?.id, user?.role]);
 
   const checkSession = async () => {
     setLoading(true);
@@ -163,6 +176,20 @@ export default function App() {
           </div>
         </div>
       </footer>
+
+      {/* Participant Suspension Full-Screen Blur Overlay */}
+      {!isAdmin && user?.is_suspended && (
+        <SuspendedScreen
+          initialRemainingSeconds={user.suspension_remaining}
+          reason={user.suspension_reason}
+          onCheckStatus={async () => {
+            const res = await api.me();
+            if (res.status === 'authenticated' && res.user) {
+              setUser(res.user);
+            }
+          }}
+        />
+      )}
 
     </div>
   );

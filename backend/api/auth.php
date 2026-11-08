@@ -152,15 +152,77 @@ switch ($action) {
             ]);
         }
 
+        $isSuspended = false;
+        $remainingSeconds = 0;
+        $reason = "You're suspended for 30mins.... you're doing something not in the rules";
+
+        $dbConnected = isDatabaseConnected();
+        $pdo = getDatabaseConnection();
+
+        if ($dbConnected && $pdo) {
+            $uStmt = $pdo->prepare("SELECT suspended_until, suspension_reason, team_id, team_name FROM users WHERE id = ?");
+            $uStmt->execute([$userId]);
+            $u = $uStmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($u) {
+                $_SESSION['team_id'] = $u['team_id'];
+                $_SESSION['team_name'] = $u['team_name'];
+
+                $now = time();
+                if (!empty($u['suspended_until']) && strtotime($u['suspended_until']) > $now) {
+                    $isSuspended = true;
+                    $remainingSeconds = strtotime($u['suspended_until']) - $now;
+                    if (!empty($u['suspension_reason'])) {
+                        $reason = $u['suspension_reason'];
+                    }
+                }
+
+                // Check team suspension
+                if (!$isSuspended && !empty($u['team_id'])) {
+                    $tStmt = $pdo->prepare("SELECT suspended_until, suspension_reason FROM teams WHERE id = ?");
+                    $tStmt->execute([$u['team_id']]);
+                    $t = $tStmt->fetch(PDO::FETCH_ASSOC);
+                    if ($t && !empty($t['suspended_until']) && strtotime($t['suspended_until']) > $now) {
+                        $isSuspended = true;
+                        $remainingSeconds = strtotime($t['suspended_until']) - $now;
+                        if (!empty($t['suspension_reason'])) {
+                            $reason = $t['suspension_reason'];
+                        }
+                    }
+                }
+            }
+        } else {
+            // Check demo session suspension
+            $now = time();
+            $uSusp = $_SESSION['demo_suspensions']['users'][$userId] ?? null;
+            if ($uSusp && $uSusp['until'] > $now) {
+                $isSuspended = true;
+                $remainingSeconds = $uSusp['until'] - $now;
+                $reason = $uSusp['reason'] ?? $reason;
+            }
+            $teamId = $_SESSION['team_id'] ?? null;
+            if (!$isSuspended && $teamId) {
+                $tSusp = $_SESSION['demo_suspensions']['teams'][$teamId] ?? null;
+                if ($tSusp && $tSusp['until'] > $now) {
+                    $isSuspended = true;
+                    $remainingSeconds = $tSusp['until'] - $now;
+                    $reason = $tSusp['reason'] ?? $reason;
+                }
+            }
+        }
+
         sendJsonResponse([
             'status' => 'authenticated',
-            'db_connected' => isDatabaseConnected(),
+            'db_connected' => $dbConnected,
             'user' => [
                 'id' => $_SESSION['user_id'],
                 'username' => $_SESSION['username'],
                 'role' => $_SESSION['role'],
                 'team_id' => $_SESSION['team_id'] ?? null,
-                'team_name' => $_SESSION['team_name'] ?? null
+                'team_name' => $_SESSION['team_name'] ?? null,
+                'is_suspended' => $isSuspended,
+                'suspension_remaining' => $remainingSeconds,
+                'suspension_reason' => $reason
             ]
         ]);
         break;

@@ -174,5 +174,35 @@ export const api = {
       method: 'POST',
       body: JSON.stringify({ id })
     }),
+
+  deleteTeam: (teamId) =>
+    request('/accounts.php?action=delete_team', {
+      method: 'POST',
+      body: JSON.stringify({ team_id: teamId })
+    }),
+
+  suspendUser: (userId, minutes = 30, reason = '') =>
+    request('/accounts.php?action=suspend_user', {
+      method: 'POST',
+      body: JSON.stringify({ user_id: userId, minutes, reason })
+    }),
+
+  unsuspendUser: (userId) =>
+    request('/accounts.php?action=unsuspend_user', {
+      method: 'POST',
+      body: JSON.stringify({ user_id: userId })
+    }),
+
+  suspendTeam: (teamId, minutes = 30, reason = '') =>
+    request('/accounts.php?action=suspend_team', {
+      method: 'POST',
+      body: JSON.stringify({ team_id: teamId, minutes, reason })
+    }),
+
+  unsuspendTeam: (teamId) =>
+    request('/accounts.php?action=unsuspend_team', {
+      method: 'POST',
+      body: JSON.stringify({ team_id: teamId })
+    }),
 };
 
