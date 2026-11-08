@@ -6,8 +6,8 @@
  */
 
 // Editable MySQL Database Connection Parameters
-define('DB_HOST', 'localhost');
-define('DB_PORT', '3306');
+define('DB_HOST', '127.0.0.1');
+define('DB_PORT', '3308');
 define('DB_NAME', 'hnu_ctf');
 define('DB_USER', 'root');
 define('DB_PASS', '');
@@ -22,6 +22,7 @@ define('DEFAULT_ENFORCE_BLOCKING', 1);
 /**
  * Get PDO database connection.
  * Returns PDO instance if successful, or null if connection fails.
+ * Automatically tries XAMPP port 3308 and fallback port 3306.
  */
 function getDatabaseConnection() {
     static $pdo = null;
@@ -37,21 +38,35 @@ function getDatabaseConnection() {
 
     $connectionAttempted = true;
 
-    $dsn = "mysql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME . ";charset=" . DB_CHARSET;
+    $portsToTry = [DB_PORT];
+    if (DB_PORT == '3308') {
+        $portsToTry[] = '3306';
+    } else {
+        $portsToTry[] = '3308';
+    }
+
+    $hostsToTry = array_unique([DB_HOST, '127.0.0.1', 'localhost']);
+
     $options = [
         PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         PDO::ATTR_EMULATE_PREPARES   => false,
     ];
 
-    try {
-        $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
-        return $pdo;
-    } catch (PDOException $e) {
-        // Record error or return null for graceful fallback
-        error_log("HNU CTF Database Connection Error: " . $e->getMessage());
-        return null;
+    foreach ($hostsToTry as $host) {
+        foreach ($portsToTry as $port) {
+            try {
+                $dsn = "mysql:host=" . $host . ";port=" . $port . ";dbname=" . DB_NAME . ";charset=" . DB_CHARSET;
+                $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
+                return $pdo;
+            } catch (PDOException $e) {
+                // Try next candidate
+            }
+        }
     }
+
+    error_log("HNU CTF Database Connection Error: Unable to connect on ports " . implode(', ', $portsToTry));
+    return null;
 }
 
 /**
