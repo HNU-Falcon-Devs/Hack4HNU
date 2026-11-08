@@ -110,7 +110,6 @@ function verifyAndProcessFlag($userId, $username, $challengeId, $submittedFlag, 
             ];
         }
     }
-    }
 
     // 4. Case-sensitive comparison
     $isCorrect = (strcmp($submittedFlag, $challenge['correct_flag']) === 0) ? 1 : 0;
