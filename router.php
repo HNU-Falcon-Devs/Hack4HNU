@@ -1,11 +1,11 @@
 <?php
 /**
  * HNU CTF - Unified Web Server Router
- * Enables PHP built-in server (`php -S 127.0.0.1:8000 router.php`) to resolve
+ * Enables PHP built-in server (`php -S 0.0.0.0:8000 router.php`) to resolve
  * both the frontend single page app and all backend API requests seamlessly.
  */
 
-// Allow CORS in development
+// Allow CORS in local network and development
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '*';
 header("Access-Control-Allow-Origin: $origin");
 header("Access-Control-Allow-Credentials: true");
@@ -17,18 +17,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
+$root = __DIR__;
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-
-// Root path redirect to frontend
-if ($path === '/' || $path === '') {
-    if (file_exists(__DIR__ . '/frontend/dist/index.html')) {
-        header("Location: /frontend/dist/");
-        exit;
-    } elseif (file_exists(__DIR__ . '/index.php')) {
-        require __DIR__ . '/index.php';
-        exit;
-    }
-}
 
 // Block direct access to storage directory (files must be downloaded through api/download.php)
 if (strpos($path, '/storage/') === 0 || strpos($path, 'storage/') === 0) {
@@ -38,13 +28,35 @@ if (strpos($path, '/storage/') === 0 || strpos($path, 'storage/') === 0) {
     exit;
 }
 
+function getMimeType($file) {
+    $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+    $mimes = [
+        'js'    => 'application/javascript; charset=utf-8',
+        'mjs'   => 'application/javascript; charset=utf-8',
+        'css'   => 'text/css; charset=utf-8',
+        'html'  => 'text/html; charset=utf-8',
+        'htm'   => 'text/html; charset=utf-8',
+        'json'  => 'application/json; charset=utf-8',
+        'png'   => 'image/png',
+        'jpg'   => 'image/jpeg',
+        'jpeg'  => 'image/jpeg',
+        'gif'   => 'image/gif',
+        'svg'   => 'image/svg+xml',
+        'ico'   => 'image/x-icon',
+        'webp'  => 'image/webp',
+        'woff'  => 'font/woff',
+        'woff2' => 'font/woff2',
+        'ttf'   => 'font/ttf',
+    ];
+    return $mimes[$ext] ?? 'application/octet-stream';
+}
+
 // Candidate search locations for files
-$root = __DIR__;
 $candidates = [
     $root . $path,
+    $root . '/frontend/dist' . $path,
     $root . '/backend' . $path,
     $root . preg_replace('#^/backend#', '', $path),
-    dirname($root) . $path,
 ];
 
 foreach ($candidates as $target) {
@@ -53,29 +65,32 @@ foreach ($candidates as $target) {
             require $target;
             exit;
         }
-        // Let PHP serve static files (js, css, images, etc.)
-        return false;
+        // Direct serve static files with proper MIME header
+        header('Content-Type: ' . getMimeType($target));
+        readfile($target);
+        exit;
     }
+
     if (is_dir($target)) {
-        if (is_file(rtrim($target, '/') . '/index.html')) {
-            // If URL doesn't end with slash, redirect to add slash so relative assets work
-            if (substr($path, -1) !== '/') {
-                header("Location: " . $path . "/");
-                exit;
-            }
-            return false;
+        $indexPath = rtrim($target, '/') . '/index.html';
+        if (is_file($indexPath)) {
+            header('Content-Type: text/html; charset=utf-8');
+            readfile($indexPath);
+            exit;
         }
-        if (is_file(rtrim($target, '/') . '/index.php')) {
-            require rtrim($target, '/') . '/index.php';
+        $indexPhp = rtrim($target, '/') . '/index.php';
+        if (is_file($indexPhp)) {
+            require $indexPhp;
             exit;
         }
     }
 }
 
-// For SPA routing under /frontend/dist/
-if (strpos($path, '/frontend/dist') === 0 && file_exists($root . '/frontend/dist/index.html')) {
+// Root path or SPA fallback (serve frontend/dist/index.html)
+$distIndex = $root . '/frontend/dist/index.html';
+if (file_exists($distIndex) && !preg_match('#^/(backend|api)/#', $path)) {
     header('Content-Type: text/html; charset=utf-8');
-    readfile($root . '/frontend/dist/index.html');
+    readfile($distIndex);
     exit;
 }
 
