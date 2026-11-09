@@ -209,38 +209,37 @@ export default function AdminDashboard() {
   // ── Category color ────────────────────────────────────────────────────────
   const catColor = (cat) => {
     switch ((cat || '').toLowerCase()) {
-      case 'web': return 'bg-blue-950/80 border-blue-700/60 text-blue-300';
-      case 'osint': return 'bg-purple-950/80 border-purple-700/60 text-purple-300';
-      case 'forensics': return 'bg-amber-950/80 border-amber-700/60 text-amber-300';
-      case 'network': return 'bg-cyan-950/80 border-cyan-700/60 text-cyan-300';
-      case 'steganography': return 'bg-pink-950/80 border-pink-700/60 text-pink-300';
-      default: return 'bg-emerald-950/80 border-emerald-700/60 text-emerald-300';
+      case 'web': return 'bg-blue-50 border-blue-200 text-blue-700';
+      case 'osint': return 'bg-purple-50 border-purple-200 text-purple-700';
+      case 'forensics': return 'bg-amber-50 border-amber-200 text-amber-700';
+      case 'network': return 'bg-cyan-50 border-cyan-200 text-cyan-700';
+      case 'steganography': return 'bg-pink-50 border-pink-200 text-pink-700';
+      default: return 'bg-emerald-50 border-emerald-200 text-[#006633]';
     }
   };
 
   return (
     <div className="space-y-6">
 
-
-
       {/* ── Competition Timer ─────────────────────────────────────────────── */}
-      <div className={`bg-[#1a2234] border rounded-2xl p-6 shadow-lg ${isExpired ? 'border-red-700/60' : isRunning ? 'border-emerald-600/60' : 'border-[#26334a]'}`}>
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
+      <div className={`bg-white border rounded-2xl p-6 shadow-sm relative overflow-hidden ${isExpired ? 'border-red-300' : isRunning ? 'border-emerald-300' : 'border-slate-200'}`}>
+        <div className="absolute top-0 left-0 right-0 h-1 bg-[#006633]" />
+        <div className="absolute top-1 left-0 right-0 h-0.5 bg-[#eab308]" />
 
-
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-1">
 
           {/* Timer Display */}
           <div className="text-center sm:text-left">
-            <div className="text-xs font-mono text-gray-400 uppercase tracking-widest mb-1 flex items-center space-x-2">
+            <div className="text-xs font-mono text-slate-500 uppercase tracking-widest mb-1 flex items-center space-x-2">
               <span>Competition Timer</span>
               {isRunning && (
-                <span className="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-950 border border-emerald-700 text-emerald-400 animate-pulse">LIVE</span>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 border border-emerald-300 text-[#006633]">LIVE</span>
               )}
               {isExpired && (
-                <span className="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-red-950 border border-red-700 text-red-400">ENDED</span>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-100 border border-red-300 text-red-600">ENDED</span>
               )}
             </div>
-            <div className={`text-5xl font-black font-mono tracking-widest ${isExpired ? 'text-red-400' : isRunning ? 'text-emerald-400' : 'text-white'}`}>
+            <div className={`text-5xl font-black font-mono tracking-widest ${isExpired ? 'text-red-600' : isRunning ? 'text-[#006633]' : 'text-slate-900'}`}>
               {formatTime(displayMs)}
             </div>
           </div>
@@ -248,7 +247,7 @@ export default function AdminDashboard() {
           <button
             onClick={loadData}
             disabled={loading}
-            className="px-3.5 py-2 bg-[#121722] hover:bg-[#202b3d] border border-[#26334a] text-gray-300 rounded-xl text-xs font-mono transition"
+            className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 rounded-xl text-xs font-mono transition-colors"
           >
             <span>Refresh</span>
           </button>
@@ -261,27 +260,27 @@ export default function AdminDashboard() {
                 <button
                   onClick={handleStart}
                   disabled={isExpired}
-                  className="flex items-center space-x-2 px-5 py-2.5 bg-gradient-to-r from-[#059669] to-[#10B981] hover:from-[#047857] hover:to-[#059669] text-white rounded-xl text-sm font-bold transition shadow-lg shadow-emerald-900/30 disabled:opacity-40"
+                  className="flex items-center space-x-2 px-5 py-2.5 bg-[#006633] hover:bg-[#004d26] text-white rounded-xl text-sm font-bold transition-colors shadow-sm disabled:opacity-40"
                 >
                   <span>Start</span>
                 </button>
               ) : (
                 <button
                   onClick={handlePause}
-                  className="flex items-center space-x-2 px-5 py-2.5 bg-amber-600 hover:bg-amber-500 text-white rounded-xl text-sm font-bold transition shadow-lg"
+                  className="flex items-center space-x-2 px-5 py-2.5 bg-amber-600 hover:bg-amber-500 text-white rounded-xl text-sm font-bold transition-colors shadow-sm"
                 >
                   <span>Pause</span>
                 </button>
               )}
               <button
                 onClick={handleReset}
-                className="flex items-center space-x-2 px-4 py-2.5 bg-[#121722] hover:bg-[#202b3d] border border-[#26334a] text-gray-300 rounded-xl text-sm font-bold transition"
+                className="flex items-center space-x-2 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 rounded-xl text-sm font-bold transition-colors"
               >
                 <span>Reset</span>
               </button>
               <button
                 onClick={handleOpenEdit}
-                className="flex items-center space-x-2 px-4 py-2.5 bg-[#121722] hover:bg-[#202b3d] border border-[#26334a] text-gray-300 rounded-xl text-sm font-bold transition"
+                className="flex items-center space-x-2 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 rounded-xl text-sm font-bold transition-colors"
               >
                 <span>Edit Time</span>
               </button>
@@ -289,7 +288,7 @@ export default function AdminDashboard() {
 
             {/* Add/Remove Time */}
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-xs text-gray-500 font-mono">Adjust:</span>
+              <span className="text-xs text-slate-500 font-mono">Adjust:</span>
               {[
                 { label: '+5m', ms: 5 * 60 * 1000 },
                 { label: '+15m', ms: 15 * 60 * 1000 },
@@ -300,9 +299,9 @@ export default function AdminDashboard() {
                 <button
                   key={label}
                   onClick={() => handleAddTime(ms)}
-                  className={`px-3 py-1 rounded-lg text-xs font-mono font-bold border transition ${ms > 0
-                    ? 'bg-emerald-950/40 border-emerald-700/50 text-emerald-300 hover:bg-emerald-950/80'
-                    : 'bg-red-950/40 border-red-700/50 text-red-300 hover:bg-red-950/80'
+                  className={`px-3 py-1 rounded-lg text-xs font-mono font-bold border transition-colors ${ms > 0
+                    ? 'bg-emerald-50 border-emerald-300 text-[#006633] hover:bg-emerald-100'
+                    : 'bg-rose-50 border-rose-300 text-rose-700 hover:bg-rose-100'
                     }`}
                 >
                   {label}
@@ -315,11 +314,11 @@ export default function AdminDashboard() {
 
       {/* ── Edit Time Modal ───────────────────────────────────────────────── */}
       {editingTime && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-6 w-full max-w-sm shadow-2xl space-y-4">
+        <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white border border-slate-200 rounded-2xl p-6 w-full max-w-sm shadow-xl space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-base font-bold text-white font-mono">Set Timer</h3>
-              <button onClick={() => setEditingTime(false)} className="text-gray-400 hover:text-white">
+              <h3 className="text-base font-bold text-slate-900 font-mono">Set Timer</h3>
+              <button onClick={() => setEditingTime(false)} className="text-slate-400 hover:text-slate-600">
                 ✕
               </button>
             </div>
@@ -330,24 +329,24 @@ export default function AdminDashboard() {
                 { label: 'SS', value: editS, set: setEditS, max: 59 },
               ].map(({ label, value, set, max }, i) => (
                 <React.Fragment key={label}>
-                  {i > 0 && <span className="text-2xl font-black text-gray-500">:</span>}
+                  {i > 0 && <span className="text-2xl font-black text-slate-400">:</span>}
                   <div className="flex flex-col items-center flex-1">
-                    <span className="text-[10px] text-gray-500 font-mono mb-1">{label}</span>
+                    <span className="text-[10px] text-slate-500 font-mono mb-1">{label}</span>
                     <input
                       type="number"
                       min="0"
                       max={max}
                       value={value}
                       onChange={(e) => set(String(parseInt(e.target.value) || 0).padStart(2, '0'))}
-                      className="w-full text-center bg-[#121722] border border-[#26334a] rounded-xl p-2 text-2xl font-black font-mono text-white focus:border-emerald-500 focus:outline-none"
+                      className="w-full text-center bg-slate-50 border border-slate-300 rounded-xl p-2 text-2xl font-black font-mono text-slate-900 focus:border-[#006633] focus:outline-none"
                     />
                   </div>
                 </React.Fragment>
               ))}
             </div>
             <div className="flex justify-end space-x-2 pt-2">
-              <button onClick={() => setEditingTime(false)} className="px-4 py-2 bg-[#121722] hover:bg-[#202b3d] border border-[#26334a] text-gray-300 rounded-xl text-xs font-mono transition">Cancel</button>
-              <button onClick={handleSaveEdit} className="px-5 py-2 bg-gradient-to-r from-[#059669] to-[#10B981] hover:from-[#047857] hover:to-[#059669] text-white rounded-xl text-xs font-bold transition flex items-center space-x-1.5">
+              <button onClick={() => setEditingTime(false)} className="px-4 py-2 bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 rounded-xl text-xs font-mono transition-colors">Cancel</button>
+              <button onClick={handleSaveEdit} className="px-5 py-2 bg-[#006633] hover:bg-[#004d26] text-white rounded-xl text-xs font-bold transition-colors shadow-sm flex items-center space-x-1.5">
                 <span>Apply</span>
               </button>
             </div>
@@ -360,46 +359,46 @@ export default function AdminDashboard() {
 
         {/* Teams & Players */}
         <div className="xl:col-span-2 space-y-4">
-          <h2 className="text-sm font-bold text-white font-mono uppercase tracking-wider flex items-center space-x-2">
+          <h2 className="text-sm font-bold text-slate-900 font-mono uppercase tracking-wider flex items-center space-x-2">
             <span>Teams &amp; Participants</span>
-            <span className="text-gray-500 font-normal normal-case">({leaderboard.length} teams)</span>
+            <span className="text-slate-500 font-normal normal-case">({leaderboard.length} teams)</span>
           </h2>
 
           {loading ? (
-            <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-12 text-center text-gray-400 font-mono text-sm">
+            <div className="bg-white border border-slate-200 rounded-2xl p-12 text-center text-slate-500 font-mono text-sm">
               Loading teams...
             </div>
           ) : leaderboard.map((team, ti) => (
-            <div key={team.team_id || team.team_name} className="bg-[#1a2234] border border-[#26334a] rounded-2xl overflow-hidden shadow-md">
+            <div key={team.team_id || team.team_name} className="bg-white border border-slate-200 hover:border-[#006633] transition-colors rounded-2xl overflow-hidden shadow-sm">
               {/* Team header */}
-              <div className="flex items-center justify-between px-5 py-3.5 bg-[#161c2d] border-b border-[#26334a]">
+              <div className="flex items-center justify-between px-5 py-3.5 bg-slate-50 border-b border-slate-200">
                 <div className="flex items-center space-x-3">
-                  <span className="font-mono text-xs font-bold text-[#F59E0B]">#{ti + 1}</span>
-                  <span className="font-bold text-white text-sm">{team.team_name}</span>
+                  <span className="font-mono text-xs font-bold text-[#eab308]">#{ti + 1}</span>
+                  <span className="font-bold text-slate-900 text-sm">{team.team_name}</span>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <span className="text-xs font-mono text-gray-400">
+                  <span className="text-xs font-mono text-slate-500">
                     {(team.members || []).length} / 4 members
                   </span>
-                  <div className="flex items-center space-x-1.5 px-3 py-1 rounded-full bg-emerald-950/60 border border-emerald-700/50">
-                    <span className="text-sm font-black text-white font-mono">{team.total_points ?? 0}</span>
-                    <span className="text-[10px] text-gray-400 font-mono">pts</span>
+                  <div className="flex items-center space-x-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200">
+                    <span className="text-sm font-black text-[#006633] font-mono">{team.total_points ?? 0}</span>
+                    <span className="text-[10px] text-slate-500 font-mono">pts</span>
                   </div>
                 </div>
               </div>
 
               {/* Members grid */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 divide-x divide-y divide-[#26334a]">
+              <div className="grid grid-cols-2 sm:grid-cols-4 divide-x divide-y divide-slate-100">
                 {(team.members || []).slice(0, 4).map((m, mi) => (
                   <div key={m.username || mi} className="px-4 py-3 space-y-1">
-                    <span className="text-xs font-bold text-white truncate block">{m.username}</span>
-                    <div className="text-[11px] font-mono text-emerald-400">{m.points ?? 0} pts</div>
+                    <span className="text-xs font-bold text-slate-800 truncate block">{m.username}</span>
+                    <div className="text-[11px] font-mono text-[#006633]">{m.points ?? 0} pts</div>
                   </div>
                 ))}
                 {/* Pad empty slots */}
                 {Array.from({ length: Math.max(0, 4 - (team.members || []).length) }).map((_, ei) => (
                   <div key={`empty-${ei}`} className="px-4 py-3 flex items-center justify-center">
-                    <span className="text-[11px] text-gray-600 font-mono italic">Empty slot</span>
+                    <span className="text-[11px] text-slate-400 font-mono italic">Empty slot</span>
                   </div>
                 ))}
               </div>
@@ -409,37 +408,37 @@ export default function AdminDashboard() {
 
         {/* Solve Events Feed */}
         <div className="space-y-4">
-          <h2 className="text-sm font-bold text-white font-mono uppercase tracking-wider flex items-center space-x-2">
+          <h2 className="text-sm font-bold text-slate-900 font-mono uppercase tracking-wider flex items-center space-x-2">
             <span>Solve Events</span>
-            <span className="text-gray-500 font-normal normal-case">({solves.length})</span>
+            <span className="text-slate-500 font-normal normal-case">({solves.length})</span>
           </h2>
 
-          <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl overflow-hidden shadow-md">
+          <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
             {solves.length === 0 ? (
-              <div className="p-8 text-center text-gray-500 font-mono text-sm">
+              <div className="p-8 text-center text-slate-500 font-mono text-sm">
                 No solves recorded yet.
               </div>
             ) : (
-              <div className="divide-y divide-[#26334a] max-h-[600px] overflow-y-auto">
+              <div className="divide-y divide-slate-100 max-h-[600px] overflow-y-auto">
                 {solves.map((s, i) => (
-                  <div key={i} className="px-4 py-3 hover:bg-[#202b3d] transition space-y-1.5">
+                  <div key={i} className="px-4 py-3 hover:bg-slate-50 transition-colors space-y-1.5">
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex items-center space-x-2 min-w-0">
-                        <span className="text-xs font-bold text-white truncate">{s.challenge_title}</span>
+                        <span className="text-xs font-bold text-slate-900 truncate">{s.challenge_title}</span>
                       </div>
                       <span className={`shrink-0 px-1.5 py-0.5 rounded text-[10px] font-bold border font-mono ${catColor(s.category)}`}>
                         {s.category}
                       </span>
                     </div>
                     <div className="flex items-center justify-between pl-5">
-                      <div className="text-[11px] font-mono text-gray-400">
-                        <span className="text-emerald-300 font-bold">{s.username}</span>
-                        <span className="text-gray-600 mx-1">·</span>
+                      <div className="text-[11px] font-mono text-slate-500">
+                        <span className="text-[#006633] font-bold">{s.username}</span>
+                        <span className="text-slate-400 mx-1">·</span>
                         <span>{s.team_name}</span>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <span className="text-[11px] font-bold text-[#F59E0B] font-mono">+{s.points}pts</span>
-                        <span className="text-[10px] text-gray-500 font-mono">{s.solved_at}</span>
+                        <span className="text-[11px] font-bold text-[#eab308] font-mono">+{s.points}pts</span>
+                        <span className="text-[10px] text-slate-400 font-mono">{s.solved_at}</span>
                       </div>
                     </div>
                   </div>

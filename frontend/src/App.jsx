@@ -12,7 +12,7 @@ import SystemMonitorPage from './pages/SystemMonitorPage';
 import AccountsPage from './pages/AccountsPage';
 import LoadingScreen from './components/LoadingScreen';
 import SuspendedScreen from './components/SuspendedScreen';
-// import { AlertTriangle } from 'lucide-react';
+import hnuLogo from './assets/hnu-logo.png';
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -56,7 +56,7 @@ export default function App() {
     setActiveTab(userData.role === 'admin' ? 'admin_dashboard' : 'dashboard');
     setTimeout(() => {
       setIsLoggingIn(false);
-    }, 2000);
+    }, 1200);
   };
 
   const handleLogout = async () => {
@@ -66,14 +66,7 @@ export default function App() {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-[#121722] flex flex-col items-center justify-center space-y-4">
-        <div className="w-10 h-10 border-3 border-emerald-400 border-t-transparent rounded-full animate-spin" />
-        <div className="font-mono text-xs text-emerald-400 tracking-wider uppercase">
-          Initializing HNU CTF...
-        </div>
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   if (!user) {
@@ -81,18 +74,13 @@ export default function App() {
   }
 
   if (isLoggingIn) {
-    return (
-      <LoadingScreen
-        message={user.role === 'admin' ? 'Entering Administrator Dashboard...' : 'Entering Participant Dashboard...'}
-        subtitle="Initializing tournament environment..."
-      />
-    );
+    return <LoadingScreen />;
   }
 
   const isAdmin = user.role === 'admin';
 
   return (
-    <div className="min-h-screen bg-[#121722] text-[#F1F5F9] flex flex-col font-sans selection:bg-emerald-500/30 selection:text-emerald-300">
+    <div className="min-h-screen bg-white text-slate-800 flex flex-col font-sans selection:bg-emerald-500/20 selection:text-emerald-900">
 
       {/* Navbar */}
       <Navbar
@@ -105,15 +93,15 @@ export default function App() {
 
       {/* Demo mode banner */}
       {!dbConnected && (
-        <div className="bg-amber-950/60 border-b border-amber-800/80 px-4 py-2 text-xs font-mono text-amber-200">
+        <div className="bg-amber-50 border-b border-amber-200 px-4 py-2 text-xs font-mono text-amber-900">
           <div className="max-w-7xl mx-auto flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <span>
                 <strong>DEMO DATA MODE:</strong> MySQL database not yet imported. Run the queries in{' '}
-                <code className="text-cyan-300 font-bold">documentation/database_schema.sql</code> to connect live data.
+                <code className="text-[#006633] font-bold">documentation/database_schema.sql</code> to connect live data.
               </span>
             </div>
-            <span className="hidden sm:inline-block text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-amber-900 border border-amber-700">
+            <span className="hidden sm:inline-block text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-amber-100 border border-amber-300 text-amber-800">
               Setup Pending
             </span>
           </div>
@@ -121,7 +109,7 @@ export default function App() {
       )}
 
       {/* Main content */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 bg-white">
 
         {/* ── Participant pages ──────────────────────────────────────────── */}
         {!isAdmin && activeTab === 'dashboard' && (
@@ -163,17 +151,32 @@ export default function App() {
 
       </main>
 
-      {/* Footer */}
-      <footer className="bg-[#0e131d] border-t border-[#1e2638] py-4 text-center text-xs font-sans text-gray-400">
-        <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <div className="flex items-center space-x-2">
-            <span className="font-semibold text-gray-300">HNU CTF</span>
-            <span className="text-gray-600">•</span>
-            <span className="text-emerald-400 font-medium">Holy Name University</span>
+      {/* Institutional HNU Green Footer with 3 Little Logos */}
+      <footer className="bg-[#006633] border-t-2 border-[#eab308] py-6 text-white text-xs font-sans mt-auto">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+          
+          {/* 3 Little Logos */}
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 rounded-full bg-white/10 p-1 flex items-center justify-center border border-white/20">
+              <img src={hnuLogo} alt="HNU Crest 1" className="w-full h-full object-contain brightness-110" />
+            </div>
+            <div className="w-8 h-8 rounded-full bg-white/10 p-1 flex items-center justify-center border border-white/20">
+              <img src={hnuLogo} alt="HNU Crest 2" className="w-full h-full object-contain brightness-110" />
+            </div>
+            <div className="w-8 h-8 rounded-full bg-white/10 p-1 flex items-center justify-center border border-white/20">
+              <img src={hnuLogo} alt="HNU Crest 3" className="w-full h-full object-contain brightness-110" />
+            </div>
           </div>
-          <div className="text-gray-400 text-[11px] font-mono">
-            PHP 8 &amp; ReactJS
+
+          <div className="text-center sm:text-left">
+            <span className="font-bold text-sm tracking-wide text-white block">Holy Name University</span>
+            <span className="text-emerald-100 text-[11px] font-mono">Cybersecurity Challenge &amp; Competition Platform</span>
           </div>
+
+          <div className="text-emerald-100 text-[11px] font-mono text-center sm:text-right">
+            <span>&copy; {new Date().getFullYear()} HNU CTF • All rights reserved</span>
+          </div>
+
         </div>
       </footer>
 

@@ -171,59 +171,62 @@ export default function SystemMonitorPage() {
   // ── Helpers ───────────────────────────────────────────────────────────────
   const getThreatBadge = (level) => {
     switch (level) {
-      case 'Critical': return 'bg-red-950/90 text-red-400 border-red-700 font-bold';
-      case 'High': return 'bg-orange-950/90 text-orange-400 border-orange-700 font-bold';
-      case 'Medium': return 'bg-amber-950/90 text-amber-400 border-amber-700';
-      default: return 'bg-[#121722] text-gray-300 border-[#26334a]';
+      case 'Critical': return 'bg-rose-50 text-rose-700 border-rose-300 font-bold';
+      case 'High': return 'bg-orange-50 text-orange-700 border-orange-300 font-bold';
+      case 'Medium': return 'bg-amber-50 text-amber-700 border-amber-300';
+      default: return 'bg-slate-100 text-slate-700 border-slate-200';
     }
   };
 
   const getStatusBadge = (status) => {
     switch (status) {
-      case 'blocked': return 'bg-red-950 text-red-400 border-red-800 font-bold';
-      case 'rate_limited': return 'bg-amber-950 text-amber-400 border-amber-800 font-bold';
-      case 'suspicious': return 'bg-orange-950 text-orange-400 border-orange-800 font-bold';
-      case 'whitelisted': return 'bg-emerald-950 text-emerald-400 border-emerald-800 font-bold';
-      default: return 'bg-[#121722] text-gray-300 border-[#26334a]';
+      case 'blocked': return 'bg-rose-50 text-rose-700 border-rose-300 font-bold';
+      case 'rate_limited': return 'bg-amber-50 text-amber-700 border-amber-300 font-bold';
+      case 'suspicious': return 'bg-orange-50 text-orange-700 border-orange-300 font-bold';
+      case 'whitelisted': return 'bg-emerald-50 text-[#006633] border-emerald-300 font-bold';
+      default: return 'bg-slate-100 text-slate-700 border-slate-200';
     }
   };
 
   const getLogEventColor = (et) => {
-    if (!et) return 'text-gray-400';
-    if (et.includes('SUCCESS')) return 'text-emerald-400';
-    if (et.includes('FAILED') || et.includes('HIGH_RISK') || et.includes('CRITICAL') || et.includes('BLOCKED')) return 'text-red-400';
-    if (et.includes('SUSPICIOUS') || et.includes('RATE_LIMITED')) return 'text-amber-400';
-    if (et.includes('AUTH')) return 'text-blue-400';
-    if (et.includes('ADMIN')) return 'text-purple-400';
-    return 'text-gray-300';
+    if (!et) return 'text-slate-400';
+    if (et.includes('SUCCESS')) return 'text-[#006633]';
+    if (et.includes('FAILED') || et.includes('HIGH_RISK') || et.includes('CRITICAL') || et.includes('BLOCKED')) return 'text-rose-600';
+    if (et.includes('SUSPICIOUS') || et.includes('RATE_LIMITED')) return 'text-amber-600';
+    if (et.includes('AUTH')) return 'text-blue-600';
+    if (et.includes('ADMIN')) return 'text-purple-600';
+    return 'text-slate-700';
   };
 
   return (
     <div className="space-y-6">
 
       {/* Header */}
-      <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-6 shadow-lg flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-black text-white tracking-tight font-mono">System Monitor</h1>
+      <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4 relative overflow-hidden">
+        <div className="absolute top-0 left-0 right-0 h-1 bg-[#006633]" />
+        <div className="absolute top-1 left-0 right-0 h-0.5 bg-[#eab308]" />
 
+        <div className="pt-1">
+          <h1 className="text-2xl font-black text-slate-900 tracking-tight font-mono">System Monitor</h1>
+          <p className="text-xs text-slate-500 font-mono">Real-time telemetry, brute-force monitoring, and IP filtering</p>
         </div>
         <button
           onClick={() => { if (activeTab === 'overview') loadOverview(); else if (activeTab === 'attacks') loadAttacks(); else if (activeTab === 'ip') loadIps(); else loadLogs(); }}
-          className="px-3.5 py-2 bg-[#121722] hover:bg-[#202b3d] border border-[#26334a] text-gray-300 rounded-xl text-xs font-mono flex items-center space-x-1.5 transition"
+          className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 rounded-xl text-xs font-mono flex items-center space-x-1.5 transition-colors"
         >
           <span>Refresh</span>
         </button>
       </div>
 
       {/* Tabs */}
-      <div className="flex items-center space-x-1 bg-[#161c2d] border border-[#26334a] rounded-xl p-1">
+      <div className="flex items-center space-x-1 bg-slate-100 border border-slate-200 rounded-xl p-1">
         {TABS.map(({ id, label }) => (
           <button
             key={id}
             onClick={() => setActiveTab(id)}
-            className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-xs font-semibold transition flex-1 justify-center ${activeTab === id
-                ? 'bg-[#1a2234] border border-[#26334a] text-white shadow-sm'
-                : 'text-gray-400 hover:text-white'
+            className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-xs font-semibold transition-colors flex-1 justify-center ${activeTab === id
+                ? 'bg-white border border-slate-200 text-[#006633] shadow-sm font-bold'
+                : 'text-slate-600 hover:text-slate-900'
               }`}
           >
             <span>{label}</span>
@@ -237,17 +240,17 @@ export default function SystemMonitorPage() {
           {/* Stat cards */}
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3 font-mono">
             {[
-              { label: 'Competitors', value: stats?.total_participants ?? 0, color: 'text-white' },
-              { label: 'Active (24h)', value: stats?.active_participants ?? 0, color: 'text-emerald-400' },
-              { label: 'Total Guesses', value: stats?.total_submissions ?? 0, color: 'text-white' },
-              { label: 'Correct Flags', value: stats?.correct_submissions ?? 0, color: 'text-emerald-400' },
-              { label: 'Incorrect', value: stats?.incorrect_submissions ?? 0, color: 'text-red-400' },
-              { label: 'Flagged IPs', value: stats?.suspicious_ips ?? 0, color: 'text-amber-400' },
-              { label: 'Brute Detected', value: stats?.detected_brute_force ?? 0, color: 'text-red-500' },
-              { label: 'Active Alerts', value: stats?.active_suspicious_activity ?? 0, color: 'text-red-400' },
+              { label: 'Competitors', value: stats?.total_participants ?? 0, color: 'text-slate-900' },
+              { label: 'Active (24h)', value: stats?.active_participants ?? 0, color: 'text-[#006633]' },
+              { label: 'Total Guesses', value: stats?.total_submissions ?? 0, color: 'text-slate-900' },
+              { label: 'Correct Flags', value: stats?.correct_submissions ?? 0, color: 'text-[#006633]' },
+              { label: 'Incorrect', value: stats?.incorrect_submissions ?? 0, color: 'text-rose-600' },
+              { label: 'Flagged IPs', value: stats?.suspicious_ips ?? 0, color: 'text-amber-600' },
+              { label: 'Brute Detected', value: stats?.detected_brute_force ?? 0, color: 'text-rose-600' },
+              { label: 'Active Alerts', value: stats?.active_suspicious_activity ?? 0, color: 'text-rose-600' },
             ].map(({ label, value, color }) => (
-              <div key={label} className="bg-[#1a2234] border border-[#26334a] rounded-xl p-3 shadow-md">
-                <div className="text-[10px] uppercase text-gray-400 truncate">{label}</div>
+              <div key={label} className="bg-white border border-slate-200 rounded-xl p-3 shadow-sm">
+                <div className="text-[10px] uppercase text-slate-500 truncate">{label}</div>
                 <div className={`text-xl font-bold mt-1 ${color}`}>{value}</div>
               </div>
             ))}
@@ -256,12 +259,12 @@ export default function SystemMonitorPage() {
           {/* Charts */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Pie */}
-            <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-5 shadow-lg space-y-3">
-              <div className="flex items-center justify-between pb-2 border-b border-[#26334a]">
-                <h2 className="text-xs font-bold font-mono text-white uppercase tracking-wider flex items-center space-x-2">
+            <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-3">
+              <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+                <h2 className="text-xs font-bold font-mono text-slate-900 uppercase tracking-wider flex items-center space-x-2">
                   <span>Flag Accuracy</span>
                 </h2>
-                <span className="text-[11px] text-gray-500 font-mono">Cumulative</span>
+                <span className="text-[11px] text-slate-400 font-mono">Cumulative</span>
               </div>
               <div className="h-64">
                 {charts?.success_vs_failed ? (
@@ -270,21 +273,21 @@ export default function SystemMonitorPage() {
                       <Pie data={charts.success_vs_failed} cx="50%" cy="50%" innerRadius={60} outerRadius={85} paddingAngle={5} dataKey="value">
                         {charts.success_vs_failed.map((e, i) => <Cell key={i} fill={e.fill || COLORS[i % COLORS.length]} />)}
                       </Pie>
-                      <Tooltip contentStyle={{ backgroundColor: '#121722', borderColor: '#26334a', borderRadius: '12px', fontSize: '12px', fontFamily: 'monospace' }} />
+                      <Tooltip contentStyle={{ backgroundColor: '#ffffff', borderColor: '#e2e8f0', borderRadius: '12px', fontSize: '12px', fontFamily: 'monospace', color: '#0f172a' }} />
                       <Legend wrapperStyle={{ fontSize: '12px', fontFamily: 'monospace' }} />
                     </PieChart>
                   </ResponsiveContainer>
-                ) : <div className="h-full flex items-center justify-center text-xs text-gray-500 font-mono">No data</div>}
+                ) : <div className="h-full flex items-center justify-center text-xs text-slate-400 font-mono">No data</div>}
               </div>
             </div>
 
             {/* Area */}
-            <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-5 shadow-lg space-y-3">
-              <div className="flex items-center justify-between pb-2 border-b border-[#26334a]">
-                <h2 className="text-xs font-bold font-mono text-white uppercase tracking-wider flex items-center space-x-2">
+            <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-3">
+              <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+                <h2 className="text-xs font-bold font-mono text-slate-900 uppercase tracking-wider flex items-center space-x-2">
                   <span>Submission Volume</span>
                 </h2>
-                <span className="text-[11px] text-gray-500 font-mono">Hourly</span>
+                <span className="text-[11px] text-slate-400 font-mono">Hourly</span>
               </div>
               <div className="h-64">
                 {charts?.submissions_over_time ? (
@@ -292,66 +295,66 @@ export default function SystemMonitorPage() {
                     <AreaChart data={charts.submissions_over_time}>
                       <defs>
                         <linearGradient id="cTotal" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#10B981" stopOpacity={0.4} />
-                          <stop offset="95%" stopColor="#10B981" stopOpacity={0} />
+                          <stop offset="5%" stopColor="#006633" stopOpacity={0.4} />
+                          <stop offset="95%" stopColor="#006633" stopOpacity={0} />
                         </linearGradient>
                         <linearGradient id="cFailed" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#EF4444" stopOpacity={0.4} />
-                          <stop offset="95%" stopColor="#EF4444" stopOpacity={0} />
+                          <stop offset="5%" stopColor="#ef4444" stopOpacity={0.4} />
+                          <stop offset="95%" stopColor="#ef4444" stopOpacity={0} />
                         </linearGradient>
                       </defs>
-                      <XAxis dataKey="hour_label" stroke="#475569" fontSize={11} fontFamily="monospace" />
-                      <YAxis stroke="#475569" fontSize={11} fontFamily="monospace" />
-                      <Tooltip contentStyle={{ backgroundColor: '#121722', borderColor: '#26334a', borderRadius: '12px', fontSize: '12px', fontFamily: 'monospace' }} />
-                      <Area type="monotone" dataKey="total" name="Total" stroke="#10B981" fillOpacity={1} fill="url(#cTotal)" />
-                      <Area type="monotone" dataKey="incorrect" name="Incorrect" stroke="#EF4444" fillOpacity={1} fill="url(#cFailed)" />
+                      <XAxis dataKey="hour_label" stroke="#94a3b8" fontSize={11} fontFamily="monospace" />
+                      <YAxis stroke="#94a3b8" fontSize={11} fontFamily="monospace" />
+                      <Tooltip contentStyle={{ backgroundColor: '#ffffff', borderColor: '#e2e8f0', borderRadius: '12px', fontSize: '12px', fontFamily: 'monospace', color: '#0f172a' }} />
+                      <Area type="monotone" dataKey="total" name="Total" stroke="#006633" fillOpacity={1} fill="url(#cTotal)" />
+                      <Area type="monotone" dataKey="incorrect" name="Incorrect" stroke="#ef4444" fillOpacity={1} fill="url(#cFailed)" />
                     </AreaChart>
                   </ResponsiveContainer>
-                ) : <div className="h-full flex items-center justify-center text-xs text-gray-500 font-mono">No data</div>}
+                ) : <div className="h-full flex items-center justify-center text-xs text-slate-400 font-mono">No data</div>}
               </div>
             </div>
 
             {/* Top Suspicious IPs */}
-            <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-5 shadow-lg space-y-3">
-              <div className="flex items-center justify-between pb-2 border-b border-[#26334a]">
-                <h2 className="text-xs font-bold font-mono text-white uppercase tracking-wider flex items-center space-x-2">
+            <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-3">
+              <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+                <h2 className="text-xs font-bold font-mono text-slate-900 uppercase tracking-wider flex items-center space-x-2">
                   <span>Top Suspicious IPs</span>
                 </h2>
-                <span className="text-[11px] text-red-400 font-mono">High Risk</span>
+                <span className="text-[11px] text-rose-600 font-mono font-bold">High Risk</span>
               </div>
               <div className="h-64">
                 {charts?.top_suspicious_ips ? (
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={charts.top_suspicious_ips} layout="vertical">
-                      <XAxis type="number" stroke="#475569" fontSize={11} fontFamily="monospace" />
-                      <YAxis type="category" dataKey="ip_address" stroke="#475569" fontSize={11} fontFamily="monospace" width={110} />
-                      <Tooltip contentStyle={{ backgroundColor: '#121722', borderColor: '#26334a', borderRadius: '12px', fontSize: '12px', fontFamily: 'monospace' }} />
-                      <Bar dataKey="failed_attempts" name="Failed" fill="#EF4444" radius={[0, 4, 4, 0]} />
+                      <XAxis type="number" stroke="#94a3b8" fontSize={11} fontFamily="monospace" />
+                      <YAxis type="category" dataKey="ip_address" stroke="#94a3b8" fontSize={11} fontFamily="monospace" width={110} />
+                      <Tooltip contentStyle={{ backgroundColor: '#ffffff', borderColor: '#e2e8f0', borderRadius: '12px', fontSize: '12px', fontFamily: 'monospace', color: '#0f172a' }} />
+                      <Bar dataKey="failed_attempts" name="Failed" fill="#ef4444" radius={[0, 4, 4, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
-                ) : <div className="h-full flex items-center justify-center text-xs text-gray-500 font-mono">No data</div>}
+                ) : <div className="h-full flex items-center justify-center text-xs text-slate-400 font-mono">No data</div>}
               </div>
             </div>
 
             {/* Most Active Participants */}
-            <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-5 shadow-lg space-y-3">
-              <div className="flex items-center justify-between pb-2 border-b border-[#26334a]">
-                <h2 className="text-xs font-bold font-mono text-white uppercase tracking-wider flex items-center space-x-2">
+            <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-3">
+              <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+                <h2 className="text-xs font-bold font-mono text-slate-900 uppercase tracking-wider flex items-center space-x-2">
                   <span>Most Active Participants</span>
                 </h2>
-                <span className="text-[11px] text-gray-500 font-mono">By Submissions</span>
+                <span className="text-[11px] text-slate-400 font-mono">By Submissions</span>
               </div>
               <div className="h-64">
                 {charts?.most_active_participants ? (
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={charts.most_active_participants}>
-                      <XAxis dataKey="username" stroke="#475569" fontSize={11} fontFamily="monospace" />
-                      <YAxis stroke="#475569" fontSize={11} fontFamily="monospace" />
-                      <Tooltip contentStyle={{ backgroundColor: '#121722', borderColor: '#26334a', borderRadius: '12px', fontSize: '12px', fontFamily: 'monospace' }} />
-                      <Bar dataKey="submissions_count" name="Submissions" fill="#F59E0B" radius={[4, 4, 0, 0]} />
+                      <XAxis dataKey="username" stroke="#94a3b8" fontSize={11} fontFamily="monospace" />
+                      <YAxis stroke="#94a3b8" fontSize={11} fontFamily="monospace" />
+                      <Tooltip contentStyle={{ backgroundColor: '#ffffff', borderColor: '#e2e8f0', borderRadius: '12px', fontSize: '12px', fontFamily: 'monospace', color: '#0f172a' }} />
+                      <Bar dataKey="submissions_count" name="Submissions" fill="#eab308" radius={[4, 4, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
-                ) : <div className="h-full flex items-center justify-center text-xs text-gray-500 font-mono">No data</div>}
+                ) : <div className="h-full flex items-center justify-center text-xs text-slate-400 font-mono">No data</div>}
               </div>
             </div>
           </div>
@@ -362,49 +365,49 @@ export default function SystemMonitorPage() {
       {activeTab === 'attacks' && (
         <div className="space-y-6">
           {/* Thresholds */}
-          <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-5 shadow-lg space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-[#26334a]">
+          <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <div className="flex items-center space-x-2">
-                <h2 className="text-xs font-bold font-mono text-white uppercase tracking-wider">Brute-Force Detection Thresholds</h2>
+                <h2 className="text-xs font-bold font-mono text-slate-900 uppercase tracking-wider">Brute-Force Detection Thresholds</h2>
               </div>
             </div>
             <form onSubmit={handleSaveThresholds} className="space-y-4 font-mono text-xs">
               <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
                 {[
-                  { key: 'threshold_1min_suspicious', label: 'Burst (1 min)', note: 'Escalates to Suspicious', noteColor: 'text-amber-400' },
-                  { key: 'threshold_5min_highrisk', label: 'Sustained (5 min)', note: 'Escalates to High Risk', noteColor: 'text-orange-400' },
-                  { key: 'threshold_10min_critical', label: 'Critical (10 min)', note: 'Triggers Rate-Limit', noteColor: 'text-red-400' },
+                  { key: 'threshold_1min_suspicious', label: 'Burst (1 min)', note: 'Escalates to Suspicious', noteColor: 'text-amber-600' },
+                  { key: 'threshold_5min_highrisk', label: 'Sustained (5 min)', note: 'Escalates to High Risk', noteColor: 'text-orange-600' },
+                  { key: 'threshold_10min_critical', label: 'Critical (10 min)', note: 'Triggers Rate-Limit', noteColor: 'text-rose-600' },
                 ].map(({ key, label, note, noteColor }) => (
-                  <div key={key} className="bg-[#121722] p-3 rounded-xl border border-[#26334a]">
-                    <label className="block text-gray-400 mb-1">{label}</label>
+                  <div key={key} className="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                    <label className="block text-slate-600 mb-1">{label}</label>
                     <div className="flex items-center space-x-2">
                       <input
                         type="number" min="1" max="500"
                         value={thresholds[key]}
                         onChange={(e) => setThresholds({ ...thresholds, [key]: parseInt(e.target.value) || 1 })}
-                        className="w-full bg-[#1a2234] border border-[#26334a] rounded-lg p-1.5 text-white font-bold text-center focus:border-emerald-400 focus:outline-none"
+                        className="w-full bg-white border border-slate-300 rounded-lg p-1.5 text-slate-900 font-bold text-center focus:border-[#006633] focus:outline-none"
                       />
-                      <span className="text-gray-400 shrink-0">fails</span>
+                      <span className="text-slate-500 shrink-0">fails</span>
                     </div>
                     <p className={`text-[10px] mt-1 ${noteColor}`}>{note}</p>
                   </div>
                 ))}
-                <div className="bg-[#121722] p-3 rounded-xl border border-[#26334a] flex flex-col justify-between">
-                  <label className="block text-gray-400 mb-1">Backend Enforcement</label>
+                <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 flex flex-col justify-between">
+                  <label className="block text-slate-600 mb-1">Backend Enforcement</label>
                   <label className="flex items-center space-x-2 cursor-pointer mt-1">
                     <input type="checkbox" checked={thresholds.enforce_ip_blocking == 1}
                       onChange={(e) => setThresholds({ ...thresholds, enforce_ip_blocking: e.target.checked ? 1 : 0 })}
-                      className="rounded bg-[#1a2234] border-[#26334a] text-emerald-500 focus:ring-0" />
-                    <span className="text-white text-xs font-semibold">Active Firewall</span>
+                      className="rounded bg-white border-slate-300 text-[#006633] focus:ring-0" />
+                    <span className="text-slate-900 text-xs font-semibold">Active Firewall</span>
                   </label>
-                  <p className="text-[10px] text-gray-400 mt-1">{thresholds.enforce_ip_blocking == 1 ? 'Hard HTTP 403 block' : 'Warning mark only'}</p>
+                  <p className="text-[10px] text-slate-500 mt-1">{thresholds.enforce_ip_blocking == 1 ? 'Hard HTTP 403 block' : 'Warning mark only'}</p>
                 </div>
               </div>
               <div className="flex items-center justify-between pt-1">
-                {saveMessage && <p className={`text-xs ${saveMessage.type === 'success' ? 'text-emerald-400' : 'text-red-400'}`}>{saveMessage.text}</p>}
+                {saveMessage && <p className={`text-xs ${saveMessage.type === 'success' ? 'text-[#006633]' : 'text-rose-600'}`}>{saveMessage.text}</p>}
                 <div className="ml-auto">
                   <button type="submit" disabled={savingThresholds}
-                    className="px-4 py-2 bg-gradient-to-r from-[#059669] to-[#10B981] hover:from-[#047857] hover:to-[#059669] text-white rounded-xl text-xs font-bold transition disabled:opacity-50">
+                    className="px-4 py-2 bg-[#006633] hover:bg-[#004d26] text-white rounded-xl text-xs font-bold transition-colors shadow-sm disabled:opacity-50">
                     {savingThresholds ? 'Updating...' : 'Save & Deploy Rules'}
                   </button>
                 </div>
@@ -413,21 +416,21 @@ export default function SystemMonitorPage() {
           </div>
 
           {/* Attacks table */}
-          <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-5 shadow-lg space-y-3">
+          <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-3">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
               <div className="flex items-center space-x-2">
-                <h2 className="text-sm font-bold font-mono text-white uppercase tracking-wider">Flag Brute-Force Monitor</h2>
-                <span className="text-xs text-gray-400 font-mono">({filteredAttacks.length})</span>
+                <h2 className="text-sm font-bold font-mono text-slate-900 uppercase tracking-wider">Flag Brute-Force Monitor</h2>
+                <span className="text-xs text-slate-500 font-mono">({filteredAttacks.length})</span>
               </div>
               <div className="relative w-full sm:w-72">
                 <input type="text" value={attackSearch} onChange={(e) => setAttackSearch(e.target.value)}
                   placeholder="Search participant or IP..."
-                  className="w-full bg-[#121722] border border-[#26334a] rounded-xl pl-8 pr-3 py-1.5 text-xs font-mono text-white placeholder-gray-500 focus:border-emerald-400 focus:outline-none transition" />
+                  className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-1.5 text-xs font-mono text-slate-900 placeholder-slate-400 focus:border-[#006633] focus:outline-none transition-colors" />
               </div>
             </div>
-            <div className="overflow-x-auto border border-[#26334a] rounded-xl">
+            <div className="overflow-x-auto border border-slate-200 rounded-xl">
               <table className="w-full text-left text-xs font-mono">
-                <thead className="bg-[#161c2d] text-gray-400 border-b border-[#26334a] uppercase tracking-wider text-[11px]">
+                <thead className="bg-slate-50 text-slate-600 border-b border-slate-200 uppercase tracking-wider text-[11px]">
                   <tr>
                     <th className="px-4 py-3">Participant</th><th className="px-4 py-3">IP</th>
                     <th className="px-4 py-3">Challenge</th><th className="px-4 py-3">Failed</th>
@@ -435,17 +438,17 @@ export default function SystemMonitorPage() {
                     <th className="px-4 py-3 text-right">Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#26334a]/80">
+                <tbody className="divide-y divide-slate-100">
                   {attacksLoading ? (
-                    <tr><td colSpan="7" className="px-4 py-12 text-center text-gray-400">Scanning incidents...</td></tr>
+                    <tr><td colSpan="7" className="px-4 py-12 text-center text-slate-400">Scanning incidents...</td></tr>
                   ) : filteredAttacks.length === 0 ? (
-                    <tr><td colSpan="7" className="px-4 py-12 text-center text-gray-500">No suspicious activity detected.</td></tr>
+                    <tr><td colSpan="7" className="px-4 py-12 text-center text-slate-500">No suspicious activity detected.</td></tr>
                   ) : filteredAttacks.map((row, i) => (
-                    <tr key={i} className="hover:bg-[#1f283a] transition">
-                      <td className="px-4 py-3 text-white font-bold whitespace-nowrap">{row.participant}</td>
-                      <td className="px-4 py-3 text-emerald-400 font-bold whitespace-nowrap">{row.ip_address}</td>
-                      <td className="px-4 py-3 text-gray-200 whitespace-nowrap">{row.challenge}</td>
-                      <td className="px-4 py-3 text-red-400 font-bold whitespace-nowrap">{row.failed_attempts}</td>
+                    <tr key={i} className="hover:bg-slate-50 transition-colors">
+                      <td className="px-4 py-3 text-slate-900 font-bold whitespace-nowrap">{row.participant}</td>
+                      <td className="px-4 py-3 text-[#006633] font-bold whitespace-nowrap">{row.ip_address}</td>
+                      <td className="px-4 py-3 text-slate-700 whitespace-nowrap">{row.challenge}</td>
+                      <td className="px-4 py-3 text-rose-600 font-bold whitespace-nowrap">{row.failed_attempts}</td>
                       <td className="px-4 py-3 whitespace-nowrap">
                         <span className={`px-2 py-0.5 rounded text-[10px] uppercase border ${getThreatBadge(row.threat_level)}`}>{row.threat_level}</span>
                       </td>
@@ -454,7 +457,7 @@ export default function SystemMonitorPage() {
                       </td>
                       <td className="px-4 py-3 text-right">
                         <button onClick={() => setInvestigatingIp(row.ip_address)}
-                          className="px-2.5 py-1 rounded-lg bg-[#121722] hover:bg-[#202b3d] border border-[#26334a] hover:border-emerald-400/50 text-emerald-400 text-[11px] font-bold flex items-center space-x-1 ml-auto transition">
+                          className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-300 text-[#006633] text-[11px] font-bold flex items-center space-x-1 ml-auto transition-colors">
                           <span>Investigate</span>
                         </button>
                       </td>
@@ -470,11 +473,11 @@ export default function SystemMonitorPage() {
       {/* ═══ IP FILTER TAB ═════════════════════════════════════════════════ */}
       {activeTab === 'ip' && (
         <div className="space-y-6">
-          <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-4 shadow-lg flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3">
             <div className="flex items-center space-x-1.5 overflow-x-auto w-full sm:w-auto">
               {[{ id: 'all', label: 'All' }, { id: 'blocked', label: 'Blocked' }, { id: 'suspicious', label: 'Suspicious' }, { id: 'whitelisted', label: 'Whitelisted' }].map(t => (
                 <button key={t.id} onClick={() => setIpFilter(t.id)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-mono whitespace-nowrap transition border ${ipFilter === t.id ? 'bg-emerald-400 text-slate-950 border-emerald-400 font-bold shadow-md' : 'bg-[#121722] text-gray-400 border-[#26334a] hover:text-white'}`}>
+                  className={`px-3 py-1.5 rounded-xl text-xs font-mono whitespace-nowrap transition-colors border ${ipFilter === t.id ? 'bg-[#006633] text-white border-[#006633] font-bold shadow-sm' : 'bg-slate-100 text-slate-600 border-slate-200 hover:bg-slate-200'}`}>
                   {t.label}
                 </button>
               ))}
@@ -483,19 +486,19 @@ export default function SystemMonitorPage() {
               <div className="relative flex-1 sm:w-60">
                 <input type="text" value={ipSearch} onChange={(e) => setIpSearch(e.target.value)}
                   placeholder="Search IP..."
-                  className="w-full bg-[#121722] border border-[#26334a] rounded-xl pl-8 pr-3 py-1.5 text-xs font-mono text-white placeholder-gray-500 focus:border-emerald-400 focus:outline-none transition" />
+                  className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-1.5 text-xs font-mono text-slate-900 placeholder-slate-400 focus:border-[#006633] focus:outline-none transition-colors" />
               </div>
               <button onClick={() => setShowAddIpModal(true)}
-                className="px-4 py-2 bg-gradient-to-r from-[#059669] to-[#10B981] hover:from-[#047857] hover:to-[#059669] text-white rounded-xl text-xs font-mono font-bold flex items-center space-x-1.5 transition shadow-md shadow-emerald-900/30">
+                className="px-4 py-2 bg-[#006633] hover:bg-[#004d26] text-white rounded-xl text-xs font-mono font-bold flex items-center space-x-1.5 transition-colors shadow-sm">
                 <span>Add IP Rule</span>
               </button>
             </div>
           </div>
 
-          <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl overflow-hidden shadow-lg">
+          <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs font-mono">
-                <thead className="bg-[#161c2d] text-gray-400 border-b border-[#26334a] uppercase tracking-wider text-[11px]">
+                <thead className="bg-slate-50 text-slate-600 border-b border-slate-200 uppercase tracking-wider text-[11px]">
                   <tr>
                     <th className="px-5 py-3.5">IP Address</th><th className="px-5 py-3.5">Status</th>
                     <th className="px-5 py-3.5">Threat</th><th className="px-5 py-3.5">Failed</th>
@@ -503,38 +506,38 @@ export default function SystemMonitorPage() {
                     <th className="px-5 py-3.5 text-right">Controls</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#26334a]/80">
+                <tbody className="divide-y divide-slate-100">
                   {ipLoading ? (
-                    <tr><td colSpan="7" className="px-5 py-12 text-center text-gray-400">Loading IPs...</td></tr>
+                    <tr><td colSpan="7" className="px-5 py-12 text-center text-slate-400">Loading IPs...</td></tr>
                   ) : filteredIps.length === 0 ? (
-                    <tr><td colSpan="7" className="px-5 py-12 text-center text-gray-500">No IP entries found.</td></tr>
+                    <tr><td colSpan="7" className="px-5 py-12 text-center text-slate-500">No IP entries found.</td></tr>
                   ) : filteredIps.map((row) => (
-                    <tr key={row.id} className="hover:bg-[#1f283a] transition">
-                      <td className="px-5 py-3.5 font-bold text-white whitespace-nowrap">{row.ip_address}</td>
+                    <tr key={row.id} className="hover:bg-slate-50 transition-colors">
+                      <td className="px-5 py-3.5 font-bold text-slate-900 whitespace-nowrap">{row.ip_address}</td>
                       <td className="px-5 py-3.5 whitespace-nowrap">
                         <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase border ${getStatusBadge(row.status)}`}>{row.status}</span>
                       </td>
                       <td className="px-5 py-3.5 whitespace-nowrap">
                         <span className={`px-2 py-0.5 rounded text-[10px] uppercase border ${getThreatBadge(row.threat_level)}`}>{row.threat_level}</span>
                       </td>
-                      <td className="px-5 py-3.5 font-bold text-red-400">{row.failed_attempts_count}</td>
+                      <td className="px-5 py-3.5 font-bold text-rose-600">{row.failed_attempts_count}</td>
                       <td className="px-5 py-3.5">
                         {row.is_enforced
-                          ? <span className="flex items-center space-x-1 text-emerald-400 text-[11px] font-bold"><span>Enforced</span></span>
-                          : <span className="flex items-center space-x-1 text-amber-400 text-[11px]"><span>Marked</span></span>}
+                          ? <span className="flex items-center space-x-1 text-[#006633] text-[11px] font-bold"><span>Enforced</span></span>
+                          : <span className="flex items-center space-x-1 text-amber-600 text-[11px]"><span>Marked</span></span>}
                       </td>
-                      <td className="px-5 py-3.5 text-gray-300 max-w-xs truncate" title={row.reason}>{row.reason || '—'}</td>
+                      <td className="px-5 py-3.5 text-slate-600 max-w-xs truncate" title={row.reason}>{row.reason || '—'}</td>
                       <td className="px-5 py-3.5 text-right whitespace-nowrap">
                         <div className="flex items-center justify-end space-x-1.5">
                           <button onClick={() => setInvestigatingIp(row.ip_address)}
-                            className="px-2.5 py-1 rounded-lg bg-[#121722] hover:bg-[#202b3d] border border-[#26334a] hover:border-emerald-400/50 text-emerald-400 text-[11px] font-bold flex items-center space-x-1 transition">
+                            className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-300 text-[#006633] text-[11px] font-bold flex items-center space-x-1 transition-colors">
                             <span>Profile</span>
                           </button>
                           {row.status !== 'blocked'
-                            ? <button onClick={() => handleQuickIpAction(row.ip_address, 'block')} className="px-2 py-1 rounded-lg bg-red-950/80 hover:bg-red-900 border border-red-800 text-red-300 text-[11px] font-bold transition">Block</button>
-                            : <button onClick={() => handleQuickIpAction(row.ip_address, 'unblock')} className="px-2 py-1 rounded-lg bg-[#121722] hover:bg-[#202b3d] border border-[#26334a] text-gray-300 text-[11px] font-bold transition">Unblock</button>}
+                            ? <button onClick={() => handleQuickIpAction(row.ip_address, 'block')} className="px-2 py-1 rounded-lg bg-rose-50 hover:bg-rose-100 border border-rose-300 text-rose-700 text-[11px] font-bold transition-colors">Block</button>
+                            : <button onClick={() => handleQuickIpAction(row.ip_address, 'unblock')} className="px-2 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 text-[11px] font-bold transition-colors">Unblock</button>}
                           {row.status !== 'whitelisted' &&
-                            <button onClick={() => handleQuickIpAction(row.ip_address, 'whitelist')} className="px-2 py-1 rounded-lg bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-800 text-emerald-300 text-[11px] font-bold transition">Whitelist</button>}
+                            <button onClick={() => handleQuickIpAction(row.ip_address, 'whitelist')} className="px-2 py-1 rounded-lg bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-[#006633] text-[11px] font-bold transition-colors">Whitelist</button>}
                         </div>
                       </td>
                     </tr>
@@ -546,39 +549,39 @@ export default function SystemMonitorPage() {
 
           {/* Add IP Modal */}
           {showAddIpModal && (
-            <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
-              <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 font-mono text-xs">
+            <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
+              <div className="bg-white border border-slate-200 rounded-2xl max-w-md w-full p-6 shadow-xl space-y-4 font-mono text-xs">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-base font-bold text-white">Apply IP Policy</h3>
-                  <button onClick={() => setShowAddIpModal(false)} className="text-gray-400 hover:text-white">✕</button>
+                  <h3 className="text-base font-bold text-slate-900">Apply IP Policy</h3>
+                  <button onClick={() => setShowAddIpModal(false)} className="text-slate-400 hover:text-slate-700">✕</button>
                 </div>
                 <form onSubmit={handleManualIpAction} className="space-y-3">
                   <div>
-                    <label className="block text-gray-400 mb-1">IP Address</label>
+                    <label className="block text-slate-700 font-medium mb-1">IP Address</label>
                     <input type="text" value={newIp} onChange={(e) => setNewIp(e.target.value)} placeholder="192.168.1.100" required
-                      className="w-full bg-[#121722] border border-[#26334a] rounded-xl p-2.5 text-white focus:border-emerald-400 focus:outline-none" />
+                      className="w-full bg-slate-50 border border-slate-300 rounded-xl p-2.5 text-slate-900 focus:border-[#006633] focus:outline-none" />
                   </div>
                   <div>
-                    <label className="block text-gray-400 mb-1">Policy</label>
+                    <label className="block text-slate-700 font-medium mb-1">Policy</label>
                     <select value={newAction} onChange={(e) => setNewAction(e.target.value)}
-                      className="w-full bg-[#121722] border border-[#26334a] rounded-xl p-2.5 text-white focus:border-emerald-400 focus:outline-none">
+                      className="w-full bg-slate-50 border border-slate-300 rounded-xl p-2.5 text-slate-900 focus:border-[#006633] focus:outline-none">
                       <option value="block">Block (HTTP 403)</option>
                       <option value="whitelist">Whitelist</option>
                       <option value="unblock">Unblock / Reset</option>
                     </select>
                   </div>
                   <div>
-                    <label className="block text-gray-400 mb-1">Notes</label>
+                    <label className="block text-slate-700 font-medium mb-1">Notes</label>
                     <input type="text" value={newNotes} onChange={(e) => setNewNotes(e.target.value)} placeholder="Reason..."
-                      className="w-full bg-[#121722] border border-[#26334a] rounded-xl p-2.5 text-white focus:border-emerald-400 focus:outline-none" />
+                      className="w-full bg-slate-50 border border-slate-300 rounded-xl p-2.5 text-slate-900 focus:border-[#006633] focus:outline-none" />
                   </div>
                   <label className="flex items-center space-x-2 cursor-pointer">
-                    <input type="checkbox" checked={newEnforced} onChange={(e) => setNewEnforced(e.target.checked)} className="rounded bg-[#121722] border-[#26334a] text-emerald-500 focus:ring-0" />
-                    <span className="text-gray-300">Enforce immediately</span>
+                    <input type="checkbox" checked={newEnforced} onChange={(e) => setNewEnforced(e.target.checked)} className="rounded bg-slate-50 border-slate-300 text-[#006633] focus:ring-0" />
+                    <span className="text-slate-700">Enforce immediately</span>
                   </label>
-                  <div className="flex justify-end space-x-2 pt-3 border-t border-[#26334a]">
-                    <button type="button" onClick={() => setShowAddIpModal(false)} className="px-4 py-2 bg-[#121722] hover:bg-[#202b3d] text-gray-300 border border-[#26334a] rounded-xl transition">Cancel</button>
-                    <button type="submit" disabled={actionLoading} className="px-5 py-2 bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 hover:to-rose-600 text-white font-bold rounded-xl transition disabled:opacity-50">
+                  <div className="flex justify-end space-x-2 pt-3 border-t border-slate-200">
+                    <button type="button" onClick={() => setShowAddIpModal(false)} className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 rounded-xl transition-colors font-medium">Cancel</button>
+                    <button type="submit" disabled={actionLoading} className="px-5 py-2 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl transition-colors shadow-sm disabled:opacity-50">
                       {actionLoading ? 'Applying...' : 'Apply Policy'}
                     </button>
                   </div>
@@ -593,48 +596,48 @@ export default function SystemMonitorPage() {
       {activeTab === 'logs' && (
         <div className="space-y-6">
           {/* Filters */}
-          <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-4 shadow-lg flex flex-wrap items-center gap-3">
+          <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm flex flex-wrap items-center gap-3">
             <div className="relative flex-1 min-w-48">
               <input type="text" value={logsSearch} onChange={(e) => setLogsSearch(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && loadLogs()}
                 placeholder="Search logs... (press Enter)"
-                className="w-full bg-[#121722] border border-[#26334a] rounded-xl pl-8 pr-3 py-1.5 text-xs font-mono text-white placeholder-gray-500 focus:border-emerald-400 focus:outline-none transition" />
+                className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-1.5 text-xs font-mono text-slate-900 placeholder-slate-400 focus:border-[#006633] focus:outline-none transition-colors" />
             </div>
             <select value={logsEventType} onChange={(e) => { setLogsEventType(e.target.value); setLogsPage(1); }}
-              className="bg-[#121722] border border-[#26334a] rounded-xl p-2 text-xs font-mono text-white focus:border-emerald-400 focus:outline-none">
+              className="bg-slate-50 border border-slate-300 rounded-xl p-2 text-xs font-mono text-slate-900 focus:border-[#006633] focus:outline-none">
               {EVENT_TYPES.map(et => <option key={et} value={et}>{et === 'ALL' ? 'All Events' : et.replace(/_/g, ' ')}</option>)}
             </select>
             <select value={logsThreatLevel} onChange={(e) => { setLogsThreatLevel(e.target.value); setLogsPage(1); }}
-              className="bg-[#121722] border border-[#26334a] rounded-xl p-2 text-xs font-mono text-white focus:border-emerald-400 focus:outline-none">
+              className="bg-slate-50 border border-slate-300 rounded-xl p-2 text-xs font-mono text-slate-900 focus:border-[#006633] focus:outline-none">
               {THREAT_LEVELS.map(tl => <option key={tl} value={tl}>{tl === 'ALL' ? 'All Threat Levels' : tl}</option>)}
             </select>
-            <span className="text-xs text-gray-400 font-mono ml-auto">{logsTotal} total</span>
+            <span className="text-xs text-slate-500 font-mono ml-auto">{logsTotal} total</span>
           </div>
 
-          <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl overflow-hidden shadow-lg">
+          <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs font-mono">
-                <thead className="bg-[#161c2d] text-gray-400 border-b border-[#26334a] uppercase tracking-wider text-[11px]">
+                <thead className="bg-slate-50 text-slate-600 border-b border-slate-200 uppercase tracking-wider text-[11px]">
                   <tr>
                     <th className="px-5 py-3.5">Time</th><th className="px-5 py-3.5">Event Type</th>
                     <th className="px-5 py-3.5">User</th><th className="px-5 py-3.5">IP</th>
                     <th className="px-5 py-3.5">Threat</th><th className="px-5 py-3.5">Message</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#26334a]/80">
+                <tbody className="divide-y divide-slate-100">
                   {logsLoading ? (
-                    <tr><td colSpan="6" className="px-5 py-12 text-center text-gray-400">Loading logs...</td></tr>
+                    <tr><td colSpan="6" className="px-5 py-12 text-center text-slate-400">Loading logs...</td></tr>
                   ) : logs.length === 0 ? (
-                    <tr><td colSpan="6" className="px-5 py-12 text-center text-gray-500">No logs found.</td></tr>
+                    <tr><td colSpan="6" className="px-5 py-12 text-center text-slate-500">No logs found.</td></tr>
                   ) : logs.map((log, i) => (
-                    <tr key={i} className="hover:bg-[#1f283a] transition">
-                      <td className="px-5 py-3 text-gray-400 whitespace-nowrap text-[11px]">{log.created_at}</td>
+                    <tr key={i} className="hover:bg-slate-50 transition-colors">
+                      <td className="px-5 py-3 text-slate-500 whitespace-nowrap text-[11px]">{log.created_at}</td>
                       <td className={`px-5 py-3 whitespace-nowrap font-bold text-[11px] ${getLogEventColor(log.event_type)}`}>{(log.event_type || '').replace(/_/g, ' ')}</td>
-                      <td className="px-5 py-3 text-white whitespace-nowrap">{log.username || '—'}</td>
-                      <td className="px-5 py-3 text-emerald-400 whitespace-nowrap">{log.ip_address || '—'}</td>
+                      <td className="px-5 py-3 text-slate-900 font-bold whitespace-nowrap">{log.username || '—'}</td>
+                      <td className="px-5 py-3 text-[#006633] font-bold whitespace-nowrap">{log.ip_address || '—'}</td>
                       <td className="px-5 py-3 whitespace-nowrap">
                         <span className={`px-2 py-0.5 rounded text-[10px] uppercase border ${getThreatBadge(log.threat_level)}`}>{log.threat_level || 'Low'}</span>
                       </td>
-                      <td className="px-5 py-3 text-gray-300 max-w-xs truncate" title={log.message}>{log.message}</td>
+                      <td className="px-5 py-3 text-slate-700 max-w-xs truncate" title={log.message}>{log.message}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -646,12 +649,12 @@ export default function SystemMonitorPage() {
           {logsTotalPages > 1 && (
             <div className="flex items-center justify-between">
               <button onClick={() => setLogsPage(p => Math.max(1, p - 1))} disabled={logsPage === 1}
-                className="flex items-center space-x-1 px-3 py-2 bg-[#121722] hover:bg-[#202b3d] border border-[#26334a] text-gray-300 rounded-xl text-xs font-mono transition disabled:opacity-40">
+                className="flex items-center space-x-1 px-3 py-2 bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 rounded-xl text-xs font-mono transition-colors disabled:opacity-40">
                 <span>Prev</span>
               </button>
-              <span className="text-xs text-gray-400 font-mono">Page {logsPage} / {logsTotalPages}</span>
+              <span className="text-xs text-slate-500 font-mono">Page {logsPage} / {logsTotalPages}</span>
               <button onClick={() => setLogsPage(p => Math.min(logsTotalPages, p + 1))} disabled={logsPage === logsTotalPages}
-                className="flex items-center space-x-1 px-3 py-2 bg-[#121722] hover:bg-[#202b3d] border border-[#26334a] text-gray-300 rounded-xl text-xs font-mono transition disabled:opacity-40">
+                className="flex items-center space-x-1 px-3 py-2 bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 rounded-xl text-xs font-mono transition-colors disabled:opacity-40">
                 <span>Next</span>
               </button>
             </div>

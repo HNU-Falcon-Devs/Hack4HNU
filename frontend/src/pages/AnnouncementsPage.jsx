@@ -61,11 +61,11 @@ export default function AnnouncementsPage({ user, isAdmin }) {
 
   const getCategoryColor = (cat) => {
     switch (cat) {
-      case 'Competition': return 'bg-emerald-950/80 border-emerald-800 text-[#10B981]';
-      case 'Challenge Release': return 'bg-amber-950/80 border-amber-800 text-[#F59E0B]';
-      case 'Rules & Reminders': return 'bg-blue-950/80 border-blue-800 text-blue-300';
-      case 'Maintenance': return 'bg-red-950/80 border-red-800 text-red-300';
-      default: return 'bg-emerald-950/80 border-emerald-800 text-emerald-300';
+      case 'Competition': return 'bg-emerald-50 border-emerald-300 text-[#006633]';
+      case 'Challenge Release': return 'bg-amber-50 border-amber-300 text-amber-700';
+      case 'Rules & Reminders': return 'bg-blue-50 border-blue-300 text-blue-700';
+      case 'Maintenance': return 'bg-rose-50 border-rose-300 text-rose-700';
+      default: return 'bg-emerald-50 border-emerald-300 text-[#006633]';
     }
   };
 
@@ -73,17 +73,21 @@ export default function AnnouncementsPage({ user, isAdmin }) {
     <div className="space-y-6 max-w-4xl mx-auto">
 
       {/* Header */}
-      <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-6 sm:p-8 shadow-lg flex items-center justify-between">
-        <div className="space-y-1">
-          <h1 className="text-2xl font-black text-white tracking-tight">
+      <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm flex items-center justify-between relative overflow-hidden">
+        <div className="absolute top-0 left-0 right-0 h-1 bg-[#006633]" />
+        <div className="absolute top-1 left-0 right-0 h-0.5 bg-[#eab308]" />
+
+        <div className="space-y-1 pt-1">
+          <h1 className="text-2xl font-black text-slate-900 tracking-tight">
             Notices & Bulletins
           </h1>
+          <p className="text-xs text-slate-500 font-mono">Official competition updates from admin</p>
         </div>
 
         {isAdmin && (
           <button
             onClick={() => setShowAddModal(true)}
-            className="bg-gradient-to-r from-[#059669] to-[#10B981] hover:from-[#047857] hover:to-[#059669] text-white font-mono px-4 py-2.5 rounded-xl text-xs font-bold flex items-center space-x-2 transition shadow-md shadow-emerald-900/30"
+            className="bg-[#006633] hover:bg-[#004d26] text-white font-mono px-4 py-2.5 rounded-xl text-xs font-bold flex items-center space-x-2 transition-colors shadow-sm"
           >
             <span>Publish Broadcast</span>
           </button>
@@ -92,29 +96,29 @@ export default function AnnouncementsPage({ user, isAdmin }) {
 
       {/* Admin Publish Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
-            <h3 className="text-lg font-bold text-white">Publish Competition Notice</h3>
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white border border-slate-200 rounded-2xl max-w-lg w-full p-6 shadow-xl space-y-4">
+            <h3 className="text-lg font-bold text-slate-900">Publish Competition Notice</h3>
 
             <form onSubmit={handleCreate} className="space-y-3 font-sans text-xs">
               <div>
-                <label className="block text-gray-400 mb-1">Headline Title</label>
+                <label className="block text-slate-700 font-medium mb-1">Headline Title</label>
                 <input
                   type="text"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="e.g. Challenge Hint Released"
                   required
-                  className="w-full bg-[#121722] border border-[#26334a] rounded-xl p-2.5 text-white focus:border-[#10B981] focus:outline-none"
+                  className="w-full bg-slate-50 border border-slate-300 rounded-xl p-2.5 text-slate-900 focus:border-[#006633] focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-gray-400 mb-1">Category</label>
+                <label className="block text-slate-700 font-medium mb-1">Category</label>
                 <select
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
-                  className="w-full bg-[#121722] border border-[#26334a] rounded-xl p-2.5 text-white focus:border-[#10B981] focus:outline-none"
+                  className="w-full bg-slate-50 border border-slate-300 rounded-xl p-2.5 text-slate-900 focus:border-[#006633] focus:outline-none"
                 >
                   {CATEGORIES.map(c => (
                     <option key={c} value={c}>{c}</option>
@@ -123,14 +127,14 @@ export default function AnnouncementsPage({ user, isAdmin }) {
               </div>
 
               <div>
-                <label className="block text-gray-400 mb-1">Message Content</label>
+                <label className="block text-slate-700 font-medium mb-1">Message Content</label>
                 <textarea
                   rows={4}
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
                   placeholder="Detailed announcement content..."
                   required
-                  className="w-full bg-[#121722] border border-[#26334a] rounded-xl p-2.5 text-white focus:border-[#10B981] focus:outline-none font-sans text-sm"
+                  className="w-full bg-slate-50 border border-slate-300 rounded-xl p-2.5 text-slate-900 focus:border-[#006633] focus:outline-none font-sans text-sm"
                 />
               </div>
 
@@ -140,23 +144,23 @@ export default function AnnouncementsPage({ user, isAdmin }) {
                   id="pin"
                   checked={isPinned}
                   onChange={(e) => setIsPinned(e.target.checked)}
-                  className="rounded bg-[#121722] border-[#26334a] text-emerald-500 focus:ring-0"
+                  className="rounded bg-slate-50 border-slate-300 text-[#006633] focus:ring-0"
                 />
-                <label htmlFor="pin" className="text-gray-300 cursor-pointer">Pin to top of participant dashboards</label>
+                <label htmlFor="pin" className="text-slate-700 cursor-pointer">Pin to top of participant dashboards</label>
               </div>
 
               <div className="flex justify-end space-x-2 pt-3">
                 <button
                   type="button"
                   onClick={() => setShowAddModal(false)}
-                  className="px-4 py-2 bg-[#121722] hover:bg-[#202b3d] text-gray-300 border border-[#26334a] rounded-xl transition"
+                  className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 rounded-xl transition-colors font-medium"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="px-5 py-2 bg-gradient-to-r from-[#059669] to-[#10B981] hover:from-[#047857] hover:to-[#059669] text-white font-bold rounded-xl transition shadow-md shadow-emerald-900/30 disabled:opacity-50"
+                  className="px-5 py-2 bg-[#006633] hover:bg-[#004d26] text-white font-bold rounded-xl transition-colors shadow-sm disabled:opacity-50"
                 >
                   {submitting ? 'Broadcasting...' : 'Publish'}
                 </button>
@@ -169,20 +173,20 @@ export default function AnnouncementsPage({ user, isAdmin }) {
       {/* Announcements List */}
       <div className="space-y-4">
         {loading ? (
-          <div className="text-center py-12 text-gray-400 font-mono text-sm">
+          <div className="text-center py-12 text-slate-500 font-mono text-sm">
             Loading announcements...
           </div>
         ) : announcements.length === 0 ? (
-          <div className="text-center py-12 bg-[#1a2234] border border-[#26334a] rounded-2xl p-6 text-gray-400 font-mono text-sm">
+          <div className="text-center py-12 bg-white border border-slate-200 rounded-2xl p-6 text-slate-500 font-mono text-sm shadow-sm">
             No announcements published yet.
           </div>
         ) : (
           announcements.map((ann) => (
             <div
               key={ann.id}
-              className={`bg-[#1a2234] border rounded-2xl p-5 shadow-md space-y-3 transition ${ann.is_pinned
-                ? 'border-[#10B981] bg-gradient-to-r from-[#1a2234] to-[#122820] shadow-[0_0_18px_rgba(16,185,129,0.18)]'
-                : 'border-[#26334a]'
+              className={`bg-white border rounded-2xl p-5 shadow-sm space-y-3 transition-colors ${ann.is_pinned
+                ? 'border-[#006633] bg-emerald-50/20'
+                : 'border-slate-200 hover:border-[#006633]'
                 }`}
             >
               <div className="flex items-center justify-between">
@@ -191,18 +195,18 @@ export default function AnnouncementsPage({ user, isAdmin }) {
                     {ann.category}
                   </span>
                   {ann.is_pinned && (
-                    <span className="flex items-center space-x-1 text-[11px] font-mono text-[#F59E0B] font-bold">
+                    <span className="flex items-center space-x-1 text-[11px] font-mono text-[#eab308] font-bold">
                       <span>PINNED</span>
                     </span>
                   )}
                 </div>
 
-                <div className="flex items-center space-x-3 text-xs font-mono text-gray-400">
+                <div className="flex items-center space-x-3 text-xs font-mono text-slate-500">
                   <span>{ann.created_at}</span>
                   {isAdmin && (
                     <button
                       onClick={() => handleDelete(ann.id)}
-                      className="text-red-400 hover:text-red-300 px-2 py-0.5 hover:bg-red-950/40 rounded-lg transition text-xs font-bold"
+                      className="text-rose-600 hover:text-rose-800 px-2 py-0.5 hover:bg-rose-50 rounded-lg transition-colors text-xs font-bold"
                       title="Delete Announcement"
                     >
                       Delete
@@ -211,12 +215,12 @@ export default function AnnouncementsPage({ user, isAdmin }) {
                 </div>
               </div>
 
-              <h2 className="text-base font-bold text-white tracking-wide">{ann.title}</h2>
-              <div className="text-sm text-gray-300 leading-relaxed font-sans whitespace-pre-line">
+              <h2 className="text-base font-bold text-slate-900 tracking-wide">{ann.title}</h2>
+              <div className="text-sm text-slate-700 leading-relaxed font-sans whitespace-pre-line">
                 {ann.content}
               </div>
 
-              <div className="text-[11px] font-mono text-gray-400 pt-2 border-t border-[#26334a]">
+              <div className="text-[11px] font-mono text-slate-400 pt-2 border-t border-slate-100">
                 {ann.created_at}
               </div>
             </div>

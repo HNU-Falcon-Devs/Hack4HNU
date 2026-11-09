@@ -72,6 +72,12 @@ switch ($action) {
             if (!isset($_SESSION['demo_team_solves'][$teamKey])) {
                 $_SESSION['demo_team_solves'][$teamKey] = [];
             }
+            if (!isset($_SESSION['demo_team_submissions'])) {
+                $_SESSION['demo_team_submissions'] = [];
+            }
+            if (!isset($_SESSION['demo_team_submissions'][$teamKey])) {
+                $_SESSION['demo_team_submissions'][$teamKey] = [];
+            }
 
             // Check if solved by team
             if (isset($_SESSION['demo_team_solves'][$teamKey][$target['slug']])) {
@@ -86,7 +92,20 @@ switch ($action) {
                 ]);
             }
 
-            if (strcmp($flag, $target['correct_flag']) === 0) {
+            $isCorrect = (strcmp($flag, $target['correct_flag']) === 0);
+
+            // Log this team submission for accurate team analytics
+            $_SESSION['demo_team_submissions'][$teamKey][] = [
+                'user_id' => $user['id'],
+                'username' => $user['username'],
+                'challenge_id' => $challengeId,
+                'is_correct' => $isCorrect ? 1 : 0,
+                'points' => $isCorrect ? (int)$target['points'] : 0,
+                'submitted_at' => date('Y-m-d H:i:s'),
+                'hour_label' => date('H:00')
+            ];
+
+            if ($isCorrect) {
                 $_SESSION['demo_team_solves'][$teamKey][$target['slug']] = [
                     'solver' => $user['username'],
                     'solved_at' => date('Y-m-d H:i:s'),

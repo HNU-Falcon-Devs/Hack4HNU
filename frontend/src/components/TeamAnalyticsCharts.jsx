@@ -1,155 +1,209 @@
 import React from 'react';
 import { 
-  PieChart as PieIcon, Activity 
-} from 'lucide-react';
-import { 
   ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, 
   PieChart, Pie, Cell, Legend
 } from 'recharts';
 
 export default function TeamAnalyticsCharts({ charts }) {
-  const defaultSuccessVsFailed = [
-    { name: 'Successful', value: 48, fill: '#10B981' },
-    { name: 'Failed', value: 94, fill: '#EF4444' }
-  ];
+  const rawList = charts?.success_vs_failed || [];
+  const successfulCount = Number(rawList.find(d => d.name === 'Successful')?.value ?? 0);
+  const failedCount = Number(rawList.find(d => d.name === 'Failed')?.value ?? 0);
+  const totalSubmissions = successfulCount + failedCount;
 
-  const defaultTimeline = [
-    { hour_label: '14:00', total: 12, correct: 4, incorrect: 8 },
-    { hour_label: '15:00', total: 25, correct: 10, incorrect: 15 },
-    { hour_label: '16:00', total: 38, correct: 12, incorrect: 26 },
-    { hour_label: '17:00', total: 18, correct: 5, incorrect: 13 },
-    { hour_label: '18:00', total: 31, correct: 9, incorrect: 22 },
-    { hour_label: '19:00', total: 18, correct: 8, incorrect: 10 }
-  ];
+  const hasSubmissions = totalSubmissions > 0;
+  const pieData = hasSubmissions
+    ? [
+        { name: 'Successful', value: successfulCount, fill: '#006633' },
+        { name: 'Failed', value: failedCount, fill: '#ef4444' }
+      ]
+    : [
+        { name: 'No Attempts', value: 1, fill: '#e2e8f0' }
+      ];
 
-  const successVsFailed = (charts?.success_vs_failed && charts.success_vs_failed.length > 0)
-    ? charts.success_vs_failed
-    : defaultSuccessVsFailed;
-
-  const timeline = (charts?.submissions_over_time && charts.submissions_over_time.length > 0)
-    ? charts.submissions_over_time
-    : defaultTimeline;
+  const timeline = Array.isArray(charts?.submissions_over_time) ? charts.submissions_over_time : [];
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       
-      {/* Chart 1: FLAG ACCURACY (SUCCESSFUL VS FAILED) */}
-      <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-5 shadow-lg space-y-3">
-        <div className="flex items-center justify-between pb-2 border-b border-[#26334a]">
-          <h2 className="text-xs font-bold font-mono text-white uppercase tracking-wider flex items-center space-x-2">
-            <span>FLAG ACCURACY (SUCCESSFUL VS FAILED)</span>
-          </h2>
-          <span className="text-[11px] text-gray-500 font-mono">Cumulative</span>
+      {/* Chart 1: FLAG ACCURACY */}
+      <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-3">
+        <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+          <div>
+            <h2 className="text-xs font-bold font-mono text-slate-800 uppercase tracking-wider flex items-center space-x-2">
+              <span>FLAG ACCURACY (SUCCESSFUL VS FAILED)</span>
+            </h2>
+            <span className="text-[10px] text-slate-400 font-sans block mt-0.5">
+              Strictly confidential • Visible only to your team
+            </span>
+          </div>
+          <span className="text-[10px] font-mono font-bold text-[#006633] bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
+            YOUR TEAM
+          </span>
         </div>
 
-        <div className="h-64">
+        <div className="h-64 relative flex items-center justify-center">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
-                data={successVsFailed}
+                data={pieData}
                 cx="50%"
-                cy="46%"
+                cy="50%"
                 innerRadius={60}
                 outerRadius={86}
-                paddingAngle={4}
+                paddingAngle={hasSubmissions ? 4 : 0}
                 dataKey="value"
               >
-                {successVsFailed.map((entry, index) => (
+                {pieData.map((entry, index) => (
                   <Cell 
                     key={`cell-${index}`} 
-                    fill={entry.fill || (entry.name === 'Successful' ? '#10B981' : '#EF4444')} 
+                    fill={entry.fill || (entry.name === 'Successful' ? '#006633' : '#ef4444')} 
                   />
                 ))}
               </Pie>
-              <Tooltip 
-                contentStyle={{ 
-                  backgroundColor: '#121722', 
-                  borderColor: '#26334a', 
-                  borderRadius: '12px', 
-                  color: '#fff', 
-                  fontSize: '12px', 
-                  fontFamily: 'monospace' 
-                }}
-              />
-              <Legend 
-                verticalAlign="bottom"
-                wrapperStyle={{ fontSize: '12px', fontFamily: 'monospace', paddingTop: '10px' }}
-                formatter={(value) => <span className="text-gray-300 font-mono text-xs">{value}</span>}
-              />
+              {hasSubmissions && (
+                <Tooltip 
+                  contentStyle={{ 
+                    backgroundColor: '#ffffff', 
+                    borderColor: '#e2e8f0', 
+                    borderRadius: '0.75rem', 
+                    color: '#0f172a',
+                    fontFamily: 'monospace',
+                    fontSize: '12px',
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)'
+                  }} 
+                />
+              )}
+              {hasSubmissions && (
+                <Legend 
+                  verticalAlign="bottom" 
+                  height={36} 
+                  iconType="circle"
+                  wrapperStyle={{ fontSize: '11px', fontFamily: 'monospace', color: '#64748b' }} 
+                />
+              )}
             </PieChart>
           </ResponsiveContainer>
+
+          {!hasSubmissions && (
+            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none text-center p-4">
+              <span className="text-xs font-mono font-bold text-slate-700">0 Submissions</span>
+              <span className="text-[10px] text-slate-400 font-sans mt-0.5">Awaiting first flag attempt</span>
+            </div>
+          )}
+        </div>
+
+        <div className="grid grid-cols-2 gap-3 pt-2 border-t border-slate-100 text-center font-mono">
+          <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+            <span className="text-[10px] text-slate-500 uppercase block">Successful Solves</span>
+            <span className="text-lg font-bold text-[#006633]">
+              {successfulCount}
+            </span>
+          </div>
+          <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+            <span className="text-[10px] text-slate-500 uppercase block">Failed Submissions</span>
+            <span className="text-lg font-bold text-rose-600">
+              {failedCount}
+            </span>
+          </div>
         </div>
       </div>
 
       {/* Chart 2: SUBMISSION VOLUME TIMELINE */}
-      <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-5 shadow-lg space-y-3">
-        <div className="flex items-center justify-between pb-2 border-b border-[#26334a]">
-          <h2 className="text-xs font-bold font-mono text-white uppercase tracking-wider flex items-center space-x-2">
-            <span>SUBMISSION VOLUME TIMELINE</span>
-          </h2>
-          <span className="text-[11px] text-gray-500 font-mono">Hourly</span>
+      <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-3">
+        <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+          <div>
+            <h2 className="text-xs font-bold font-mono text-slate-800 uppercase tracking-wider flex items-center space-x-2">
+              <span>SUBMISSION VOLUME TIMELINE</span>
+            </h2>
+            <span className="text-[10px] text-slate-400 font-sans block mt-0.5">
+              Hourly attempts recorded by your team
+            </span>
+          </div>
+          <span className="text-[10px] font-mono font-bold text-[#006633] bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
+            YOUR TEAM
+          </span>
         </div>
 
         <div className="h-64">
-          <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={timeline} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-              <defs>
-                <linearGradient id="chartColorTotal" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#10B981" stopOpacity={0.45}/>
-                  <stop offset="95%" stopColor="#10B981" stopOpacity={0.02}/>
-                </linearGradient>
-                <linearGradient id="chartColorFailed" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#EF4444" stopOpacity={0.45}/>
-                  <stop offset="95%" stopColor="#EF4444" stopOpacity={0.02}/>
-                </linearGradient>
-              </defs>
-              <XAxis 
-                dataKey="hour_label" 
-                stroke="#475569" 
-                fontSize={11} 
-                fontFamily="monospace"
-                tickLine={false}
-              />
-              <YAxis 
-                stroke="#475569" 
-                fontSize={11} 
-                fontFamily="monospace"
-                tickLine={false}
-              />
-              <Tooltip 
-                contentStyle={{ 
-                  backgroundColor: '#121722', 
-                  borderColor: '#26334a', 
-                  borderRadius: '12px', 
-                  fontSize: '12px', 
-                  fontFamily: 'monospace',
-                  color: '#fff'
-                }} 
-              />
-              <Area 
-                type="monotone" 
-                dataKey="total" 
-                name="Total Submissions" 
-                stroke="#10B981" 
-                strokeWidth={2}
-                fillOpacity={1} 
-                fill="url(#chartColorTotal)" 
-              />
-              <Area 
-                type="monotone" 
-                dataKey="incorrect" 
-                name="Incorrect Attempts" 
-                stroke="#EF4444" 
-                strokeWidth={2}
-                fillOpacity={1} 
-                fill="url(#chartColorFailed)" 
-              />
-            </AreaChart>
-          </ResponsiveContainer>
+          {timeline.length > 0 ? (
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={timeline} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                <defs>
+                  <linearGradient id="colorTotal" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#006633" stopOpacity={0.25} />
+                    <stop offset="95%" stopColor="#006633" stopOpacity={0.0} />
+                  </linearGradient>
+                  <linearGradient id="colorCorrect" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#eab308" stopOpacity={0.25} />
+                    <stop offset="95%" stopColor="#eab308" stopOpacity={0.0} />
+                  </linearGradient>
+                </defs>
+                <XAxis 
+                  dataKey="hour_label" 
+                  stroke="#94a3b8" 
+                  fontSize={10} 
+                  fontFamily="monospace"
+                  tickLine={false}
+                />
+                <YAxis 
+                  stroke="#94a3b8" 
+                  fontSize={10} 
+                  fontFamily="monospace"
+                  tickLine={false}
+                />
+                <Tooltip 
+                  contentStyle={{ 
+                    backgroundColor: '#ffffff', 
+                    borderColor: '#e2e8f0', 
+                    borderRadius: '0.75rem', 
+                    color: '#0f172a',
+                    fontFamily: 'monospace',
+                    fontSize: '11px',
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)'
+                  }} 
+                />
+                <Area 
+                  type="monotone" 
+                  dataKey="total" 
+                  name="Total Submissions" 
+                  stroke="#006633" 
+                  strokeWidth={2}
+                  fillOpacity={1} 
+                  fill="url(#colorTotal)" 
+                />
+                <Area 
+                  type="monotone" 
+                  dataKey="correct" 
+                  name="Correct Solves" 
+                  stroke="#eab308" 
+                  strokeWidth={2}
+                  fillOpacity={1} 
+                  fill="url(#colorCorrect)" 
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className="h-full flex flex-col items-center justify-center text-center p-6 space-y-1.5 border border-dashed border-slate-200 rounded-xl bg-slate-50/50">
+              <span className="text-xs font-mono font-bold text-slate-700">No Submission Activity Yet</span>
+              <span className="text-[11px] text-slate-400 font-sans max-w-xs">
+                As you and your 3 teammates test flags, hourly volume and solve milestones will plot here in real time.
+              </span>
+            </div>
+          )}
+        </div>
+
+        <div className="flex items-center justify-between text-xs font-mono text-slate-500 pt-2 border-t border-slate-100">
+          <div className="flex items-center space-x-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#006633]" />
+            <span>Total Attempts</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#eab308]" />
+            <span>Correct Flags</span>
+          </div>
         </div>
       </div>
 
     </div>
   );
 }
-

@@ -42,15 +42,15 @@ export default function Navbar({ user, onLogout, activeTab, setActiveTab, dbConn
         }
         setActiveTab(tab);
       }}
-      className={`px-4 h-16 text-sm font-semibold transition-all border-b-2 whitespace-nowrap flex items-center space-x-1.5 ${
+      className={`px-4 h-16 text-sm font-semibold transition-colors border-b-2 whitespace-nowrap flex items-center space-x-1.5 ${
         activeTab === tab
-          ? 'border-[#10B981] text-[#10B981]'
-          : 'border-transparent text-gray-400 hover:text-white hover:border-gray-600'
+          ? 'border-[#006633] text-[#006633] font-bold'
+          : 'border-transparent text-slate-600 hover:text-[#006633] hover:border-slate-300'
       }`}
     >
       <span>{label}</span>
       {tab === 'announcements' && unreadAnnouncements > 0 && (
-        <span className="px-1.5 py-0.2 rounded-full text-[10px] font-mono font-bold bg-[#10B981] text-slate-950 animate-pulse">
+        <span className="px-1.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#006633] text-white">
           {unreadAnnouncements > 9 ? '9+' : unreadAnnouncements}
         </span>
       )}
@@ -76,7 +76,7 @@ export default function Navbar({ user, onLogout, activeTab, setActiveTab, dbConn
   const tabs = isAdmin ? adminTabs : participantTabs;
 
   return (
-    <header className="bg-[#161c2d] border-b border-[#242f44] sticky top-0 z-40 shadow-lg">
+    <header className="bg-white sticky top-0 z-40 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
 
@@ -86,8 +86,8 @@ export default function Navbar({ user, onLogout, activeTab, setActiveTab, dbConn
             onClick={() => setActiveTab(isAdmin ? 'admin_dashboard' : 'dashboard')}
           >
             <img src={hnuLogo} alt="HNU Logo" className="w-9 h-9 object-contain" />
-            <span className="font-black italic text-2xl tracking-tighter text-[#F59E0B]">
-              HNU <span className="text-[#10B981]">CTF</span>
+            <span className="font-black italic text-2xl tracking-tighter text-[#006633]">
+              HNU <span className="text-[#eab308]">CTF</span>
             </span>
           </div>
 
@@ -100,27 +100,27 @@ export default function Navbar({ user, onLogout, activeTab, setActiveTab, dbConn
           <div className="relative shrink-0">
             <button
               onClick={() => setDropdownOpen(!dropdownOpen)}
-              className="flex items-center space-x-2 bg-[#101522] hover:bg-[#1a2234] px-3.5 py-1.5 rounded-full border border-[#242f44] transition shadow-md"
+              className="flex items-center space-x-2 bg-slate-50 hover:bg-slate-100 px-3.5 py-1.5 rounded-full border border-slate-200 transition text-slate-800"
             >
-              <span className="text-xs font-bold text-white">{user?.username}</span>
-              <span className="text-gray-400 text-xs">▾</span>
+              <span className="text-xs font-bold text-slate-800">{user?.username}</span>
+              <span className="text-slate-500 text-xs">▾</span>
             </button>
 
             {dropdownOpen && (
-              <div className="absolute right-0 mt-2 w-52 bg-[#1a2234] border border-[#26334a] rounded-xl shadow-2xl py-1 z-50">
-                <div className="px-4 py-2 border-b border-[#26334a]">
-                  <p className="text-[11px] text-gray-400">Signed in as</p>
-                  <p className="text-sm font-bold text-white truncate">{user?.username}</p>
-                  <p className="text-xs text-[#F59E0B] font-mono font-medium truncate mt-0.5">
+              <div className="absolute right-0 mt-2 w-52 bg-white border border-slate-200 rounded-xl shadow-xl py-1 z-50">
+                <div className="px-4 py-2 border-b border-slate-100">
+                  <p className="text-[11px] text-slate-500">Signed in as</p>
+                  <p className="text-sm font-bold text-slate-900 truncate">{user?.username}</p>
+                  <p className="text-xs text-[#006633] font-mono font-medium truncate mt-0.5">
                     {isAdmin ? 'Administrator' : `Team: ${teamDisplay}`}
                   </p>
-                  <span className="inline-block mt-1 text-[10px] px-2 py-0.5 rounded-full bg-[#101522] border border-[#26334a] font-mono text-emerald-400 uppercase">
+                  <span className="inline-block mt-1 text-[10px] px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 font-mono text-[#006633] font-bold uppercase">
                     {user?.role}
                   </span>
                 </div>
                 <button
                   onClick={() => { setDropdownOpen(false); onLogout(); }}
-                  className="w-full text-left px-4 py-2 text-xs font-semibold text-red-400 hover:bg-red-500/10 flex items-center space-x-2 transition"
+                  className="w-full text-left px-4 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 flex items-center space-x-2 transition"
                 >
                   <span>Sign Out</span>
                 </button>
@@ -129,6 +129,12 @@ export default function Navbar({ user, onLogout, activeTab, setActiveTab, dbConn
           </div>
 
         </div>
+      </div>
+
+      {/* Signature HNU Green and Yellow dual stripe at the edge of the navbar */}
+      <div className="w-full">
+        <div className="h-1 bg-[#006633]" />
+        <div className="h-0.5 bg-[#eab308]" />
       </div>
     </header>
   );

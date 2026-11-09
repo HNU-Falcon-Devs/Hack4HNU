@@ -4,8 +4,8 @@
 
 @layer base {
   body {
-    background-color: #121722;
-    color: #F1F5F9;
+    background-color: #ffffff;
+    color: #0f172a;
     font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   }
 }
@@ -16,38 +16,62 @@
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #121722;
+  background: #f8fafc;
 }
 ::-webkit-scrollbar-thumb {
-  background: #26334a;
+  background: #cbd5e1;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #10B981;
+  background: #006633;
 }
 
-/* Card glass / matte utility */
-.hnu-panel {
-  background-color: #1a2234;
-  border: 1px solid #26334a;
+/* HNU Dual Stripe (Green & Yellow) as seen on official site */
+.hnu-navbar-edge {
+  width: 100%;
+}
+.hnu-navbar-edge-green {
+  height: 4px;
+  background-color: #006633;
+}
+.hnu-navbar-edge-yellow {
+  height: 3px;
+  background-color: #eab308;
+}
+
+/* Clean HNU Card with Green & Yellow Hover Border (No Glow, No Zoom) */
+.hnu-clean-card {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
   border-radius: 1rem;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+  transition: border-color 0.15s ease-in-out;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
 }
 
-.hnu-panel-header-amber {
-  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
-  color: #0F172A;
-  font-weight: 700;
+.hnu-clean-card:hover {
+  border-color: #006633;
+  box-shadow: 0 2px 6px -1px rgba(0, 102, 51, 0.12);
 }
 
-.hnu-panel-header-green {
-  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
-  color: #FFFFFF;
+/* Buttons */
+.hnu-btn-primary {
+  background-color: #006633;
+  color: #ffffff;
   font-weight: 700;
+  border-radius: 0.75rem;
+  transition: background-color 0.15s ease-in-out;
+}
+.hnu-btn-primary:hover {
+  background-color: #004d26;
 }
 
-.hnu-panel-header-slate {
-  background: #232d42;
-  color: #F59E0B;
+.hnu-btn-gold {
+  background-color: #eab308;
+  color: #0f172a;
   font-weight: 700;
+  border-radius: 0.75rem;
+  transition: background-color 0.15s ease-in-out;
+}
+.hnu-btn-gold:hover {
+  background-color: #ca8a04;
 }

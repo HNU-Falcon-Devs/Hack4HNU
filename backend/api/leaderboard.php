@@ -76,59 +76,42 @@ if ($dbConnected && $pdo) {
                 $teamPoints += (int)$sc['points'];
             }
 
+            // Team Flag Accuracy & Submission Volume Timeline (Strictly accurate for this team)
+            $stmtSF = $pdo->prepare("
+                SELECT 
+                    COALESCE(SUM(CASE WHEN s.is_correct = 1 THEN 1 ELSE 0 END), 0) as successful,
+                    COALESCE(SUM(CASE WHEN s.is_correct = 0 THEN 1 ELSE 0 END), 0) as failed
+                FROM submissions s
+                JOIN users u ON s.user_id = u.id
+                WHERE u.team_id = ?
+            ");
+            $stmtSF->execute([$teamId]);
+            $sfData = $stmtSF->fetch();
+            $succ = (int)($sfData['successful'] ?? 0);
+            $fail = (int)($sfData['failed'] ?? 0);
+
+            $stmtHourly = $pdo->prepare("
+                SELECT 
+                    DATE_FORMAT(s.submitted_at, '%H:00') as hour_label,
+                    COUNT(*) as total,
+                    SUM(CASE WHEN s.is_correct = 1 THEN 1 ELSE 0 END) as correct,
+                    SUM(CASE WHEN s.is_correct = 0 THEN 1 ELSE 0 END) as incorrect
+                FROM submissions s
+                JOIN users u ON s.user_id = u.id
+                WHERE u.team_id = ? AND s.submitted_at >= DATE_SUB(NOW(), INTERVAL 12 HOUR)
+                GROUP BY DATE_FORMAT(s.submitted_at, '%H:00')
+                ORDER BY MIN(s.submitted_at) ASC
+            ");
+            $stmtHourly->execute([$teamId]);
+            $hRows = $stmtHourly->fetchAll() ?: [];
+
             $teamCharts = [
                 'success_vs_failed' => [
-                    ['name' => 'Successful', 'value' => 48, 'fill' => '#10B981'],
-                    ['name' => 'Failed', 'value' => 94, 'fill' => '#EF4444']
+                    ['name' => 'Successful', 'value' => $succ, 'fill' => '#006633'],
+                    ['name' => 'Failed', 'value' => $fail, 'fill' => '#ef4444']
                 ],
-                'submissions_over_time' => [
-                    ['hour_label' => '14:00', 'total' => 12, 'correct' => 4, 'incorrect' => 8],
-                    ['hour_label' => '15:00', 'total' => 25, 'correct' => 10, 'incorrect' => 15],
-                    ['hour_label' => '16:00', 'total' => 38, 'correct' => 12, 'incorrect' => 26],
-                    ['hour_label' => '17:00', 'total' => 18, 'correct' => 5, 'incorrect' => 13],
-                    ['hour_label' => '18:00', 'total' => 31, 'correct' => 9, 'incorrect' => 22],
-                    ['hour_label' => '19:00', 'total' => 18, 'correct' => 8, 'incorrect' => 10]
-                ]
+                'submissions_over_time' => $hRows
             ];
-
-            if ($teamId) {
-                $stmtSF = $pdo->prepare("
-                    SELECT 
-                        SUM(CASE WHEN s.is_correct = 1 THEN 1 ELSE 0 END) as successful,
-                        SUM(CASE WHEN s.is_correct = 0 THEN 1 ELSE 0 END) as failed
-                    FROM submissions s
-                    JOIN users u ON s.user_id = u.id
-                    WHERE u.team_id = ?
-                ");
-                $stmtSF->execute([$teamId]);
-                $sfData = $stmtSF->fetch();
-                $succ = (int)($sfData['successful'] ?? 0);
-                $fail = (int)($sfData['failed'] ?? 0);
-                if ($succ > 0 || $fail > 0) {
-                    $teamCharts['success_vs_failed'] = [
-                        ['name' => 'Successful', 'value' => $succ, 'fill' => '#10B981'],
-                        ['name' => 'Failed', 'value' => $fail, 'fill' => '#EF4444']
-                    ];
-                }
-
-                $stmtHourly = $pdo->prepare("
-                    SELECT 
-                        DATE_FORMAT(s.submitted_at, '%H:00') as hour_label,
-                        COUNT(*) as total,
-                        SUM(CASE WHEN s.is_correct = 1 THEN 1 ELSE 0 END) as correct,
-                        SUM(CASE WHEN s.is_correct = 0 THEN 1 ELSE 0 END) as incorrect
-                    FROM submissions s
-                    JOIN users u ON s.user_id = u.id
-                    WHERE u.team_id = ? AND s.submitted_at >= DATE_SUB(NOW(), INTERVAL 12 HOUR)
-                    GROUP BY DATE_FORMAT(s.submitted_at, '%H:00')
-                    ORDER BY hour_label ASC
-                ");
-                $stmtHourly->execute([$teamId]);
-                $hRows = $stmtHourly->fetchAll();
-                if (!empty($hRows)) {
-                    $teamCharts['submissions_over_time'] = $hRows;
-                }
-            }
 
             sendJsonResponse([
                 'status' => 'success',
@@ -381,6 +364,32 @@ if ($dbConnected && $pdo) {
             ];
         }
 
+        $demoTeamKey = 'team_' . $teamId;
+        $demoSubs = $_SESSION['demo_team_submissions'][$demoTeamKey] ?? [];
+        $demoSucc = 0;
+        $demoFail = 0;
+        $demoHourlyMap = [];
+        foreach ($demoSubs as $sub) {
+            if (!empty($sub['is_correct'])) {
+                $demoSucc++;
+            } else {
+                $demoFail++;
+            }
+            $h = $sub['hour_label'] ?? date('H:00');
+            if (!isset($demoHourlyMap[$h])) {
+                $demoHourlyMap[$h] = ['hour_label' => $h, 'total' => 0, 'correct' => 0, 'incorrect' => 0];
+            }
+            $demoHourlyMap[$h]['total']++;
+            if (!empty($sub['is_correct'])) {
+                $demoHourlyMap[$h]['correct']++;
+            } else {
+                $demoHourlyMap[$h]['incorrect']++;
+            }
+        }
+        if (empty($demoSubs) && count($solvedList) > 0) {
+            $demoSucc = count($solvedList);
+        }
+
         sendJsonResponse([
             'status' => 'success',
             'db_connected' => false,
@@ -390,17 +399,10 @@ if ($dbConnected && $pdo) {
             'privacy_notice' => 'Confidential Competition Mode: In accordance with HNU CTF rules, competitor standings are kept private during competition. Only your team\'s points and verified solves are visible.',
             'charts' => [
                 'success_vs_failed' => [
-                    ['name' => 'Successful', 'value' => 48, 'fill' => '#10B981'],
-                    ['name' => 'Failed', 'value' => 94, 'fill' => '#EF4444']
+                    ['name' => 'Successful', 'value' => $demoSucc, 'fill' => '#006633'],
+                    ['name' => 'Failed', 'value' => $demoFail, 'fill' => '#ef4444']
                 ],
-                'submissions_over_time' => [
-                    ['hour_label' => '14:00', 'total' => 12, 'correct' => 4, 'incorrect' => 8],
-                    ['hour_label' => '15:00', 'total' => 25, 'correct' => 10, 'incorrect' => 15],
-                    ['hour_label' => '16:00', 'total' => 38, 'correct' => 12, 'incorrect' => 26],
-                    ['hour_label' => '17:00', 'total' => 18, 'correct' => 5, 'incorrect' => 13],
-                    ['hour_label' => '18:00', 'total' => 31, 'correct' => 9, 'incorrect' => 22],
-                    ['hour_label' => '19:00', 'total' => 18, 'correct' => 8, 'incorrect' => 10]
-                ]
+                'submissions_over_time' => array_values($demoHourlyMap)
             ],
             'team' => [
                 'team_id' => $teamId,

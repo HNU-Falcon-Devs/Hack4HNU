@@ -109,12 +109,16 @@ export default function ChallengeManagementPage() {
     <div className="space-y-6">
 
       {/* Header Banner */}
-      <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-6 shadow-lg flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div className="flex items-center space-x-3">
+      <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4 relative overflow-hidden">
+        <div className="absolute top-0 left-0 right-0 h-1 bg-[#006633]" />
+        <div className="absolute top-1 left-0 right-0 h-0.5 bg-[#eab308]" />
+
+        <div className="flex items-center space-x-3 pt-1">
           <div>
-            <h1 className="text-2xl font-black text-white tracking-tight font-mono">
+            <h1 className="text-2xl font-black text-slate-900 tracking-tight font-mono">
               Challenges Dashboard
             </h1>
+            <p className="text-xs text-slate-500 font-mono">Manage challenge definitions, flags, points, and solvers</p>
           </div>
         </div>
 
@@ -122,13 +126,13 @@ export default function ChallengeManagementPage() {
           <button
             onClick={loadChallenges}
             disabled={loading}
-            className="px-3.5 py-2 bg-[#121722] hover:bg-[#202b3d] border border-[#26334a] text-gray-300 rounded-xl text-xs font-mono flex items-center space-x-1.5 transition"
+            className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 rounded-xl text-xs font-mono flex items-center space-x-1.5 transition-colors"
           >
             <span>Reload</span>
           </button>
           <button
             onClick={() => { setNewChallenge({ ...BLANK_CHALLENGE }); setShowCreateModal(true); }}
-            className="px-4 py-2 bg-gradient-to-r from-[#059669] to-[#10B981] hover:from-[#047857] hover:to-[#059669] text-white rounded-xl text-xs font-mono font-bold flex items-center space-x-1.5 transition shadow-md shadow-emerald-900/30"
+            className="px-4 py-2 bg-[#006633] hover:bg-[#004d26] text-white rounded-xl text-xs font-mono font-bold flex items-center space-x-1.5 transition-colors shadow-sm"
           >
             <span>Add Challenge</span>
           </button>
@@ -136,28 +140,26 @@ export default function ChallengeManagementPage() {
       </div>
 
       {/* Search Bar */}
-      <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-4 shadow-lg flex items-center justify-between">
+      <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm flex items-center justify-between">
         <div className="relative w-full sm:w-96">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-          </div>
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search challenges by title or category..."
-            className="w-full bg-[#121722] border border-[#26334a] rounded-xl pl-8 pr-3 py-1.5 text-xs font-mono text-white placeholder-gray-500 focus:border-[#10B981] transition"
+            className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-1.5 text-xs font-mono text-slate-900 placeholder-slate-400 focus:border-[#006633] transition-colors focus:outline-none"
           />
         </div>
-        <span className="text-xs text-gray-400 font-mono hidden sm:block">
+        <span className="text-xs text-slate-500 font-mono hidden sm:block">
           Total Imported: {challenges.length}
         </span>
       </div>
 
       {/* Challenges Admin Table */}
-      <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl overflow-hidden shadow-lg">
+      <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs font-mono">
-            <thead className="bg-[#161c2d] text-gray-400 border-b border-[#26334a] uppercase tracking-wider text-[11px]">
+            <thead className="bg-slate-50 text-slate-600 border-b border-slate-200 uppercase tracking-wider text-[11px]">
               <tr>
                 <th className="px-5 py-3.5">ID</th>
                 <th className="px-5 py-3.5">Title</th>
@@ -170,16 +172,16 @@ export default function ChallengeManagementPage() {
                 <th className="px-5 py-3.5 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-800/80">
+            <tbody className="divide-y divide-slate-100">
               {loading ? (
                 <tr>
-                  <td colSpan="9" className="px-5 py-12 text-center text-gray-400">
+                  <td colSpan="9" className="px-5 py-12 text-center text-slate-400">
                     Loading challenge configurations...
                   </td>
                 </tr>
               ) : filtered.length === 0 ? (
                 <tr>
-                  <td colSpan="9" className="px-5 py-12 text-center text-gray-500">
+                  <td colSpan="9" className="px-5 py-12 text-center text-slate-500">
                     No challenges matched your query.
                   </td>
                 </tr>
@@ -187,24 +189,24 @@ export default function ChallengeManagementPage() {
                 filtered.map((ch) => {
                   const isRevealed = revealFlags[ch.id];
                   return (
-                    <tr key={ch.id} className="hover:bg-gray-800/30 transition">
-                      <td className="px-5 py-3.5 text-gray-500 font-bold">#{ch.id}</td>
-                      <td className="px-5 py-3.5 font-bold text-white whitespace-nowrap">{ch.title}</td>
-                      <td className="px-5 py-3.5 text-cyan-300">{ch.category}</td>
+                    <tr key={ch.id} className="hover:bg-slate-50 transition-colors">
+                      <td className="px-5 py-3.5 text-slate-400 font-bold">#{ch.id}</td>
+                      <td className="px-5 py-3.5 font-bold text-slate-900 whitespace-nowrap">{ch.title}</td>
+                      <td className="px-5 py-3.5 text-[#006633] font-bold">{ch.category}</td>
                       <td className="px-5 py-3.5">
-                        <span className="px-2 py-0.5 rounded text-[10px] bg-[#080D18] border border-gray-800">
+                        <span className="px-2 py-0.5 rounded text-[10px] bg-slate-100 border border-slate-200 text-slate-700">
                           {ch.difficulty}
                         </span>
                       </td>
-                      <td className="px-5 py-3.5 font-bold text-cyan-400">{ch.points}</td>
+                      <td className="px-5 py-3.5 font-bold text-[#eab308]">{ch.points}</td>
                       <td className="px-5 py-3.5 whitespace-nowrap">
                         <div className="flex items-center space-x-1.5">
-                          <span className="text-gray-300 select-all font-mono">
+                          <span className="text-slate-700 select-all font-mono">
                             {isRevealed ? (ch.correct_flag || 'N/A') : '••••••••••••••••••••'}
                           </span>
                           <button
                             onClick={() => toggleFlagReveal(ch.id)}
-                            className="text-gray-500 hover:text-cyan-400 p-0.5"
+                            className="text-slate-400 hover:text-[#006633] p-0.5"
                             title={isRevealed ? 'Mask Flag' : 'Reveal Flag'}
                           >
                             {isRevealed ? 'Hide' : 'Show'}
@@ -215,8 +217,8 @@ export default function ChallengeManagementPage() {
                         <button
                           onClick={() => handleToggle(ch.id)}
                           className={`px-2 py-0.5 rounded text-[10px] font-bold border flex items-center space-x-1 ${ch.is_enabled
-                            ? 'bg-green-950/80 border-green-800 text-green-400'
-                            : 'bg-red-950/80 border-red-800 text-red-400'
+                            ? 'bg-emerald-50 border-emerald-300 text-[#006633]'
+                            : 'bg-rose-50 border-rose-300 text-rose-700'
                             }`}
                         >
                           <span>{ch.is_enabled ? 'Active' : 'Disabled'}</span>
@@ -225,7 +227,7 @@ export default function ChallengeManagementPage() {
                       <td className="px-5 py-3.5 whitespace-nowrap">
                         <button
                           onClick={() => openSolversModal(ch)}
-                          className="text-cyan-400 hover:underline flex items-center space-x-1"
+                          className="text-[#006633] hover:underline flex items-center space-x-1 font-bold"
                         >
                           <span>{ch.solve_count || 0} solvers</span>
                         </button>
@@ -234,13 +236,13 @@ export default function ChallengeManagementPage() {
                         <div className="flex items-center justify-end space-x-1.5">
                           <button
                             onClick={() => setEditChallenge({ ...ch })}
-                            className="px-2.5 py-1 bg-[#121722] hover:bg-[#1a2234] border border-[#26334a] hover:border-emerald-500/50 text-emerald-300 rounded text-[11px] font-bold flex items-center space-x-1 transition"
+                            className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 rounded text-[11px] font-bold flex items-center space-x-1 transition-colors"
                           >
                             <span>Edit</span>
                           </button>
                           <button
                             onClick={() => handleDeleteChallenge(ch.id, ch.title)}
-                            className="px-2.5 py-1 bg-red-950/60 hover:bg-red-900/80 border border-red-800/60 text-red-300 rounded text-[11px] font-bold flex items-center space-x-1 transition"
+                            className="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 border border-rose-300 text-rose-700 rounded text-[11px] font-bold flex items-center space-x-1 transition-colors"
                           >
                             <span>Delete</span>
                           </button>
@@ -257,33 +259,33 @@ export default function ChallengeManagementPage() {
 
       {/* Edit Challenge Modal */}
       {editChallenge && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-[#111827] border border-[#1E293B] rounded-xl max-w-2xl w-full p-6 shadow-2xl space-y-4 font-mono text-xs">
-            <div className="flex items-center justify-between pb-3 border-b border-gray-800">
-              <h3 className="text-base font-bold text-white font-mono">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white border border-slate-200 rounded-2xl max-w-2xl w-full p-6 shadow-xl space-y-4 font-mono text-xs">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+              <h3 className="text-base font-bold text-slate-900 font-mono">
                 <span>Configure Challenge: {editChallenge.title}</span>
               </h3>
-              <button onClick={() => setEditChallenge(null)} className="text-gray-400 hover:text-white">✕</button>
+              <button onClick={() => setEditChallenge(null)} className="text-slate-400 hover:text-slate-700">✕</button>
             </div>
 
             <form onSubmit={handleSaveEdit} className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-gray-400 mb-1">Challenge Title</label>
+                  <label className="block text-slate-700 font-medium mb-1">Challenge Title</label>
                   <input
                     type="text"
                     value={editChallenge.title}
                     onChange={(e) => setEditChallenge({ ...editChallenge, title: e.target.value })}
                     required
-                    className="w-full bg-[#080D18] border border-gray-700 rounded p-2 text-white focus:border-cyan-400"
+                    className="w-full bg-slate-50 border border-slate-300 rounded p-2 text-slate-900 focus:border-[#006633] focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-gray-400 mb-1">Category</label>
+                  <label className="block text-slate-700 font-medium mb-1">Category</label>
                   <select
                     value={editChallenge.category}
                     onChange={(e) => setEditChallenge({ ...editChallenge, category: e.target.value })}
-                    className="w-full bg-[#080D18] border border-gray-700 rounded p-2 text-white focus:border-cyan-400"
+                    className="w-full bg-slate-50 border border-slate-300 rounded p-2 text-slate-900 focus:border-[#006633] focus:outline-none"
                   >
                     {CATEGORIES.map(c => (
                       <option key={c} value={c}>{c}</option>
@@ -294,11 +296,11 @@ export default function ChallengeManagementPage() {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-gray-400 mb-1">Difficulty</label>
+                  <label className="block text-slate-700 font-medium mb-1">Difficulty</label>
                   <select
                     value={editChallenge.difficulty}
                     onChange={(e) => setEditChallenge({ ...editChallenge, difficulty: e.target.value })}
-                    className="w-full bg-[#080D18] border border-gray-700 rounded p-2 text-white focus:border-cyan-400"
+                    className="w-full bg-slate-50 border border-slate-300 rounded p-2 text-slate-900 focus:border-[#006633] focus:outline-none"
                   >
                     {DIFFICULTIES.map(d => (
                       <option key={d} value={d}>{d}</option>
@@ -306,7 +308,7 @@ export default function ChallengeManagementPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-gray-400 mb-1">Point Value</label>
+                  <label className="block text-slate-700 font-medium mb-1">Point Value</label>
                   <input
                     type="number"
                     min="1"
@@ -314,14 +316,14 @@ export default function ChallengeManagementPage() {
                     value={editChallenge.points}
                     onChange={(e) => setEditChallenge({ ...editChallenge, points: parseInt(e.target.value) || 0 })}
                     required
-                    className="w-full bg-[#080D18] border border-gray-700 rounded p-2 text-white focus:border-cyan-400"
+                    className="w-full bg-slate-50 border border-slate-300 rounded p-2 text-slate-900 focus:border-[#006633] focus:outline-none"
                   />
                 </div>
               </div>
 
               {/* Correct Flag Input */}
-              <div className="bg-[#080D18] p-3 rounded-lg border border-red-900/60 space-y-1">
-                <label className="block text-red-400 font-bold uppercase tracking-wider">
+              <div className="bg-rose-50 p-3 rounded-lg border border-rose-200 space-y-1">
+                <label className="block text-rose-700 font-bold uppercase tracking-wider">
                   Correct Flag Key (Format: HNU&#123;...&#125;)
                 </label>
                 <input
@@ -330,32 +332,32 @@ export default function ChallengeManagementPage() {
                   onChange={(e) => setEditChallenge({ ...editChallenge, correct_flag: e.target.value })}
                   required
                   placeholder="HNU{your_secret_flag}"
-                  className="w-full bg-[#111827] border border-red-800 rounded p-2 text-white font-bold select-all focus:border-red-500"
+                  className="w-full bg-white border border-rose-300 rounded p-2 text-slate-900 font-bold select-all focus:border-[#006633] focus:outline-none"
                 />
-                <p className="text-[10px] text-gray-500">
+                <p className="text-[10px] text-slate-500">
                   Case-sensitive verification. Submissions matching this exact string award points.
                 </p>
               </div>
 
               <div>
-                <label className="block text-gray-400 mb-1">Target Host / Connection Info / URL</label>
+                <label className="block text-slate-700 font-medium mb-1">Target Host / Connection Info / URL</label>
                 <input
                   type="text"
                   value={editChallenge.target_info || ''}
                   onChange={(e) => setEditChallenge({ ...editChallenge, target_info: e.target.value })}
                   placeholder="e.g. 172.16.105.9:3000 or Target IP: 124.6.144.115"
-                  className="w-full bg-[#080D18] border border-gray-700 rounded p-2 text-white focus:border-cyan-400"
+                  className="w-full bg-slate-50 border border-slate-300 rounded p-2 text-slate-900 focus:border-[#006633] focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-gray-400 mb-1">Description & Prompt Instructions</label>
+                <label className="block text-slate-700 font-medium mb-1">Description & Prompt Instructions</label>
                 <textarea
                   rows={4}
                   value={editChallenge.description}
                   onChange={(e) => setEditChallenge({ ...editChallenge, description: e.target.value })}
                   required
-                  className="w-full bg-[#080D18] border border-gray-700 rounded p-2 text-white focus:border-cyan-400 font-sans text-xs leading-relaxed"
+                  className="w-full bg-slate-50 border border-slate-300 rounded p-2 text-slate-900 focus:border-[#006633] focus:outline-none font-sans text-xs leading-relaxed"
                 />
               </div>
 
@@ -365,25 +367,25 @@ export default function ChallengeManagementPage() {
                   id="enabledCheck"
                   checked={editChallenge.is_enabled}
                   onChange={(e) => setEditChallenge({ ...editChallenge, is_enabled: e.target.checked })}
-                  className="rounded bg-[#080D18] border-gray-700 text-cyan-500 focus:ring-0"
+                  className="rounded bg-slate-50 border-slate-300 text-[#006633] focus:ring-0"
                 />
-                <label htmlFor="enabledCheck" className="text-gray-300 cursor-pointer">
+                <label htmlFor="enabledCheck" className="text-slate-700 cursor-pointer">
                   Challenge is active and visible to participants
                 </label>
               </div>
 
-              <div className="flex justify-end space-x-2 pt-3 border-t border-gray-800">
+              <div className="flex justify-end space-x-2 pt-3 border-t border-slate-200">
                 <button
                   type="button"
                   onClick={() => setEditChallenge(null)}
-                  className="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded transition"
+                  className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 rounded transition-colors font-medium"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={saving}
-                  className="px-5 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold rounded transition disabled:opacity-50"
+                  className="px-5 py-2 bg-[#006633] hover:bg-[#004d26] text-white font-bold rounded transition-colors shadow-sm disabled:opacity-50"
                 >
                   {saving ? 'Saving...' : 'Save Changes'}
                 </button>
@@ -395,37 +397,37 @@ export default function ChallengeManagementPage() {
 
       {/* Solvers Inspection Modal */}
       {showSolversModal && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#111827] border border-[#1E293B] rounded-xl max-w-md w-full p-6 shadow-2xl space-y-4 font-mono text-xs">
-            <div className="flex items-center justify-between pb-2 border-b border-gray-800">
-              <h3 className="text-sm font-bold text-white font-mono">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white border border-slate-200 rounded-2xl max-w-md w-full p-6 shadow-xl space-y-4 font-mono text-xs">
+            <div className="flex items-center justify-between pb-2 border-b border-slate-200">
+              <h3 className="text-sm font-bold text-slate-900 font-mono">
                 <span>Solvers for: {showSolversModal.title}</span>
               </h3>
-              <button onClick={() => setShowSolversModal(null)} className="text-gray-400 hover:text-white">✕</button>
+              <button onClick={() => setShowSolversModal(null)} className="text-slate-400 hover:text-slate-700">✕</button>
             </div>
 
             <div className="max-h-64 overflow-y-auto space-y-2">
               {solversLoading ? (
-                <div className="text-center py-6 text-gray-400">Loading solvers list...</div>
+                <div className="text-center py-6 text-slate-500">Loading solvers list...</div>
               ) : solversList.length === 0 ? (
-                <div className="text-center py-6 text-gray-500">No participants have solved this challenge yet.</div>
+                <div className="text-center py-6 text-slate-500">No participants have solved this challenge yet.</div>
               ) : (
                 solversList.map((s, idx) => (
-                  <div key={idx} className="flex items-center justify-between p-2 rounded bg-[#080D18] border border-gray-800">
+                  <div key={idx} className="flex items-center justify-between p-2 rounded bg-slate-50 border border-slate-200">
                     <div className="flex items-center space-x-2">
-                      <span className="text-gray-500 font-bold">#{idx + 1}</span>
-                      <span className="text-white font-bold">{s.username}</span>
+                      <span className="text-slate-400 font-bold">#{idx + 1}</span>
+                      <span className="text-slate-900 font-bold">{s.username}</span>
                     </div>
-                    <span className="text-gray-400 text-[10px]">{s.solved_at}</span>
+                    <span className="text-slate-500 text-[10px]">{s.solved_at}</span>
                   </div>
                 ))
               )}
             </div>
 
-            <div className="text-right pt-2 border-t border-gray-800">
+            <div className="text-right pt-2 border-t border-slate-200">
               <button
                 onClick={() => setShowSolversModal(null)}
-                className="px-4 py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded transition"
+                className="px-4 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 rounded transition-colors font-medium"
               >
                 Close
               </button>
@@ -436,28 +438,28 @@ export default function ChallengeManagementPage() {
 
       {/* ═══ Create Challenge Modal ══════════════════════════════════════════ */}
       {showCreateModal && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl max-w-2xl w-full p-6 shadow-2xl space-y-4 font-mono text-xs">
-            <div className="flex items-center justify-between pb-3 border-b border-[#26334a]">
-              <h3 className="text-base font-bold text-white font-mono">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white border border-slate-200 rounded-2xl max-w-2xl w-full p-6 shadow-xl space-y-4 font-mono text-xs">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+              <h3 className="text-base font-bold text-slate-900 font-mono">
                 <span>Add New Challenge</span>
               </h3>
-              <button onClick={() => setShowCreateModal(false)} className="text-gray-400 hover:text-white">✕</button>
+              <button onClick={() => setShowCreateModal(false)} className="text-slate-400 hover:text-slate-700">✕</button>
             </div>
 
             <form onSubmit={handleCreateChallenge} className="space-y-3">
               {/* Category first */}
-              <div className="bg-emerald-950/30 border border-emerald-700/40 rounded-xl p-3 space-y-1">
-                <label className="block text-emerald-400 font-bold uppercase tracking-wider text-[10px]">Category (select first)</label>
+              <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3 space-y-1">
+                <label className="block text-[#006633] font-bold uppercase tracking-wider text-[10px]">Category (select first)</label>
                 <div className="flex flex-wrap gap-2 pt-1">
                   {CATEGORIES.map(c => (
                     <button
                       key={c}
                       type="button"
                       onClick={() => setNewChallenge({ ...newChallenge, category: c })}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition ${newChallenge.category === c
-                        ? 'bg-emerald-500 border-emerald-400 text-white'
-                        : 'bg-[#121722] border-[#26334a] text-gray-400 hover:text-white hover:border-emerald-500/50'
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors ${newChallenge.category === c
+                        ? 'bg-[#006633] border-[#006633] text-white shadow-sm'
+                        : 'bg-white border-slate-300 text-slate-700 hover:border-[#006633]'
                         }`}
                     >
                       {c}
@@ -468,71 +470,71 @@ export default function ChallengeManagementPage() {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-gray-400 mb-1">Challenge Title</label>
+                  <label className="block text-slate-700 font-medium mb-1">Challenge Title</label>
                   <input type="text" value={newChallenge.title}
                     onChange={(e) => setNewChallenge({ ...newChallenge, title: e.target.value })}
                     required placeholder="e.g. SQL Injection 101"
-                    className="w-full bg-[#121722] border border-[#26334a] rounded-xl p-2 text-white focus:border-emerald-400 focus:outline-none" />
+                    className="w-full bg-slate-50 border border-slate-300 rounded-xl p-2 text-slate-900 focus:border-[#006633] focus:outline-none" />
                 </div>
                 <div>
-                  <label className="block text-gray-400 mb-1">Difficulty</label>
+                  <label className="block text-slate-700 font-medium mb-1">Difficulty</label>
                   <select value={newChallenge.difficulty}
                     onChange={(e) => setNewChallenge({ ...newChallenge, difficulty: e.target.value })}
-                    className="w-full bg-[#121722] border border-[#26334a] rounded-xl p-2 text-white focus:border-emerald-400 focus:outline-none">
+                    className="w-full bg-slate-50 border border-slate-300 rounded-xl p-2 text-slate-900 focus:border-[#006633] focus:outline-none">
                     {DIFFICULTIES.map(d => <option key={d} value={d}>{d}</option>)}
                   </select>
                 </div>
               </div>
 
               <div>
-                <label className="block text-gray-400 mb-1">Point Value</label>
+                <label className="block text-slate-700 font-medium mb-1">Point Value</label>
                 <input type="number" min="1" max="5000" value={newChallenge.points}
                   onChange={(e) => setNewChallenge({ ...newChallenge, points: parseInt(e.target.value) || 100 })}
                   required
-                  className="w-full bg-[#121722] border border-[#26334a] rounded-xl p-2 text-white focus:border-emerald-400 focus:outline-none" />
+                  className="w-full bg-slate-50 border border-slate-300 rounded-xl p-2 text-slate-900 focus:border-[#006633] focus:outline-none" />
               </div>
 
               {/* Flag */}
-              <div className="bg-[#121722] p-3 rounded-xl border border-red-900/60 space-y-1">
-                <label className="block text-red-400 font-bold uppercase tracking-wider text-[10px]">
+              <div className="bg-rose-50 p-3 rounded-xl border border-rose-200 space-y-1">
+                <label className="block text-rose-700 font-bold uppercase tracking-wider text-[10px]">
                   Correct Flag (Format: HNU&#123;...&#125;)
                 </label>
                 <input type="text" value={newChallenge.correct_flag}
                   onChange={(e) => setNewChallenge({ ...newChallenge, correct_flag: e.target.value })}
                   required placeholder="HNU{your_secret_flag}"
-                  className="w-full bg-[#1a2234] border border-red-800 rounded-lg p-2 text-white font-bold focus:border-red-500 focus:outline-none" />
+                  className="w-full bg-white border border-rose-300 rounded-lg p-2 text-slate-900 font-bold focus:border-[#006633] focus:outline-none" />
               </div>
 
               <div>
-                <label className="block text-gray-400 mb-1">Target Host / URL / Connection Info</label>
+                <label className="block text-slate-700 font-medium mb-1">Target Host / URL / Connection Info</label>
                 <input type="text" value={newChallenge.target_info}
                   onChange={(e) => setNewChallenge({ ...newChallenge, target_info: e.target.value })}
                   placeholder="e.g. 172.16.105.9:3000"
-                  className="w-full bg-[#121722] border border-[#26334a] rounded-xl p-2 text-white focus:border-emerald-400 focus:outline-none" />
+                  className="w-full bg-slate-50 border border-slate-300 rounded-xl p-2 text-slate-900 focus:border-[#006633] focus:outline-none" />
               </div>
 
               <div>
-                <label className="block text-gray-400 mb-1">Description &amp; Prompt</label>
+                <label className="block text-slate-700 font-medium mb-1">Description &amp; Prompt</label>
                 <textarea rows={3} value={newChallenge.description}
                   onChange={(e) => setNewChallenge({ ...newChallenge, description: e.target.value })}
                   required placeholder="Challenge description and instructions..."
-                  className="w-full bg-[#121722] border border-[#26334a] rounded-xl p-2 text-white focus:border-emerald-400 focus:outline-none font-sans text-xs leading-relaxed" />
+                  className="w-full bg-slate-50 border border-slate-300 rounded-xl p-2 text-slate-900 focus:border-[#006633] focus:outline-none font-sans text-xs leading-relaxed" />
               </div>
 
               <div className="flex items-center space-x-2">
                 <input type="checkbox" id="newEnabled" checked={newChallenge.is_enabled}
                   onChange={(e) => setNewChallenge({ ...newChallenge, is_enabled: e.target.checked })}
-                  className="rounded bg-[#121722] border-[#26334a] text-emerald-500 focus:ring-0" />
-                <label htmlFor="newEnabled" className="text-gray-300 cursor-pointer">Challenge is active and visible to participants immediately</label>
+                  className="rounded bg-slate-50 border-slate-300 text-[#006633] focus:ring-0" />
+                <label htmlFor="newEnabled" className="text-slate-700 cursor-pointer">Challenge is active and visible to participants immediately</label>
               </div>
 
-              <div className="flex justify-end space-x-2 pt-3 border-t border-[#26334a]">
+              <div className="flex justify-end space-x-2 pt-3 border-t border-slate-200">
                 <button type="button" onClick={() => setShowCreateModal(false)}
-                  className="px-4 py-2 bg-[#121722] hover:bg-[#202b3d] text-gray-300 border border-[#26334a] rounded-xl transition">
+                  className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 rounded-xl transition-colors font-medium">
                   Cancel
                 </button>
                 <button type="submit" disabled={creating}
-                  className="px-5 py-2 bg-gradient-to-r from-[#059669] to-[#10B981] hover:from-[#047857] hover:to-[#059669] text-white font-bold rounded-xl transition disabled:opacity-50 flex items-center space-x-1.5">
+                  className="px-5 py-2 bg-[#006633] hover:bg-[#004d26] text-white font-bold rounded-xl transition-colors disabled:opacity-50 flex items-center space-x-1.5 shadow-sm">
                   <span>{creating ? 'Creating...' : 'Create Challenge'}</span>
                 </button>
               </div>

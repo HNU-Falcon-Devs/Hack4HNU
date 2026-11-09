@@ -236,27 +236,31 @@ export default function AccountsPage() {
     <div className="space-y-6">
 
       {/* Header */}
-      <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-6 shadow-lg flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-black text-white tracking-tight font-mono">Account Management</h1>
+      <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4 relative overflow-hidden">
+        <div className="absolute top-0 left-0 right-0 h-1 bg-[#006633]" />
+        <div className="absolute top-1 left-0 right-0 h-0.5 bg-[#eab308]" />
+
+        <div className="pt-1">
+          <h1 className="text-2xl font-black text-slate-900 tracking-tight font-mono">Account Management</h1>
+          <p className="text-xs text-slate-500 font-mono">Manage participating teams, credentials, and tournament access</p>
         </div>
         <div className="flex items-center space-x-2">
           <button
             onClick={loadAccounts}
             disabled={loading}
-            className="px-3.5 py-2 bg-[#121722] hover:bg-[#202b3d] border border-[#26334a] text-gray-300 rounded-xl text-xs font-mono flex items-center space-x-1.5 transition"
+            className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 rounded-xl text-xs font-mono flex items-center space-x-1.5 transition-colors"
           >
             <span>Refresh</span>
           </button>
           <button
             onClick={() => setShowAddAdmin(true)}
-            className="px-4 py-2 bg-[#121722] hover:bg-[#202b3d] border border-amber-700/60 text-amber-300 rounded-xl text-xs font-mono font-bold flex items-center space-x-1.5 transition"
+            className="px-4 py-2 bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-800 rounded-xl text-xs font-mono font-bold flex items-center space-x-1.5 transition-colors"
           >
             <span>Add Admin</span>
           </button>
           <button
             onClick={() => setShowCreateTeam(true)}
-            className="px-4 py-2 bg-gradient-to-r from-[#059669] to-[#10B981] hover:from-[#047857] hover:to-[#059669] text-white rounded-xl text-xs font-mono font-bold flex items-center space-x-1.5 transition shadow-md shadow-emerald-900/30"
+            className="px-4 py-2 bg-[#006633] hover:bg-[#004d26] text-white rounded-xl text-xs font-mono font-bold flex items-center space-x-1.5 transition-colors shadow-sm"
           >
             <span>Create Team</span>
           </button>
@@ -266,8 +270,8 @@ export default function AccountsPage() {
       {/* Message Banner */}
       {message && (
         <div className={`p-4 rounded-xl border text-sm font-mono ${message.type === 'success'
-          ? 'bg-emerald-950/60 border-emerald-700/60 text-emerald-300'
-          : 'bg-red-950/60 border-red-700/60 text-red-300'
+          ? 'bg-emerald-50 border-emerald-300 text-[#006633]'
+          : 'bg-rose-50 border-rose-300 text-rose-700'
           }`}>
           <span>{message.text}</span>
         </div>
@@ -275,37 +279,37 @@ export default function AccountsPage() {
 
       {/* Teams & Members Section */}
       {loading ? (
-        <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-12 text-center text-gray-400 font-mono text-sm">
+        <div className="bg-white border border-slate-200 rounded-2xl p-12 text-center text-slate-500 font-mono text-sm">
           Loading accounts...
         </div>
       ) : teams.length === 0 ? (
-        <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl p-12 text-center text-gray-500 font-mono text-sm">
+        <div className="bg-white border border-slate-200 rounded-2xl p-12 text-center text-slate-500 font-mono text-sm">
           No teams created yet. Click "Create Team" to add one.
         </div>
       ) : (
         <div className="space-y-6">
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-bold text-white font-mono uppercase tracking-wider">
+            <h2 className="text-sm font-bold text-slate-900 font-mono uppercase tracking-wider">
               Participant Teams ({teams.length})
             </h2>
           </div>
 
           {teams.map((team) => (
-            <div key={team.team_id || team.team_name} className="bg-[#1a2234] border border-[#26334a] rounded-2xl overflow-hidden shadow-md">
+            <div key={team.team_id || team.team_name} className="bg-white border border-slate-200 hover:border-[#006633] transition-colors rounded-2xl overflow-hidden shadow-sm">
               {/* Team header */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between px-5 py-3.5 bg-[#161c2d] border-b border-[#26334a] gap-3">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between px-5 py-3.5 bg-slate-50 border-b border-slate-200 gap-3">
                 <div className="flex flex-wrap items-center gap-3">
-                  <span className="font-bold text-white text-sm">{team.team_name}</span>
-                  <span className="text-xs font-mono text-gray-400">
+                  <span className="font-bold text-slate-900 text-sm">{team.team_name}</span>
+                  <span className="text-xs font-mono text-slate-500">
                     {(team.members || []).length} / 4 members
                   </span>
                   {team.is_suspended && (
-                    <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-rose-950/90 border border-rose-600 text-rose-300 font-bold uppercase tracking-wider animate-pulse">
+                    <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-rose-100 border border-rose-300 text-rose-700 font-bold uppercase tracking-wider">
                       Suspended ({Math.ceil((team.suspension_remaining || 1800) / 60)}m remaining)
                     </span>
                   )}
                   {(team.members || []).length === 3 && (
-                    <span className="text-[11px] font-mono px-2 py-0.5 rounded-full bg-amber-950/60 border border-amber-700/50 text-amber-300">
+                    <span className="text-[11px] font-mono px-2 py-0.5 rounded-full bg-amber-50 border border-amber-300 text-amber-800">
                       3 of 4 slots filled
                     </span>
                   )}
@@ -316,14 +320,14 @@ export default function AccountsPage() {
                   {team.is_suspended ? (
                     <button
                       onClick={() => handleUnsuspendTeam(team.team_id, team.team_name)}
-                      className="px-2.5 py-1 rounded-lg bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-600 text-emerald-300 text-xs font-mono font-bold transition shadow-sm"
+                      className="px-2.5 py-1 rounded-lg bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-[#006633] text-xs font-mono font-bold transition-colors shadow-sm"
                     >
                       Unsuspend Team
                     </button>
                   ) : (
                     <button
                       onClick={() => handleSuspendTeam(team.team_id, team.team_name)}
-                      className="px-2.5 py-1 rounded-lg bg-amber-950/70 hover:bg-amber-900 border border-amber-700/80 text-amber-300 text-xs font-mono font-bold transition shadow-sm"
+                      className="px-2.5 py-1 rounded-lg bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-800 text-xs font-mono font-bold transition-colors shadow-sm"
                       title="Suspend entire team for 30 minutes"
                     >
                       Suspend Team (30m)
@@ -332,7 +336,7 @@ export default function AccountsPage() {
 
                   <button
                     onClick={() => handleDeleteTeam(team.team_id, team.team_name)}
-                    className="px-2.5 py-1 rounded-lg bg-red-950/70 hover:bg-red-900 border border-red-700 text-red-300 text-xs font-mono font-bold transition shadow-sm"
+                    className="px-2.5 py-1 rounded-lg bg-rose-50 hover:bg-rose-100 border border-rose-300 text-rose-700 text-xs font-mono font-bold transition-colors shadow-sm"
                     title="Remove team and all its participants"
                   >
                     Remove Team
@@ -343,7 +347,7 @@ export default function AccountsPage() {
               {/* Members table */}
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs font-mono">
-                  <thead className="bg-[#121722] text-gray-500 uppercase tracking-wider text-[10px]">
+                  <thead className="bg-slate-50 text-slate-500 uppercase tracking-wider text-[10px] border-b border-slate-200">
                     <tr>
                       <th className="px-5 py-2.5">#</th>
                       <th className="px-5 py-2.5">Username</th>
@@ -353,46 +357,46 @@ export default function AccountsPage() {
                       <th className="px-5 py-2.5 text-right">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#26334a]/60">
+                  <tbody className="divide-y divide-slate-100">
                     {(team.members || []).map((m, mi) => {
                       const isRevealed = !!revealedPasswords[m.id];
                       return (
-                        <tr key={m.id || mi} className="hover:bg-[#202b3d] transition">
-                          <td className="px-5 py-3 text-gray-500 font-bold">{mi + 1}</td>
-                          <td className="px-5 py-3 font-bold text-white">{m.username}</td>
+                        <tr key={m.id || mi} className="hover:bg-slate-50 transition-colors">
+                          <td className="px-5 py-3 text-slate-400 font-bold">{mi + 1}</td>
+                          <td className="px-5 py-3 font-bold text-slate-900">{m.username}</td>
                           <td className="px-5 py-3 whitespace-nowrap">
                             <div className="flex items-center space-x-2">
-                              <span className="font-mono text-xs select-all text-gray-300 min-w-[90px]">
+                              <span className="font-mono text-xs select-all text-slate-700 min-w-[90px]">
                                 {isRevealed ? (m.plain_password || 'Participant123!') : '••••••••••••'}
                               </span>
                               <button
                                 type="button"
                                 onClick={() => toggleRevealPassword(m.id)}
-                                className="text-gray-400 hover:text-emerald-400 p-1 rounded transition"
+                                className="text-slate-400 hover:text-[#006633] p-1 rounded transition-colors"
                                 title={isRevealed ? 'Hide password' : 'View password'}
                               >
-                                {isRevealed ? <EyeOff className="w-3.5 h-3.5 text-emerald-400" /> : <Eye className="w-3.5 h-3.5" />}
+                                {isRevealed ? <EyeOff className="w-3.5 h-3.5 text-[#006633]" /> : <Eye className="w-3.5 h-3.5" />}
                               </button>
                             </div>
                           </td>
                           <td className="px-5 py-3 whitespace-nowrap">
-                            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-950/60 border border-emerald-700/50 text-emerald-300 mr-1.5">
+                            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 border border-emerald-200 text-[#006633] mr-1.5">
                               {m.role || 'participant'}
                             </span>
                             {m.is_suspended && (
-                              <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-rose-950 border border-rose-700 text-rose-300 uppercase tracking-wider animate-pulse">
+                              <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-rose-100 border border-rose-300 text-rose-700 uppercase tracking-wider">
                                 Suspended ({Math.ceil((m.suspension_remaining || 1800) / 60)}m)
                               </span>
                             )}
                           </td>
-                          <td className="px-5 py-3 text-gray-400">{m.created_at || '—'}</td>
+                          <td className="px-5 py-3 text-slate-500">{m.created_at || '—'}</td>
                           <td className="px-5 py-3 text-right">
                             <div className="flex items-center justify-end space-x-1.5">
                               {/* Suspend / Unsuspend Participant */}
                               {m.is_suspended ? (
                                 <button
                                   onClick={() => handleUnsuspendUser(m.id, m.username)}
-                                  className="px-2 py-1 rounded-lg bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-600 text-emerald-300 text-[10px] font-mono font-bold transition"
+                                  className="px-2 py-1 rounded-lg bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-[#006633] text-[10px] font-mono font-bold transition-colors"
                                   title="Lift 30m suspension"
                                 >
                                   Unsuspend
@@ -400,7 +404,7 @@ export default function AccountsPage() {
                               ) : (
                                 <button
                                   onClick={() => handleSuspendUser(m.id, m.username)}
-                                  className="px-2 py-1 rounded-lg bg-amber-950/60 hover:bg-amber-900 border border-amber-700 text-amber-300 text-[10px] font-mono font-bold transition"
+                                  className="px-2 py-1 rounded-lg bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-800 text-[10px] font-mono font-bold transition-colors"
                                   title="Suspend for 30 minutes"
                                 >
                                   Suspend (30m)
@@ -410,7 +414,7 @@ export default function AccountsPage() {
                               {/* Remove Member */}
                               <button
                                 onClick={() => handleDeleteUser(m.id, m.username)}
-                                className="px-2 py-1 rounded-lg bg-red-950/60 hover:bg-red-900/80 border border-red-800/60 text-red-300 text-[10px] font-mono font-bold transition"
+                                className="px-2 py-1 rounded-lg bg-rose-50 hover:bg-rose-100 border border-rose-300 text-rose-700 text-[10px] font-mono font-bold transition-colors"
                                 title="Remove member"
                               >
                                 Remove
@@ -424,14 +428,14 @@ export default function AccountsPage() {
                     {Array.from({ length: Math.max(0, 4 - (team.members || []).length) }).map((_, ei) => {
                       const slotNumber = (team.members || []).length + ei + 1;
                       return (
-                        <tr key={`empty-${ei}`} className="opacity-40">
-                          <td className="px-5 py-3 text-gray-600">{slotNumber}</td>
-                          <td className="px-5 py-3 text-gray-600 italic">
+                        <tr key={`empty-${ei}`} className="opacity-60 bg-slate-50/50">
+                          <td className="px-5 py-3 text-slate-400">{slotNumber}</td>
+                          <td className="px-5 py-3 text-slate-400 italic">
                             Empty slot {slotNumber === 4 ? '(4th member optional)' : ''}
                           </td>
-                          <td className="px-5 py-3">—</td>
-                          <td className="px-5 py-3">—</td>
-                          <td className="px-5 py-3">—</td>
+                          <td className="px-5 py-3 text-slate-400">—</td>
+                          <td className="px-5 py-3 text-slate-400">—</td>
+                          <td className="px-5 py-3 text-slate-400">—</td>
                           <td className="px-5 py-3"></td>
                         </tr>
                       );
@@ -445,13 +449,13 @@ export default function AccountsPage() {
           {/* Administrators Section */}
           {admins.length > 0 && (
             <div className="space-y-4 pt-4">
-              <h2 className="text-sm font-bold text-white font-mono uppercase tracking-wider">
+              <h2 className="text-sm font-bold text-slate-900 font-mono uppercase tracking-wider">
                 Administrators ({admins.length})
               </h2>
-              <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl overflow-hidden shadow-md">
+              <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-xs font-mono">
-                    <thead className="bg-[#121722] text-gray-500 uppercase tracking-wider text-[10px]">
+                    <thead className="bg-slate-50 text-slate-500 uppercase tracking-wider text-[10px] border-b border-slate-200">
                       <tr>
                         <th className="px-5 py-2.5">#</th>
                         <th className="px-5 py-2.5">Username</th>
@@ -461,39 +465,39 @@ export default function AccountsPage() {
                         <th className="px-5 py-2.5 text-right">Actions</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-[#26334a]/60">
+                    <tbody className="divide-y divide-slate-100">
                       {admins.map((adm, ai) => {
                         const isRevealed = !!revealedPasswords[adm.id];
                         return (
-                          <tr key={adm.id || ai} className="hover:bg-[#202b3d] transition">
-                            <td className="px-5 py-3 text-gray-500 font-bold">{ai + 1}</td>
-                            <td className="px-5 py-3 font-bold text-amber-300">{adm.username}</td>
+                          <tr key={adm.id || ai} className="hover:bg-slate-50 transition-colors">
+                            <td className="px-5 py-3 text-slate-400 font-bold">{ai + 1}</td>
+                            <td className="px-5 py-3 font-bold text-[#006633]">{adm.username}</td>
                             <td className="px-5 py-3 whitespace-nowrap">
                               <div className="flex items-center space-x-2">
-                                <span className="font-mono text-xs select-all text-gray-300 min-w-[90px]">
+                                <span className="font-mono text-xs select-all text-slate-700 min-w-[90px]">
                                   {isRevealed ? (adm.plain_password || 'Admin@HNU2026!') : '••••••••••••'}
                                 </span>
                                 <button
                                   type="button"
                                   onClick={() => toggleRevealPassword(adm.id)}
-                                  className="text-gray-400 hover:text-amber-400 p-1 rounded transition"
+                                  className="text-slate-400 hover:text-[#006633] p-1 rounded transition-colors"
                                   title={isRevealed ? 'Hide password' : 'View password'}
                                 >
-                                  {isRevealed ? <EyeOff className="w-3.5 h-3.5 text-amber-400" /> : <Eye className="w-3.5 h-3.5" />}
+                                  {isRevealed ? <EyeOff className="w-3.5 h-3.5 text-[#006633]" /> : <Eye className="w-3.5 h-3.5" />}
                                 </button>
                               </div>
                             </td>
                             <td className="px-5 py-3">
-                              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-950/60 border border-amber-700/50 text-amber-300 uppercase">
+                              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 border border-amber-300 text-amber-800 uppercase">
                                 Administrator
                               </span>
                             </td>
-                            <td className="px-5 py-3 text-gray-400">{adm.created_at || '—'}</td>
+                            <td className="px-5 py-3 text-slate-500">{adm.created_at || '—'}</td>
                             <td className="px-5 py-3 text-right">
                               {adm.username !== 'admin' && (
                                 <button
                                   onClick={() => handleDeleteUser(adm.id, adm.username)}
-                                  className="px-2.5 py-1 rounded-lg bg-red-950/60 hover:bg-red-900/80 border border-red-800/60 text-red-300 text-[11px] font-bold transition"
+                                  className="px-2.5 py-1 rounded-lg bg-rose-50 hover:bg-rose-100 border border-rose-300 text-rose-700 text-[11px] font-bold transition-colors"
                                 >
                                   <span>Delete</span>
                                 </button>
@@ -513,35 +517,35 @@ export default function AccountsPage() {
 
       {/* ═══ Create Team Modal ══════════════════════════════════════════════ */}
       {showCreateTeam && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-5">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white border border-slate-200 rounded-2xl max-w-lg w-full p-6 shadow-xl space-y-5">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-lg font-bold text-white font-mono">Create New Team</h3>
-                <p className="text-[11px] text-gray-400 font-mono mt-0.5">
+                <h3 className="text-lg font-bold text-slate-900 font-mono">Create New Team</h3>
+                <p className="text-[11px] text-slate-500 font-mono mt-0.5">
                   Members 1, 2, and 3 are required. Member 4 is optional.
                 </p>
               </div>
-              <button onClick={() => setShowCreateTeam(false)} className="text-gray-400 hover:text-white">✕</button>
+              <button onClick={() => setShowCreateTeam(false)} className="text-slate-400 hover:text-slate-700">✕</button>
             </div>
 
             <form onSubmit={handleCreateTeam} className="space-y-4 font-mono text-xs">
               {/* Team Name */}
               <div>
-                <label className="block text-gray-400 mb-1 uppercase tracking-wider text-[10px]">Team Name</label>
+                <label className="block text-slate-700 font-medium mb-1 uppercase tracking-wider text-[10px]">Team Name</label>
                 <input
                   type="text"
                   value={teamName}
                   onChange={(e) => setTeamName(e.target.value)}
                   placeholder="e.g. Team Gamma"
                   required
-                  className="w-full bg-[#121722] border border-[#26334a] rounded-xl p-2.5 text-white focus:border-emerald-400 focus:outline-none"
+                  className="w-full bg-slate-50 border border-slate-300 rounded-xl p-2.5 text-slate-900 focus:border-[#006633] focus:outline-none"
                 />
               </div>
 
               {/* 4 Member Slots */}
               <div>
-                <label className="block text-gray-400 mb-2 uppercase tracking-wider text-[10px]">
+                <label className="block text-slate-700 font-medium mb-2 uppercase tracking-wider text-[10px]">
                   Team Participants (Slots 1–3 Required, Slot 4 Optional)
                 </label>
                 <div className="space-y-2.5">
@@ -551,17 +555,17 @@ export default function AccountsPage() {
                       <div
                         key={i}
                         className={`border rounded-xl p-3 space-y-2 ${isOptional
-                          ? 'bg-[#121722]/80 border-dashed border-amber-800/60'
-                          : 'bg-[#121722] border-[#26334a]'
+                          ? 'bg-amber-50/30 border-dashed border-amber-300'
+                          : 'bg-slate-50 border-slate-200'
                           }`}
                       >
                         <div className="flex items-center justify-between">
-                          <span className={`text-[10px] uppercase font-bold ${isOptional ? 'text-amber-400' : 'text-emerald-400'
+                          <span className={`text-[10px] uppercase font-bold ${isOptional ? 'text-amber-800' : 'text-[#006633]'
                             }`}>
                             Member {i + 1} {isOptional ? '(Optional)' : '(Required)'}
                           </span>
                           {isOptional && (
-                            <span className="text-[10px] text-gray-500 italic">
+                            <span className="text-[10px] text-slate-500 italic">
                               Can leave blank
                             </span>
                           )}
@@ -573,7 +577,7 @@ export default function AccountsPage() {
                             onChange={(e) => updateMember(i, 'username', e.target.value)}
                             placeholder={isOptional ? 'Username (optional)' : 'Username (required)'}
                             required={!isOptional}
-                            className="bg-[#1a2234] border border-[#26334a] rounded-lg p-2 text-white focus:border-emerald-400 focus:outline-none"
+                            className="bg-white border border-slate-300 rounded-lg p-2 text-slate-900 focus:border-[#006633] focus:outline-none"
                           />
                           <div className="relative">
                             <input
@@ -582,12 +586,12 @@ export default function AccountsPage() {
                               onChange={(e) => updateMember(i, 'password', e.target.value)}
                               placeholder={isOptional ? 'Password (optional)' : 'Password (required)'}
                               required={!isOptional}
-                              className="w-full bg-[#1a2234] border border-[#26334a] rounded-lg p-2 pr-8 text-white focus:border-emerald-400 focus:outline-none"
+                              className="w-full bg-white border border-slate-300 rounded-lg p-2 pr-8 text-slate-900 focus:border-[#006633] focus:outline-none"
                             />
                             <button
                               type="button"
                               onClick={() => toggleShowFormPassword(i)}
-                              className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white p-1"
+                              className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 p-1"
                               title={showFormPasswords[i] ? 'Hide' : 'Show'}
                             >
                               {showFormPasswords[i] ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
@@ -598,23 +602,23 @@ export default function AccountsPage() {
                     );
                   })}
                 </div>
-                <p className="text-[10px] text-gray-500 mt-2">
+                <p className="text-[10px] text-slate-500 mt-2">
                   Tip: A team can compete with 3 or 4 participants. Passwords are saved and can be viewed anytime by administrators in the accounts table.
                 </p>
               </div>
 
-              <div className="flex justify-end space-x-2 pt-2 border-t border-[#26334a]">
+              <div className="flex justify-end space-x-2 pt-2 border-t border-slate-200">
                 <button
                   type="button"
                   onClick={() => setShowCreateTeam(false)}
-                  className="px-4 py-2 bg-[#121722] hover:bg-[#202b3d] text-gray-300 border border-[#26334a] rounded-xl transition"
+                  className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 rounded-xl transition-colors font-medium"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="px-5 py-2 bg-gradient-to-r from-[#059669] to-[#10B981] hover:from-[#047857] hover:to-[#059669] text-white font-bold rounded-xl transition disabled:opacity-50 flex items-center space-x-1.5"
+                  className="px-5 py-2 bg-[#006633] hover:bg-[#004d26] text-white font-bold rounded-xl transition-colors disabled:opacity-50 flex items-center space-x-1.5 shadow-sm"
                 >
                   <span>{submitting ? 'Creating...' : 'Create Team'}</span>
                 </button>
@@ -626,28 +630,28 @@ export default function AccountsPage() {
 
       {/* ═══ Add Admin Modal ══════════════════════════════════════════════ */}
       {showAddAdmin && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-[#1a2234] border border-[#26334a] rounded-2xl max-w-sm w-full p-6 shadow-2xl space-y-4">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white border border-slate-200 rounded-2xl max-w-sm w-full p-6 shadow-xl space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-bold text-white font-mono flex items-center space-x-2">
+              <h3 className="text-lg font-bold text-slate-900 font-mono flex items-center space-x-2">
                 <span>Add Administrator</span>
               </h3>
-              <button onClick={() => setShowAddAdmin(false)} className="text-gray-400 hover:text-white">✕</button>
+              <button onClick={() => setShowAddAdmin(false)} className="text-slate-400 hover:text-slate-700">✕</button>
             </div>
             <form onSubmit={handleAddAdmin} className="space-y-3 font-mono text-xs">
               <div>
-                <label className="block text-gray-400 mb-1">Admin Username</label>
+                <label className="block text-slate-700 font-medium mb-1">Admin Username</label>
                 <input
                   type="text"
                   value={adminUsername}
                   onChange={(e) => setAdminUsername(e.target.value)}
                   required
                   placeholder="admin_username"
-                  className="w-full bg-[#121722] border border-[#26334a] rounded-xl p-2.5 text-white focus:border-amber-400 focus:outline-none"
+                  className="w-full bg-slate-50 border border-slate-300 rounded-xl p-2.5 text-slate-900 focus:border-[#006633] focus:outline-none"
                 />
               </div>
               <div>
-                <label className="block text-gray-400 mb-1">Password</label>
+                <label className="block text-slate-700 font-medium mb-1">Password</label>
                 <div className="relative">
                   <input
                     type={showAdminPass ? 'text' : 'password'}
@@ -655,30 +659,30 @@ export default function AccountsPage() {
                     onChange={(e) => setAdminPassword(e.target.value)}
                     required
                     placeholder="Strong password"
-                    className="w-full bg-[#121722] border border-[#26334a] rounded-xl p-2.5 pr-9 text-white focus:border-amber-400 focus:outline-none"
+                    className="w-full bg-slate-50 border border-slate-300 rounded-xl p-2.5 pr-9 text-slate-900 focus:border-[#006633] focus:outline-none"
                   />
                   <button
                     type="button"
                     onClick={() => setShowAdminPass(p => !p)}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white p-1"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 p-1"
                     title={showAdminPass ? 'Hide' : 'Show'}
                   >
                     {showAdminPass ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
                   </button>
                 </div>
               </div>
-              <div className="flex justify-end space-x-2 pt-2 border-t border-[#26334a]">
+              <div className="flex justify-end space-x-2 pt-2 border-t border-slate-200">
                 <button
                   type="button"
                   onClick={() => setShowAddAdmin(false)}
-                  className="px-4 py-2 bg-[#121722] hover:bg-[#202b3d] text-gray-300 border border-[#26334a] rounded-xl transition"
+                  className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 rounded-xl transition-colors font-medium"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="px-5 py-2 bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 text-white font-bold rounded-xl transition disabled:opacity-50"
+                  className="px-5 py-2 bg-[#006633] hover:bg-[#004d26] text-white font-bold rounded-xl transition-colors disabled:opacity-50 shadow-sm"
                 >
                   {submitting ? 'Creating...' : 'Create Admin'}
                 </button>
