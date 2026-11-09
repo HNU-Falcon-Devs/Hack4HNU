@@ -135,6 +135,12 @@ export const api = {
     return request(`/security_logs.php?${query}`);
   },
 
+  reportScreenshotEvent: () =>
+    request('/screenshot_event.php', {
+      method: 'POST',
+      body: JSON.stringify({})
+    }),
+
   // Announcements
   getAnnouncements: () => request('/announcements.php?action=list'),
   

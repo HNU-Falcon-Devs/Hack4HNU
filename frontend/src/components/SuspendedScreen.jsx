@@ -54,7 +54,7 @@ export default function SuspendedScreen({
             Account Suspended
           </h1>
           <p className="text-xs font-mono text-rose-600 font-bold uppercase tracking-wider">
-            Tournament Policy Violation Detected
+            Competition Policy Violation Detected
           </p>
         </div>
 

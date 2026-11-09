@@ -108,7 +108,7 @@ export default function LeaderboardPage({ currentUser }) {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className={`grid grid-cols-1 gap-4 ${team.members.length === 3 ? 'sm:grid-cols-3 sm:max-w-6xl sm:mx-auto' : 'sm:grid-cols-2 lg:grid-cols-4'}`}>
             {team.members.map((member, idx) => {
               const isMe = member.username === currentUser?.username;
               return (

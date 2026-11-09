@@ -16,7 +16,8 @@ const EVENT_TYPES = [
   'IP_BLOCKED_ACCESS',
   'AUTH_FAILED',
   'AUTH_SUCCESS',
-  'ADMIN_ACTION'
+  'ADMIN_ACTION',
+  'SCREENSHOT_DETECTED'
 ];
 
 const THREAT_LEVELS = ['ALL', 'Low', 'Medium', 'High', 'Critical'];

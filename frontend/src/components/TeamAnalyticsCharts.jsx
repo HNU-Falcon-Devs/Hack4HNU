@@ -173,9 +173,6 @@ export default function TeamAnalyticsCharts({ charts }) {
           ) : (
             <div className="h-full flex flex-col items-center justify-center text-center p-6 space-y-1.5 border border-dashed border-slate-200 rounded-xl bg-slate-50/50">
               <span className="text-xs font-mono font-bold text-slate-700">No Submission Activity Yet</span>
-              <span className="text-[11px] text-slate-400 font-sans max-w-xs">
-                As you and your 3 teammates test flags, hourly volume and solve milestones will plot here in real time.
-              </span>
             </div>
           )}
         </div>

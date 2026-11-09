@@ -37,6 +37,24 @@ export default function App() {
     return () => clearInterval(poll);
   }, [user?.id, user?.role]);
 
+  useEffect(() => {
+    if (!user?.id) return undefined;
+    let lastReportedAt = 0;
+    const handleScreenshotKey = (event) => {
+      if (event.key !== 'PrintScreen' || event.repeat) return;
+      const now = Date.now();
+      if (now - lastReportedAt < 1500) return;
+      lastReportedAt = now;
+      void api.reportScreenshotEvent();
+    };
+    window.addEventListener('keydown', handleScreenshotKey);
+    window.addEventListener('keyup', handleScreenshotKey);
+    return () => {
+      window.removeEventListener('keydown', handleScreenshotKey);
+      window.removeEventListener('keyup', handleScreenshotKey);
+    };
+  }, [user?.id]);
+
   const checkSession = async () => {
     setLoading(true);
     const res = await api.me();

@@ -184,7 +184,8 @@ CREATE TABLE IF NOT EXISTS `security_logs` (
     'IP_BLOCKED_ACCESS', 
     'AUTH_FAILED', 
     'AUTH_SUCCESS', 
-    'ADMIN_ACTION'
+    'ADMIN_ACTION',
+    'SCREENSHOT_DETECTED'
   ) NOT NULL,
   `result` ENUM('CORRECT', 'INCORRECT', 'BLOCKED', 'TRIGGERED', 'INFO') NOT NULL,
   `threat_level` ENUM('Low', 'Medium', 'High', 'Critical') NOT NULL DEFAULT 'Low',

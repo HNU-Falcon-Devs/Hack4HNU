@@ -9,7 +9,6 @@ export default function ChallengeModal({ challenge, onClose, onSolveSuccess, isA
   const [flag, setFlag] = useState('');
   const [loading, setLoading] = useState(false);
   const [feedback, setFeedback] = useState(null);
-  const [showScreenshot, setShowScreenshot] = useState(false);
 
   if (!challenge) return null;
 
@@ -193,29 +192,6 @@ export default function ChallengeModal({ challenge, onClose, onSolveSuccess, isA
             </div>
           )}
 
-          {/* Original Screenshot Toggle */}
-          <div className="border-t border-slate-200 pt-3">
-            <button
-              onClick={() => setShowScreenshot(!showScreenshot)}
-              className="flex items-center space-x-2 text-xs text-slate-500 hover:text-[#006633] font-mono transition-colors"
-            >
-              <span>{showScreenshot ? 'Hide Original Challenge Screenshot' : 'View Original CTFd Screenshot'}</span>
-            </button>
-
-            {showScreenshot && (
-              <div className="mt-3 p-2 bg-slate-50 border border-slate-200 rounded-xl">
-                <img
-                  src={api.getChallengeImageUrl(challenge.slug)}
-                  alt={challenge.title}
-                  className="rounded-lg max-h-80 w-auto mx-auto border border-slate-200 object-contain"
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                  }}
-                />
-              </div>
-            )}
-          </div>
-
           {/* Administrator Flag Preview */}
           {isAdmin && challenge.correct_flag && (
             <div className="bg-rose-50 border border-rose-200 rounded-xl p-3 text-xs font-mono">
@@ -237,7 +213,7 @@ export default function ChallengeModal({ challenge, onClose, onSolveSuccess, isA
           {/* Flag Submission Form */}
           <form onSubmit={handleSubmit} className="space-y-3 pt-2">
             <label className="block text-xs uppercase font-mono tracking-wider text-slate-700 font-medium">
-              Submit Flag <span className="text-slate-500">(Required format: HNU&#123;...&#125;)</span>
+              Submit flag
             </label>
             <div className="flex items-center space-x-2">
               <div className="relative flex-1">
