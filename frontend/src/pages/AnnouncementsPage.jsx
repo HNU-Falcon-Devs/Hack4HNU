@@ -26,7 +26,7 @@ export default function AnnouncementsPage({ user, isAdmin }) {
       try {
         const allIds = res.announcements.map(a => a.id);
         localStorage.setItem('hnu_read_announcements', JSON.stringify(allIds));
-      } catch {}
+      } catch { }
     }
     setLoading(false);
   };
@@ -81,7 +81,6 @@ export default function AnnouncementsPage({ user, isAdmin }) {
           <h1 className="text-2xl font-black text-slate-900 tracking-tight">
             Notices & Bulletins
           </h1>
-          <p className="text-xs text-slate-500 font-mono">Official competition updates from admin</p>
         </div>
 
         {isAdmin && (

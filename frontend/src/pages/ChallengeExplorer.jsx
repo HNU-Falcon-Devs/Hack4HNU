@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Flag, CheckCircle, Download, ExternalLink, 
-  Sparkles, Layers, Shield, Terminal, Globe, 
+import {
+  Flag, CheckCircle, Download, ExternalLink,
+  Sparkles, Layers, Shield, Terminal, Globe,
   Search as SearchIcon, Wifi, FileSearch, Image as ImageIcon, Box
 } from 'lucide-react';
 import { api } from '../services/api';
@@ -37,9 +37,9 @@ export default function ChallengeExplorer({ user, isAdmin }) {
   const handleSolveSuccess = (solvedId) => {
     setChallenges(prev => prev.map(ch => {
       if (ch.id === solvedId) {
-        return { 
-          ...ch, 
-          is_solved: true, 
+        return {
+          ...ch,
+          is_solved: true,
           solve_count: (ch.solve_count || 0) + 1,
           solved_by_username: ch.solved_by_username || user?.username,
           solved_by_teammate: false
@@ -89,7 +89,7 @@ export default function ChallengeExplorer({ user, isAdmin }) {
 
   return (
     <div className="space-y-10">
-      
+
       {loading ? (
         <div className="text-center py-24 text-slate-500 font-mono text-sm space-y-3">
           <div className="w-9 h-9 border-2 border-[#006633] border-t-transparent rounded-full animate-spin mx-auto" />
@@ -107,24 +107,16 @@ export default function ChallengeExplorer({ user, isAdmin }) {
 
           return (
             <section key={group.name} className="space-y-4">
-              
+
               {/* Category Section Header (e.g. WEB, OSINT, NETWORK...) */}
               <div className="flex items-center justify-between pb-3 border-b border-slate-200">
                 <div className="flex items-center space-x-3">
-                  <h2 
+                  <h2
                     className="text-lg sm:text-xl font-black font-mono tracking-wider uppercase text-slate-900 flex items-center space-x-2"
                   >
                     <span className="w-2.5 h-2.5 rounded-full bg-[#006633]" />
                     <span>{group.label}</span>
                   </h2>
-                  <span className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-slate-100 border border-slate-300 text-slate-700">
-                    {group.challenges.length} Questions • {totalPoints} PTS
-                  </span>
-                </div>
-
-                <div className="text-xs font-mono">
-                  <span className="text-[#006633] font-bold">{solvedCount}</span>
-                  <span className="text-slate-500"> / {group.challenges.length} Solved</span>
                 </div>
               </div>
 
@@ -136,11 +128,10 @@ export default function ChallengeExplorer({ user, isAdmin }) {
                     <div
                       key={ch.id}
                       onClick={() => setActiveChallenge(ch)}
-                      className={`group relative bg-white border rounded-2xl p-5 cursor-pointer transition-colors shadow-sm flex flex-col justify-between ${
-                        isSolved 
-                          ? 'border-[#006633] bg-emerald-50/20' 
-                          : `border-slate-200 hover:border-[#006633]`
-                      }`}
+                      className={`group relative bg-white border rounded-2xl p-5 cursor-pointer transition-colors shadow-sm flex flex-col justify-between ${isSolved
+                        ? 'border-[#006633] bg-emerald-50/20'
+                        : `border-slate-200 hover:border-[#006633]`
+                        }`}
                     >
                       {/* Solved Status Indicator Strip */}
                       {isSolved && (
@@ -196,7 +187,6 @@ export default function ChallengeExplorer({ user, isAdmin }) {
                             </span>
                           )}
 
-                          <span>{ch.solve_count || 0} solves</span>
                         </div>
                       </div>
 

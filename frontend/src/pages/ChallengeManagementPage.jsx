@@ -118,7 +118,6 @@ export default function ChallengeManagementPage() {
             <h1 className="text-2xl font-black text-slate-900 tracking-tight font-mono">
               Challenges Dashboard
             </h1>
-            <p className="text-xs text-slate-500 font-mono">Manage challenge definitions, flags, points, and solvers</p>
           </div>
         </div>
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { 
-  X, Download, Flag, CheckCircle, AlertCircle, Info, ExternalLink, 
+import {
+  X, Download, Flag, CheckCircle, AlertCircle, Info, ExternalLink,
   Image as ImageIcon, ShieldCheck, Terminal, HelpCircle
 } from 'lucide-react';
 import { api } from '../services/api';
@@ -78,7 +78,7 @@ export default function ChallengeModal({ challenge, onClose, onSolveSuccess, isA
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
       <div className="relative bg-white border border-slate-200 rounded-2xl max-w-2xl w-full shadow-2xl overflow-hidden my-8">
-        
+
         {/* Top green & gold stripe */}
         <div className="h-1 bg-[#006633] w-full" />
         <div className="h-0.5 bg-[#eab308] w-full" />
@@ -98,8 +98,8 @@ export default function ChallengeModal({ challenge, onClose, onSolveSuccess, isA
               </span>
             )}
           </div>
-          <button 
-            onClick={onClose} 
+          <button
+            onClick={onClose}
             className="text-slate-400 hover:text-slate-700 p-1 rounded-lg hover:bg-slate-200 transition-colors"
           >
             ✕
@@ -108,14 +108,14 @@ export default function ChallengeModal({ challenge, onClose, onSolveSuccess, isA
 
         {/* Modal Body */}
         <div className="p-6 space-y-6">
-          
+
           {/* Team Solve Info Banner if solved */}
           {challenge.is_solved && (
             <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3.5 flex items-start space-x-3 text-xs text-[#006633]">
               <div>
                 <p className="font-bold text-slate-900">
-                  {challenge.solved_by_teammate 
-                    ? `Solved by teammate ${challenge.solved_by_username}` 
+                  {challenge.solved_by_teammate
+                    ? `Solved by teammate ${challenge.solved_by_username}`
                     : `You solved this challenge!`}
                 </p>
                 <p className="text-slate-600 font-sans mt-0.5">
@@ -144,9 +144,9 @@ export default function ChallengeModal({ challenge, onClose, onSolveSuccess, isA
                 <span className="select-all">{challenge.target_info}</span>
               </div>
               {challenge.target_info.startsWith('http') && (
-                <a 
-                  href={challenge.target_info} 
-                  target="_blank" 
+                <a
+                  href={challenge.target_info}
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="text-xs flex items-center space-x-1 text-[#006633] hover:text-[#004d26] bg-emerald-50 border border-emerald-300 px-2.5 py-1 rounded-lg transition-colors font-medium"
                 >
@@ -204,8 +204,8 @@ export default function ChallengeModal({ challenge, onClose, onSolveSuccess, isA
 
             {showScreenshot && (
               <div className="mt-3 p-2 bg-slate-50 border border-slate-200 rounded-xl">
-                <img 
-                  src={api.getChallengeImageUrl(challenge.slug)} 
+                <img
+                  src={api.getChallengeImageUrl(challenge.slug)}
                   alt={challenge.title}
                   className="rounded-lg max-h-80 w-auto mx-auto border border-slate-200 object-contain"
                   onError={(e) => {
@@ -226,11 +226,10 @@ export default function ChallengeModal({ challenge, onClose, onSolveSuccess, isA
 
           {/* Feedback Messages */}
           {feedback && (
-            <div className={`p-3 rounded-xl border flex items-start space-x-2.5 text-sm ${
-              feedback.type === 'success' ? 'bg-emerald-50 border-emerald-300 text-[#006633] font-medium' :
+            <div className={`p-3 rounded-xl border flex items-start space-x-2.5 text-sm ${feedback.type === 'success' ? 'bg-emerald-50 border-emerald-300 text-[#006633] font-medium' :
               feedback.type === 'info' ? 'bg-blue-50 border-blue-300 text-blue-800' :
-              'bg-rose-50 border-rose-300 text-rose-700'
-            }`}>
+                'bg-rose-50 border-rose-300 text-rose-700'
+              }`}>
               <div className="leading-snug">{feedback.message}</div>
             </div>
           )}

@@ -247,7 +247,7 @@ export default function LeaderboardPage({ currentUser }) {
               : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
               }`}
           >
-            <span>Team Rankings (All Teams)</span>
+            <span>Team Rankings </span>
           </button>
 
           <button
@@ -257,7 +257,7 @@ export default function LeaderboardPage({ currentUser }) {
               : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
               }`}
           >
-            <span>Individual Scoring (All Participants)</span>
+            <span>Individual Rankings</span>
           </button>
         </div>
 

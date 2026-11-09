@@ -1,6 +1,6 @@
 import React from 'react';
-import { 
-  ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, 
+import {
+  ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip,
   PieChart, Pie, Cell, Legend
 } from 'recharts';
 
@@ -13,18 +13,18 @@ export default function TeamAnalyticsCharts({ charts }) {
   const hasSubmissions = totalSubmissions > 0;
   const pieData = hasSubmissions
     ? [
-        { name: 'Successful', value: successfulCount, fill: '#006633' },
-        { name: 'Failed', value: failedCount, fill: '#ef4444' }
-      ]
+      { name: 'Successful', value: successfulCount, fill: '#006633' },
+      { name: 'Failed', value: failedCount, fill: '#ef4444' }
+    ]
     : [
-        { name: 'No Attempts', value: 1, fill: '#e2e8f0' }
-      ];
+      { name: 'No Attempts', value: 1, fill: '#e2e8f0' }
+    ];
 
   const timeline = Array.isArray(charts?.submissions_over_time) ? charts.submissions_over_time : [];
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      
+
       {/* Chart 1: FLAG ACCURACY */}
       <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-3">
         <div className="flex items-center justify-between pb-2 border-b border-slate-100">
@@ -32,13 +32,7 @@ export default function TeamAnalyticsCharts({ charts }) {
             <h2 className="text-xs font-bold font-mono text-slate-800 uppercase tracking-wider flex items-center space-x-2">
               <span>FLAG ACCURACY (SUCCESSFUL VS FAILED)</span>
             </h2>
-            <span className="text-[10px] text-slate-400 font-sans block mt-0.5">
-              Strictly confidential • Visible only to your team
-            </span>
           </div>
-          <span className="text-[10px] font-mono font-bold text-[#006633] bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
-            YOUR TEAM
-          </span>
         </div>
 
         <div className="h-64 relative flex items-center justify-center">
@@ -54,31 +48,31 @@ export default function TeamAnalyticsCharts({ charts }) {
                 dataKey="value"
               >
                 {pieData.map((entry, index) => (
-                  <Cell 
-                    key={`cell-${index}`} 
-                    fill={entry.fill || (entry.name === 'Successful' ? '#006633' : '#ef4444')} 
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={entry.fill || (entry.name === 'Successful' ? '#006633' : '#ef4444')}
                   />
                 ))}
               </Pie>
               {hasSubmissions && (
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: '#ffffff', 
-                    borderColor: '#e2e8f0', 
-                    borderRadius: '0.75rem', 
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: '#ffffff',
+                    borderColor: '#e2e8f0',
+                    borderRadius: '0.75rem',
                     color: '#0f172a',
                     fontFamily: 'monospace',
                     fontSize: '12px',
                     boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)'
-                  }} 
+                  }}
                 />
               )}
               {hasSubmissions && (
-                <Legend 
-                  verticalAlign="bottom" 
-                  height={36} 
+                <Legend
+                  verticalAlign="bottom"
+                  height={36}
                   iconType="circle"
-                  wrapperStyle={{ fontSize: '11px', fontFamily: 'monospace', color: '#64748b' }} 
+                  wrapperStyle={{ fontSize: '11px', fontFamily: 'monospace', color: '#64748b' }}
                 />
               )}
             </PieChart>
@@ -115,13 +109,7 @@ export default function TeamAnalyticsCharts({ charts }) {
             <h2 className="text-xs font-bold font-mono text-slate-800 uppercase tracking-wider flex items-center space-x-2">
               <span>SUBMISSION VOLUME TIMELINE</span>
             </h2>
-            <span className="text-[10px] text-slate-400 font-sans block mt-0.5">
-              Hourly attempts recorded by your team
-            </span>
           </div>
-          <span className="text-[10px] font-mono font-bold text-[#006633] bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
-            YOUR TEAM
-          </span>
         </div>
 
         <div className="h-64">
@@ -138,47 +126,47 @@ export default function TeamAnalyticsCharts({ charts }) {
                     <stop offset="95%" stopColor="#eab308" stopOpacity={0.0} />
                   </linearGradient>
                 </defs>
-                <XAxis 
-                  dataKey="hour_label" 
-                  stroke="#94a3b8" 
-                  fontSize={10} 
+                <XAxis
+                  dataKey="hour_label"
+                  stroke="#94a3b8"
+                  fontSize={10}
                   fontFamily="monospace"
                   tickLine={false}
                 />
-                <YAxis 
-                  stroke="#94a3b8" 
-                  fontSize={10} 
+                <YAxis
+                  stroke="#94a3b8"
+                  fontSize={10}
                   fontFamily="monospace"
                   tickLine={false}
                 />
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: '#ffffff', 
-                    borderColor: '#e2e8f0', 
-                    borderRadius: '0.75rem', 
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: '#ffffff',
+                    borderColor: '#e2e8f0',
+                    borderRadius: '0.75rem',
                     color: '#0f172a',
                     fontFamily: 'monospace',
                     fontSize: '11px',
                     boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)'
-                  }} 
+                  }}
                 />
-                <Area 
-                  type="monotone" 
-                  dataKey="total" 
-                  name="Total Submissions" 
-                  stroke="#006633" 
+                <Area
+                  type="monotone"
+                  dataKey="total"
+                  name="Total Submissions"
+                  stroke="#006633"
                   strokeWidth={2}
-                  fillOpacity={1} 
-                  fill="url(#colorTotal)" 
+                  fillOpacity={1}
+                  fill="url(#colorTotal)"
                 />
-                <Area 
-                  type="monotone" 
-                  dataKey="correct" 
-                  name="Correct Solves" 
-                  stroke="#eab308" 
+                <Area
+                  type="monotone"
+                  dataKey="correct"
+                  name="Correct Solves"
+                  stroke="#eab308"
                   strokeWidth={2}
-                  fillOpacity={1} 
-                  fill="url(#colorCorrect)" 
+                  fillOpacity={1}
+                  fill="url(#colorCorrect)"
                 />
               </AreaChart>
             </ResponsiveContainer>
