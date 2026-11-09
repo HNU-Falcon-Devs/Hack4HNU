@@ -54,7 +54,7 @@ export default function LoginPage({ onLoginSuccess }) {
 
         {/* Login Card with HNU Green & Yellow top stripe */}
         <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
-          
+
           {/* Top Green & Yellow dual stripe */}
           <div className="w-full">
             <div className="h-1 bg-[#006633]" />
@@ -126,40 +126,7 @@ export default function LoginPage({ onLoginSuccess }) {
 
             </form>
 
-            {/* Quick-fill helper */}
-            <div className="pt-4 border-t border-slate-100">
-              <span className="text-[11px] font-mono text-slate-500 uppercase tracking-wider block mb-2 font-semibold">
-                Quick Test Accounts:
-              </span>
-              <div className="grid grid-cols-3 gap-2 text-xs font-mono">
-                <button
-                  type="button"
-                  onClick={() => handleQuickFill('cyberspartan', 'Participant123!')}
-                  className="p-2 rounded-xl bg-slate-50 border border-slate-200 hover:border-[#006633] text-left transition"
-                >
-                  <div className="text-[#006633] font-bold truncate">cyberspartan</div>
-                  <div className="text-[10px] text-slate-500">Team Alpha</div>
-                </button>
 
-                <button
-                  type="button"
-                  onClick={() => handleQuickFill('bravo_falcon', 'Participant123!')}
-                  className="p-2 rounded-xl bg-slate-50 border border-slate-200 hover:border-[#006633] text-left transition"
-                >
-                  <div className="text-[#006633] font-bold truncate">bravo_falcon</div>
-                  <div className="text-[10px] text-slate-500">Team Bravo</div>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => handleQuickFill('admin', 'Admin@HNU2026!')}
-                  className="p-2 rounded-xl bg-slate-50 border border-slate-200 hover:border-[#eab308] text-left transition"
-                >
-                  <div className="text-amber-700 font-bold truncate">admin</div>
-                  <div className="text-[10px] text-slate-500">SOC Admin</div>
-                </button>
-              </div>
-            </div>
 
           </div>
         </div>
