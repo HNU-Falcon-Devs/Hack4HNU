@@ -371,11 +371,9 @@ Public self-registration is strictly disabled to prevent unauthorized accounts d
 </details>
 
 ---
----
 
-### Network Access URLs
+### Developers
 
-Developers
 
 | Name | Role |  
 | :--- | :--- | 
