@@ -371,6 +371,19 @@ Public self-registration is strictly disabled to prevent unauthorized accounts d
 </details>
 
 ---
+---
+
+### Network Access URLs
+
+Developers
+
+| Name | Role |  
+| :--- | :--- | 
+| Sam |  | 
+| Siris | |
+| Marchus |  |
+
+---
 
 <div align="center">
   <sub>Holy Name University - College of Computer Studies * Cybersecurity Challenge Platform</sub>
