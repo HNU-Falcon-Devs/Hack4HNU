@@ -380,6 +380,10 @@ Public self-registration is strictly disabled to prevent unauthorized accounts d
 | Sam |  | 
 | Siris | |
 | Marchus |  |
+| Rael |  |
+| Mj |  |
+| Cris |  |
+| Alexes |  |
 
 ---
 
